@@ -15,6 +15,7 @@ class FavoriteFixtures extends Fixture
         $favorite = new Favorite();
         $favorite
             ->setaddedAt(new \DateTimeImmutable())
+            
         ;
         $manager->persist($favorite);
 
