@@ -3,13 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Booking;
+use App\Form\BookingForm;
 use App\Form\BookingFormType;
+use App\Repository\RoomRepository;
+use App\Repository\OptionRepository;
 use App\Repository\BookingRepository;
+use App\Repository\EquipmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/booking')]
 class BookingController extends AbstractController
@@ -32,6 +36,8 @@ class BookingController extends AbstractController
     #[Route('/book/{id}', name: 'booking_book_room', methods: ['POST'])]
     public function bookRoom(Request $request, int $id): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
         $booking = new Booking();
         $data = $request->request->all();
         $booking
@@ -39,11 +45,11 @@ class BookingController extends AbstractController
             ->setStatus("en attente")
             ->setStartDate($data['startDate'])
             ->setEndDate($data['endDate'])
-            ->setUser($this->getUser())
-
-
-
+            ->setClient($user->getClient())
         ;
+
+
+
         if ($data['equipment']) {
             foreach ($data['equipment'] as $value) {
                 $booking->addEquipment($this->er->find($value));

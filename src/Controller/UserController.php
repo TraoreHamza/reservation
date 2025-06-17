@@ -5,14 +5,17 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Client;
-use App\Repository\FavoriteRepository;
-use App\Form\ProfileForm;
+use App\Form\UserForm;
+use App\Entity\Favorite;
 use App\Form\ClientForm;
+use App\Form\ProfileForm;
+use App\Repository\RoomRepository;
+use App\Repository\FavoriteRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/user')]
 class UserController extends AbstractController
@@ -27,7 +30,7 @@ class UserController extends AbstractController
     public function profile(Request $request): Response
     {
         $user = $this->getUser();
-        $form = $this->createForm(ProfileForm::class, $user);
+        $form = $this->createForm(UserForm::class, $user);
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
@@ -46,6 +49,7 @@ class UserController extends AbstractController
     #[Route('/fiche', name: 'user_fiche', methods: ['GET', 'POST'])]
     public function fiche(Request $request): Response
     {
+        /** @var User $user */
         $user = $this->getUser();
         $client = $user->getClient() ?? new Client();
         $form = $this->createForm(ClientForm::class, $client);

@@ -5,12 +5,13 @@ namespace App\Controller;
 
 use App\Entity\Review;
 use App\Form\ReviewForm;
+use App\Repository\RoomRepository;
 use App\Repository\ReviewRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/review')]
 class ReviewController extends AbstractController
@@ -29,8 +30,8 @@ class ReviewController extends AbstractController
         $data = $request->request->all();
         $review
             ->setRoom($this->roomRepo->find($id))
-            ->setRating($data['rating'])
-            ->setComment($data['comment'])
+            ->setStar($data['star'])
+            ->setContent($data['content'])
         ;
 
 
