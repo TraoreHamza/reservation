@@ -6,8 +6,9 @@ use Faker\Factory;
 use App\Entity\Quotation;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class QuotationFixtures extends Fixture
+class QuotationFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
@@ -18,6 +19,7 @@ class QuotationFixtures extends Fixture
             ->setDate($faker->date())
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable())
+        
         ;
         $manager->persist($quotation);
 
@@ -26,7 +28,7 @@ class QuotationFixtures extends Fixture
     public function getDependencies(): array
     {
         return [
-            ClientFixtures::class,
+            RoomFixtures::class,
         ];
     }
 }
