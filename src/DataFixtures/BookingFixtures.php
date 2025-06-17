@@ -27,7 +27,7 @@ class BookingFixtures extends Fixture
     {
         return [
             ClientFixtures::class,
-            EquipementFixtures::class,
+            EquipmentFixtures::class,
             OptionFixtures::class,
             FavoriteFixtures::class,
         ];
