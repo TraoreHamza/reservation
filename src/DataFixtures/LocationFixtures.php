@@ -15,9 +15,9 @@ class LocationFixtures extends Fixture
         $location = new Location();
         $location
             ->setCity($faker->city())
-            ->setDepartment($faker->department())
-            ->setNumber($faker->numberBetween(1, 100))
-            ->setState($faker->state())
+            ->setDepartment('')
+            ->setNumber($faker->numberBetween())
+            ->setState($faker->region())
         ;
         $manager->persist($location);
 
