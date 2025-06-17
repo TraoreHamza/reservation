@@ -114,15 +114,19 @@ En tant qu’administrateur, je souhaite pouvoir gerer les equipements disponibl
   - edit()        GET POST
   
 
+
+#### formulaire fait 
+
+
 "yasmina"
-//controller de l admin dans easyAdmin 
+//controller de l admin dans easyAdmin   *"lawrence"*
 
 
 #### Service
 
 "lawrence"
 - QuotationService()   // permet de creer un devis a partir d'une résarvation 
-"lawrence" 
+*"hamza si pas fait"* 
 
 
 #### Eventlistener
@@ -130,14 +134,14 @@ En tant qu’administrateur, je souhaite pouvoir gerer les equipements disponibl
 - NotificationListener()    //envoi des differente notification des reservations(user, admin)
 - VerificationListener()    // envoi un message flash si la fiche client n est pas complete
   
-"lawrence" commence par Notification et verification et fini par Quatation
+"lawrence" commence par Notification et verification et fini par Quatation                           *"yasmina si pas fait"*
 c'est pas parceque une class n est pas encore codé qu on peut pas coder nos fonctionnalité qui sont liée.
 
   
 ---
-ensemble easyadmin et securité
+ Tous ensemble  securité
 
-#### EasyAdmin
+#### EasyAdmin  
 
 #### Securité
 
@@ -149,3 +153,14 @@ ensemble easyadmin et securité
 partage entre nous
 
 #### finition déploiement
+
+
+
+sallevenue
+
+bookmysalle
+
+salleservice
+
+
+
