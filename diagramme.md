@@ -58,7 +58,7 @@ classDiagram
     - int capacity NN
     - text description
     - bool isAvailable NN
-    - Room room m2m
+  
     }
 
   class Booking {

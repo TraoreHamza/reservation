@@ -29,18 +29,6 @@ class Room
     private ?bool $isAvailable = null;
 
     /**
-     * @var Collection<int, self>
-     */
-    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'rooms')]
-    private Collection $room;
-
-    /**
-     * @var Collection<int, self>
-     */
-    #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'room')]
-    private Collection $rooms;
-
-    /**
      * @var Collection<int, Equipment>
      */
     #[ORM\ManyToMany(targetEntity: Equipment::class, mappedBy: 'room')]
@@ -78,8 +66,6 @@ class Room
 
     public function __construct()
     {
-        $this->room = new ArrayCollection();
-        $this->rooms = new ArrayCollection();
         $this->equipments = new ArrayCollection();
         $this->options = new ArrayCollection();
         $this->quotations = new ArrayCollection();
@@ -139,38 +125,6 @@ class Room
         $this->isAvailable = $isAvailable;
 
         return $this;
-    }
-
-    /**
-     * @return Collection<int, self>
-     */
-    public function getRoom(): Collection
-    {
-        return $this->room;
-    }
-
-    public function addRoom(self $room): static
-    {
-        if (!$this->room->contains($room)) {
-            $this->room->add($room);
-        }
-
-        return $this;
-    }
-
-    public function removeRoom(self $room): static
-    {
-        $this->room->removeElement($room);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, self>
-     */
-    public function getRooms(): Collection
-    {
-        return $this->rooms;
     }
 
     /**
