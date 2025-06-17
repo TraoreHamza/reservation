@@ -31,6 +31,7 @@ classDiagram
     class Review{
     - int star
     - string content
+    - Room room
     
     }
 
@@ -68,6 +69,9 @@ classDiagram
     - dateTime created_at NN
     - Equipment equipment
     - Option option
+    - Room room
+    - Client client
+
 
   }
  
