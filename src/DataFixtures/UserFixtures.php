@@ -2,15 +2,27 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use Faker\Factory;
+use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 
 class UserFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
-    {
-        // $product = new Product();
-        // $manager->persist($product);
+    {  
+        $faker = Factory::create('fr_FR');
+        $user = new User();
+        $user
+            ->setEmail($faker->email())
+            ->setPassword($this->hashPassword($user))
+            ->setWarning($faker->numberBetween(0, 1, 2, 3))
+            ->setIsBanned($faker->boolean())
+            ->setIsActive($faker->boolean())
+            ->setCreatedAt(new \DateTimeImmutable())
+            ->setUpdatedAt(new \DateTimeImmutable())
+        ;
+        $manager->persist($user);
 
         $manager->flush();
     }
