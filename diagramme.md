@@ -65,7 +65,7 @@ classDiagram
     - dateTime startDate NN
     - dateTime endDate NN
     - string status NN
-    - dateTime createdAt NN
+    - dateTime created_at NN
     - Equipment equipment
     - Option option
 
@@ -90,7 +90,6 @@ classDiagram
  
   class Favorite {
     - int id NN
-    - dateTime addedAt NN
     - Room room
     - User user
 
