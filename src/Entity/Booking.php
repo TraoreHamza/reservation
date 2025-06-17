@@ -28,10 +28,10 @@ class Booking
     private ?\DateTimeImmutable $createdAt = null;
 
     /**
-     * @var Collection<int, Equipement>
+     * @var Collection<int, Equipment>
      */
-    #[ORM\ManyToMany(targetEntity: Equipement::class, inversedBy: 'bookings')]
-    private Collection $equipement;
+    #[ORM\ManyToMany(targetEntity: Equipment::class, inversedBy: 'bookings')]
+    private Collection $equipment;
 
     /**
      * @var Collection<int, Option>
@@ -39,9 +39,17 @@ class Booking
     #[ORM\ManyToMany(targetEntity: Option::class, inversedBy: 'bookings')]
     private Collection $option;
 
+    #[ORM\ManyToOne(inversedBy: 'bookings')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Room $room = null;
+
+    #[ORM\ManyToOne(inversedBy: 'bookings')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Client $client = null;
+
     public function __construct()
     {
-        $this->equipement = new ArrayCollection();
+        $this->equipment = new ArrayCollection();
         $this->option = new ArrayCollection();
     }
 
@@ -99,25 +107,25 @@ class Booking
     }
 
     /**
-     * @return Collection<int, Equipement>
+     * @return Collection<int, Equipment>
      */
-    public function getEquipement(): Collection
+    public function getEquipment(): Collection
     {
-        return $this->equipement;
+        return $this->equipment;
     }
 
-    public function addEquipement(Equipement $equipement): static
+    public function addEquipment(Equipment $equipment): static
     {
-        if (!$this->equipement->contains($equipement)) {
-            $this->equipement->add($equipement);
+        if (!$this->equipment->contains($equipment)) {
+            $this->equipment->add($equipment);
         }
 
         return $this;
     }
 
-    public function removeEquipement(Equipement $equipement): static
+    public function removeEquipment(Equipment $equipment): static
     {
-        $this->equipement->removeElement($equipement);
+        $this->equipment->removeElement($equipment);
 
         return $this;
     }
@@ -142,6 +150,30 @@ class Booking
     public function removeOption(Option $option): static
     {
         $this->option->removeElement($option);
+
+        return $this;
+    }
+
+    public function getRoom(): ?Room
+    {
+        return $this->room;
+    }
+
+    public function setRoom(?Room $room): static
+    {
+        $this->room = $room;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): static
+    {
+        $this->client = $client;
 
         return $this;
     }
