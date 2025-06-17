@@ -2,16 +2,27 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use Faker\Factory;
+use App\Entity\Client;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 
 class ClientFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // $product = new Product();
-        // $manager->persist($product);
+        $faker = Factory::create('fr_FR');
+        $client = new Client();
+        $client
+            ->setName($faker->name())
+            ->setAddresse($faker->address())
+        ;
+        $manager->persist($client);
 
         $manager->flush();
+    }
+    public function getDependencies(): array
+    {
+        return [];
     }
 }
