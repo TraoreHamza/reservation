@@ -19,13 +19,13 @@ class Booking
     private ?string $Status = null;
 
     #[ORM\Column]
-    private ?\DateTime $startDate = null;
+    private ?\DateTimeImmutable $startDate = null;
 
     #[ORM\Column]
-    private ?\DateTime $endDate = null;
+    private ?\DateTimeImmutable $endDate = null;
 
     #[ORM\Column]
-    private ?\DateTime $createdAt = null;
+    private ?\DateTimeImmutable $createdAt = null;
 
     /**
      * @var Collection<int, Equipement>
@@ -62,36 +62,36 @@ class Booking
         return $this;
     }
 
-    public function getStartDate(): ?\DateTime
+    public function getStartDate(): ?\DateTimeImmutable
     {
         return $this->startDate;
     }
 
-    public function setStartDate(\DateTime $startDate): static
+    public function setStartDate(\DateTimeImmutable $startDate): static
     {
         $this->startDate = $startDate;
 
         return $this;
     }
 
-    public function getEndDate(): ?\DateTime
+    public function getEndDate(): ?\DateTimeImmutable
     {
         return $this->endDate;
     }
 
-    public function setEndDate(\DateTime $endDate): static
+    public function setEndDate(\DateTimeImmutable $endDate): static
     {
         $this->endDate = $endDate;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): static
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
