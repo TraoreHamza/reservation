@@ -16,6 +16,8 @@ class BookingFixtures extends Fixture
         $booking
             ->setStatus($faker->randomElement(['pending', 'confirmed', 'cancelled']))
             ->setCreatedAt(new \DateTimeImmutable())
+            ->setStartDate(new \DateTimeImmutable())
+            ->setEndDate(new \DateTimeImmutable())
         ;
         $manager->persist($booking);
 
