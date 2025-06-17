@@ -2,16 +2,31 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use Faker\Factory;
+use App\Entity\Room;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 
 class RoomFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // $product = new Product();
-        // $manager->persist($product);
+        $faker = Factory::create('fr_FR');
+        $room = new Room();
+        $room
+            ->setName($faker->word())
+            ->setCapacity($faker->numberBetween())
+            ->setDescription($faker->sentence())
+            ->setIsAvailable($faker->boolean())
+        ;
+        $manager->persist($room);
 
         $manager->flush();
+    }
+    public function getDependencies(): array
+    {
+        return [
+        
+        ];
     }
 }
