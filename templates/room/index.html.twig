@@ -1,15 +1,18 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-<ul>
+<h1>Liste des salles</h1>
+
+<div class="room-list">
     {% for room in rooms %}
-        <li>
-            <strong>{{ room.name }}</strong> - 
-            Capacité : {{ room.capacity }}<br>
-            Description : {{ room.description }}<br>
-            Disponible : {{ room.isAvailable ? 'Oui' : 'Non' }}
-        </li>
+        <div class="room-card">
+            <h2>{{ room.name }}</h2>
+            <img src="{{ room.image }}" alt="Image de la salle {{ room.name }}" style="max-width:200px;">
+            <p><strong>Capacité :</strong> {{ room.capacity }}</p>
+            <p><strong>Description :</strong> {{ room.description }}</p>
+            <p><strong>Disponible :</strong> {{ room.isAvailable ? 'Oui' : 'Non' }}</p>
+        </div>
     {% else %}
-        <li>Aucune salle trouvée.</li>
+        <p>Aucune salle trouvée.</p>
     {% endfor %}
-</ul>
+</div>
 {% endblock %}
