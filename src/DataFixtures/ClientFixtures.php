@@ -16,8 +16,10 @@ class ClientFixtures extends Fixture
         $client
             ->setName($faker->name())
             ->setAddresse($faker->address())
+            
         ;
         $manager->persist($client);
+        
 
         $manager->flush();
     }
