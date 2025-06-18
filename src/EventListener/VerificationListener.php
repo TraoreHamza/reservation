@@ -26,6 +26,7 @@ class VerificationListener
         $client = $this->clientRepo->findOneBy(['user' => $user]);
 
         if (!$client || !$client->getAdresse()) {
+            /** @var \Symfony\Component\HttpFoundation\Session\Session $session */
             $session = $this->requestStack->getSession();
             if ($session) {
                 $session->getFlashBag()->add(
