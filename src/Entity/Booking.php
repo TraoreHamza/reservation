@@ -31,7 +31,7 @@ class Booking
      * @var Collection<int, Equipment>
      */
     #[ORM\ManyToMany(targetEntity: Equipment::class, inversedBy: 'bookings')]
-    private Collection $Equipment;
+    private Collection $equipment;
 
     /**
      * @var Collection<int, Option>
@@ -39,9 +39,17 @@ class Booking
     #[ORM\ManyToMany(targetEntity: Option::class, inversedBy: 'bookings')]
     private Collection $option;
 
+    #[ORM\ManyToOne(inversedBy: 'bookings')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Room $room = null;
+
+    #[ORM\ManyToOne(inversedBy: 'bookings')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Client $client = null;
+
     public function __construct()
     {
-        $this->Equipment = new ArrayCollection();
+        $this->equipment = new ArrayCollection();
         $this->option = new ArrayCollection();
     }
 
@@ -103,21 +111,21 @@ class Booking
      */
     public function getEquipment(): Collection
     {
-        return $this->Equipment;
+        return $this->equipment;
     }
 
-    public function addEquipment(Equipment $Equipment): static
+    public function addEquipment(Equipment $equipment): static
     {
-        if (!$this->Equipment->contains($Equipment)) {
-            $this->Equipment->add($Equipment);
+        if (!$this->equipment->contains($equipment)) {
+            $this->equipment->add($equipment);
         }
 
         return $this;
     }
 
-    public function removeEquipment(Equipment $Equipment): static
+    public function removeEquipment(Equipment $equipment): static
     {
-        $this->Equipment->removeElement($Equipment);
+        $this->equipment->removeElement($equipment);
 
         return $this;
     }
@@ -142,6 +150,30 @@ class Booking
     public function removeOption(Option $option): static
     {
         $this->option->removeElement($option);
+
+        return $this;
+    }
+
+    public function getRoom(): ?Room
+    {
+        return $this->room;
+    }
+
+    public function setRoom(?Room $room): static
+    {
+        $this->room = $room;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): static
+    {
+        $this->client = $client;
 
         return $this;
     }

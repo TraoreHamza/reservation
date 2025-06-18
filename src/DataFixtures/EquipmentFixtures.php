@@ -12,12 +12,14 @@ class EquipmentFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
-        $Equipment = new Equipment();
-        $Equipment
+
+        $equipment = new Equipment();
+        $equipment
             ->setName($faker->word(2))
             ->setType($faker->word(2))
         ;
-        $manager->persist($Equipment);
+        $manager->persist($equipment);
+
 
         $manager->flush();
     }

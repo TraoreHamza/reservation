@@ -20,7 +20,7 @@ class Favorite
     private ?Room $room = null;
 
     #[ORM\ManyToOne(inversedBy: 'favorites')]
-    private ?User $users = null;
+    private ?User $user = null;
 
     public function getId(): ?int
     {
@@ -51,14 +51,14 @@ class Favorite
         return $this;
     }
 
-    public function getUsers(): ?User
+    public function getUser(): ?User
     {
-        return $this->users;
+        return $this->user;
     }
 
-    public function setUsers(?User $users): static
+    public function setUser(?User $user): static
     {
-        $this->users = $users;
+        $this->user = $user;
 
         return $this;
     }

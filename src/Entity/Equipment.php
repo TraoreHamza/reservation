@@ -3,10 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\EquipmentRepository;
+use App\Repository\EquipmentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Entity(repositoryClass: EquipmentRepository::class)]
+class Equipment
 #[ORM\Entity(repositoryClass: EquipmentRepository::class)]
 class Equipment
 {
