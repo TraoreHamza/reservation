@@ -4,11 +4,6 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
-    "content-hash": "7f002479edd6e3783ea13c2578a86ac2",
-    "packages": [
-        {
-=======
     "content-hash": "6051430ee377f62012cd9863839838d9",
     "packages": [
         {
@@ -1765,7 +1760,6 @@
             "time": "2025-02-19T13:28:12+00:00"
         },
         {
->>>>>>> origin/hamza
             "name": "psr/cache",
             "version": "3.0.0",
             "source": {
@@ -5881,8 +5875,6 @@
                 }
             ],
             "time": "2025-04-04T10:10:33+00:00"
-<<<<<<< HEAD
-=======
         },
         {
             "name": "twig/extra-bundle",
@@ -8394,10 +8386,8 @@
                 }
             ],
             "time": "2024-03-03T12:36:25+00:00"
->>>>>>> origin/hamza
         }
     ],
-    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {},
