@@ -16,7 +16,7 @@ class ClientFixtures extends Fixture
             $client = new Client();
             $client
                 ->setName($faker->name())
-                ->setAddresse($faker->address())
+                ->setAddress($faker->address())
             ;
             $manager->persist($client);
             $this->addReference('CLIENT_' . $i, $client);

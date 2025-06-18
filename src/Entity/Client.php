@@ -64,7 +64,7 @@ class Client
         return $this->addresse;
     }
 
-    public function setAddresse(?string $addresse): static
+    public function setAddress(?string $addresse): static
     {
         $this->addresse = $addresse;
 
