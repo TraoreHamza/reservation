@@ -43,8 +43,11 @@ class User
     /**
      * @var Collection<int, Favorite>
      */
-    #[ORM\OneToMany(targetEntity: Favorite::class, mappedBy: 'users')]
+    #[ORM\OneToMany(targetEntity: Favorite::class, mappedBy: 'user')]
     private Collection $favorites;
+
+    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Client $client = null;
 
     public function __construct()
     {
@@ -174,7 +177,7 @@ class User
     {
         if (!$this->favorites->contains($favorite)) {
             $this->favorites->add($favorite);
-            $favorite->setUsers($this);
+            $favorite->setUser($this);
         }
 
         return $this;
@@ -184,10 +187,22 @@ class User
     {
         if ($this->favorites->removeElement($favorite)) {
             // set the owning side to null (unless already changed)
-            if ($favorite->getUsers() === $this) {
-                $favorite->setUsers(null);
+            if ($favorite->getUser() === $this) {
+                $favorite->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): static
+    {
+        $this->client = $client;
 
         return $this;
     }

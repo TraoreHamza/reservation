@@ -1,3 +1,5 @@
-body {
-    background-color: skyblue;
+.land{
+    fill:#a3a3a3;
+    stroke:#fff;
+    stroke-width:0.5;
 }

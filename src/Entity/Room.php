@@ -29,22 +29,10 @@ class Room
     private ?bool $isAvailable = null;
 
     /**
-     * @var Collection<int, self>
+     * @var Collection<int, Equipment>
      */
-    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'rooms')]
-    private Collection $room;
-
-    /**
-     * @var Collection<int, self>
-     */
-    #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'room')]
-    private Collection $rooms;
-
-    /**
-     * @var Collection<int, Equipement>
-     */
-    #[ORM\ManyToMany(targetEntity: Equipement::class, mappedBy: 'room')]
-    private Collection $equipements;
+    #[ORM\ManyToMany(targetEntity: Equipment::class, mappedBy: 'room')]
+    private Collection $equipments;
 
     /**
      * @var Collection<int, Option>
@@ -64,17 +52,26 @@ class Room
     #[ORM\OneToMany(targetEntity: Favorite::class, mappedBy: 'room')]
     private Collection $favorites;
 
-    #[ORM\Column(length: 255)]
-    private ?string $image = null;
+    /**
+     * @var Collection<int, Booking>
+     */
+    #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'room')]
+    private Collection $bookings;
+
+    /**
+     * @var Collection<int, Review>
+     */
+    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'room', orphanRemoval: true)]
+    private Collection $reviews;
 
     public function __construct()
     {
-        $this->room = new ArrayCollection();
-        $this->rooms = new ArrayCollection();
-        $this->equipements = new ArrayCollection();
+        $this->equipments = new ArrayCollection();
         $this->options = new ArrayCollection();
         $this->quotations = new ArrayCollection();
         $this->favorites = new ArrayCollection();
+        $this->bookings = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -131,59 +128,27 @@ class Room
     }
 
     /**
-     * @return Collection<int, self>
+     * @return Collection<int, Equipment>
      */
-    public function getRoom(): Collection
+    public function getEquipments(): Collection
     {
-        return $this->room;
+        return $this->equipments;
     }
 
-    public function addRoom(self $room): static
+    public function addEquipment(Equipment $equipment): static
     {
-        if (!$this->room->contains($room)) {
-            $this->room->add($room);
+        if (!$this->equipments->contains($equipment)) {
+            $this->equipments->add($equipment);
+            $equipment->addRoom($this);
         }
 
         return $this;
     }
 
-    public function removeRoom(self $room): static
+    public function removeEquipment(Equipment $equipment): static
     {
-        $this->room->removeElement($room);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, self>
-     */
-    public function getRooms(): Collection
-    {
-        return $this->rooms;
-    }
-
-    /**
-     * @return Collection<int, Equipement>
-     */
-    public function getEquipements(): Collection
-    {
-        return $this->equipements;
-    }
-
-    public function addEquipement(Equipement $equipement): static
-    {
-        if (!$this->equipements->contains($equipement)) {
-            $this->equipements->add($equipement);
-            $equipement->addRoom($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEquipement(Equipement $equipement): static
-    {
-        if ($this->equipements->removeElement($equipement)) {
-            $equipement->removeRoom($this);
+        if ($this->equipments->removeElement($equipment)) {
+            $equipment->removeRoom($this);
         }
 
         return $this;
@@ -276,14 +241,62 @@ class Room
         return $this;
     }
 
-    public function getImage(): ?string
+    /**
+     * @return Collection<int, Booking>
+     */
+    public function getBookings(): Collection
     {
-        return $this->image;
+        return $this->bookings;
     }
 
-    public function setImage(string $image): static
+    public function addBooking(Booking $booking): static
     {
-        $this->image = $image;
+        if (!$this->bookings->contains($booking)) {
+            $this->bookings->add($booking);
+            $booking->setRoom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBooking(Booking $booking): static
+    {
+        if ($this->bookings->removeElement($booking)) {
+            // set the owning side to null (unless already changed)
+            if ($booking->getRoom() === $this) {
+                $booking->setRoom(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Review>
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): static
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setRoom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): static
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getRoom() === $this) {
+                $review->setRoom(null);
+            }
+        }
 
         return $this;
     }
