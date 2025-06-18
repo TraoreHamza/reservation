@@ -41,10 +41,10 @@ class Room
     private Collection $rooms;
 
     /**
-     * @var Collection<int, Equipement>
+     * @var Collection<int, Equipment>
      */
-    #[ORM\ManyToMany(targetEntity: Equipement::class, mappedBy: 'room')]
-    private Collection $equipements;
+    #[ORM\ManyToMany(targetEntity: Equipment::class, mappedBy: 'room')]
+    private Collection $Equipments;
 
     /**
      * @var Collection<int, Option>
@@ -71,7 +71,7 @@ class Room
     {
         $this->room = new ArrayCollection();
         $this->rooms = new ArrayCollection();
-        $this->equipements = new ArrayCollection();
+        $this->Equipments = new ArrayCollection();
         $this->options = new ArrayCollection();
         $this->quotations = new ArrayCollection();
         $this->favorites = new ArrayCollection();
@@ -163,27 +163,27 @@ class Room
     }
 
     /**
-     * @return Collection<int, Equipement>
+     * @return Collection<int, Equipment>
      */
-    public function getEquipements(): Collection
+    public function getEquipments(): Collection
     {
-        return $this->equipements;
+        return $this->Equipments;
     }
 
-    public function addEquipement(Equipement $equipement): static
+    public function addEquipment(Equipment $Equipment): static
     {
-        if (!$this->equipements->contains($equipement)) {
-            $this->equipements->add($equipement);
-            $equipement->addRoom($this);
+        if (!$this->Equipments->contains($Equipment)) {
+            $this->Equipments->add($Equipment);
+            $Equipment->addRoom($this);
         }
 
         return $this;
     }
 
-    public function removeEquipement(Equipement $equipement): static
+    public function removeEquipment(Equipment $Equipment): static
     {
-        if ($this->equipements->removeElement($equipement)) {
-            $equipement->removeRoom($this);
+        if ($this->Equipments->removeElement($Equipment)) {
+            $Equipment->removeRoom($this);
         }
 
         return $this;
