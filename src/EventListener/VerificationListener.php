@@ -3,16 +3,16 @@
 namespace App\EventListener;
 
 use App\Repository\ClientRepository;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class VerificationListener
 {
     public function __construct(
         private ClientRepository $clientRepo,
         private Security $security,
-        private SessionInterface $session
+        private RequestStack $requestStack
     ) {}
 
     public function onKernelController(ControllerEvent $event): void
@@ -26,10 +26,13 @@ class VerificationListener
         $client = $this->clientRepo->findOneBy(['user' => $user]);
 
         if (!$client || !$client->getAdresse()) {
-            $this->session->getFlashBag()->add(
-                'warning',
-                'Veuillez compléter votre fiche client avant de continuer.'
-            );
+            $session = $this->requestStack->getSession();
+            if ($session) {
+                $session->getFlashBag()->add(
+                    'warning',
+                    'Veuillez compléter votre fiche client avant de continuer.'
+                );
+            }
         }
     }
 }
