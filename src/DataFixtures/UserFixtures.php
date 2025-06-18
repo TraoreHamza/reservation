@@ -25,7 +25,7 @@ class UserFixtures extends Fixture
             ->setUpdatedAt(new \DateTimeImmutable())
         ;
         $manager->persist($user);
-        $this->addReference('user_' . $i, $user);
+        $this->addReference('USER_' . $i, $user);
     }
 
         $manager->flush();

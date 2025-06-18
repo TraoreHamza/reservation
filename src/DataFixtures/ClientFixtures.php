@@ -12,14 +12,17 @@ class ClientFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
-        $client = new Client();
-        $client
-            ->setName($faker->name())
-            ->setAddresse($faker->address())
-            
-        ;
+        for ($i = 0; $i < 10; $i++) {
+            $client = new Client();
+            $client
+                ->setName($faker->name())
+                ->setAddresse($faker->address())
+            ;
+            $manager->persist($client);
+            $this->addReference('CLIENT_' . $i, $client);
+        }
         $manager->persist($client);
-        
+
 
         $manager->flush();
     }
