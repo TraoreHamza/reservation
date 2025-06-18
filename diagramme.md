@@ -31,6 +31,7 @@ classDiagram
     class Review{
     - int star
     - string content
+    - Room room
     
     }
 
@@ -57,7 +58,7 @@ classDiagram
     - int capacity NN
     - text description
     - bool isAvailable NN
-    - Room room m2m
+  
     }
 
   class Booking {
@@ -65,9 +66,12 @@ classDiagram
     - dateTime startDate NN
     - dateTime endDate NN
     - string status NN
-    - dateTime createdAt NN
+    - dateTime created_at NN
     - Equipment equipment
     - Option option
+    - Room room
+    - Client client
+
 
   }
  
@@ -90,7 +94,6 @@ classDiagram
  
   class Favorite {
     - int id NN
-    - dateTime addedAt NN
     - Room room
     - User user
 
