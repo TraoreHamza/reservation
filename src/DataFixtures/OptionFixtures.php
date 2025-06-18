@@ -22,7 +22,7 @@ class OptionFixtures extends Fixture
             $option = new Option();
             $option
                 ->setName($faker->word(2))
-                ->addRoom($room[array_rand($room)])
+               
             ;
             $manager->persist($option);
         } 

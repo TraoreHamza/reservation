@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<ul>
+    {% for room in rooms %}
+        <li>
+            <strong>{{ room.name }}</strong> - 
+            Capacité : {{ room.capacity }}<br>
+            Description : {{ room.description }}<br>
+            Disponible : {{ room.isAvailable ? 'Oui' : 'Non' }}
+        </li>
+    {% else %}
+        <li>Aucune salle trouvée.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -28,8 +28,7 @@ class QuotationFixtures extends Fixture implements DependentFixtureInterface
             $client[] = $this->getReference('CLIENT_' . $i, Client::class);
         }
         // Création d'une nouvelle instance de Quotation
-       for ($i = 0; $i < 10; $i++) {
-         
+        for ($i = 0; $i < 10; $i++) {
         $quotation = new Quotation();
         $quotation
             ->setPrice($faker->randomFloat(2, 100, 1000))
@@ -40,7 +39,7 @@ class QuotationFixtures extends Fixture implements DependentFixtureInterface
             ->setClient($faker->randomElement($client)) // Associe un client aléatoire
         ;
         $manager->persist($quotation);
-       }
+        }
 
         $manager->flush();
     }
