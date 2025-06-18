@@ -4,14 +4,34 @@ namespace App\DataFixtures;
 
 use Faker\Factory;
 use App\Entity\Room;
+use App\Entity\User;
+use Cocur\Slugify\Slugify;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class RoomFixtures extends Fixture
+class RoomFixtures extends Fixture implements DependentFixtureInterface
 {
+    public function __construct(
+        private readonly UserPasswordHasherInterface $hasher,
+    ){}
     public function load(ObjectManager $manager): void
-    {
+    {   
+        $slugger = new Slugify();
         $faker = Factory::create('fr_FR');
+        // Admin
+        $admin = new User();
+        $admin
+            ->setEmail('admin@admin.fr')
+            ->setPassword($this->hasher->hashPassword($admin, 'admin'))
+            ->setWarning(0)
+            ->setRoles(['ROLE_ADMIN'])
+        ;
+
+        $manager->persist($admin);
+        $manager->flush(); // Admin enregistré en base de données
+        
         for ($i = 0; $i < 10; $i++) {
             $room = new Room();
             $room
@@ -29,7 +49,7 @@ class RoomFixtures extends Fixture
     public function getDependencies(): array
     {
         return [
-        
+            UserFixtures::class, // Assure que les utilisateurs sont créés avant les rooms
         ];
     }
 }
