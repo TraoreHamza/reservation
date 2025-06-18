@@ -16,6 +16,10 @@ class User
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Quotation::class)]
+    private Collection $quotations;
+
+
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 

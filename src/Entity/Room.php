@@ -19,6 +19,7 @@ class Room
     #[ORM\Column]
     private ?int $id = null;
 
+    
     #[ORM\Column(length: 50)]
     #[Assert\Length(max: 255, maxMessage: '{{ max}} caractères maximum.')]
     #[Assert\Regex(Pattern: '/\.(jpg|jpeg|png|webp)$/')]

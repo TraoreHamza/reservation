@@ -14,10 +14,20 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\QuotationService;
+
+
 
 #[Route('/booking')]
 class BookingController extends AbstractController
 {
+    public function confirm(Booking $booking, QuotationService $quotationService)
+{
+    $quotation = $quotationService->createFromBooking($booking);
+
+    // redirection ou affichage du devis
+    return $this->redirectToRoute('quotation_show', ['id' => $quotation->getId()]);
+}
     public function __construct(
         private EntityManagerInterface $em,
         private BookingRepository $br,
