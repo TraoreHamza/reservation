@@ -19,6 +19,7 @@ class RoomFixtures extends Fixture
                 ->setCapacity($faker->numberBetween(1, 100))
                 ->setDescription($faker->sentence())
                 ->setIsAvailable($faker->boolean())
+                ->setImage($faker->imageUrl()) // Génère une URL d'image aléatoire
             ;
             $manager->persist($room);
             $this->addReference('ROOM_' . $i, $room);

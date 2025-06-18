@@ -32,7 +32,7 @@ class FavoriteFixtures extends Fixture implements DependentFixtureInterface
         $favorite
             ->setaddedAt(new \DateTimeImmutable())
             ->setRoom($faker->randomElement($room)) // Associe une room aléatoire
-            ->setUsers($faker->randomElement($users)) // Associe un utilisateur aléatoire
+            ->setUser($faker->randomElement($users)) // Associe un utilisateur aléatoire
             
         ;
         $manager->persist($favorite);

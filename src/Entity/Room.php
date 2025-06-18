@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\RoomRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Inflector\Rules\Pattern;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RoomRepository::class)]
 class Room
@@ -18,7 +20,12 @@ class Room
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\Length(max: 255, maxMessage: '{{ max}} caractères maximum.')]
+    #[Assert\Regex(Pattern: '/\.(jpg|jpeg|png|webp)$/')]
     private ?string $name = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
 
     #[ORM\Column]
     private ?int $capacity = null;
@@ -298,6 +305,18 @@ class Room
                 $review->setRoom(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

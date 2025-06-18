@@ -12,7 +12,7 @@ class RoomController extends AbstractController
 {
     public function __construct(private RoomRepository $roomRepo) {}
 
-    #[Route('s', name: 'room_index', methods: ['GET', 'POST'])]
+    #[Route('s', name: 'rooms', methods: ['GET', 'POST'])]
     public function index(): Response
     {
         $rooms = $this->roomRepo->findAll();
