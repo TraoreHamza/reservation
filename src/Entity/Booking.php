@@ -28,10 +28,10 @@ class Booking
     private ?\DateTimeImmutable $createdAt = null;
 
     /**
-     * @var Collection<int, Equipement>
+     * @var Collection<int, Equipment>
      */
-    #[ORM\ManyToMany(targetEntity: Equipement::class, inversedBy: 'bookings')]
-    private Collection $equipement;
+    #[ORM\ManyToMany(targetEntity: Equipment::class, inversedBy: 'bookings')]
+    private Collection $Equipment;
 
     /**
      * @var Collection<int, Option>
@@ -41,7 +41,7 @@ class Booking
 
     public function __construct()
     {
-        $this->equipement = new ArrayCollection();
+        $this->Equipment = new ArrayCollection();
         $this->option = new ArrayCollection();
     }
 
@@ -99,25 +99,25 @@ class Booking
     }
 
     /**
-     * @return Collection<int, Equipement>
+     * @return Collection<int, Equipment>
      */
-    public function getEquipement(): Collection
+    public function getEquipment(): Collection
     {
-        return $this->equipement;
+        return $this->Equipment;
     }
 
-    public function addEquipement(Equipement $equipement): static
+    public function addEquipment(Equipment $Equipment): static
     {
-        if (!$this->equipement->contains($equipement)) {
-            $this->equipement->add($equipement);
+        if (!$this->Equipment->contains($Equipment)) {
+            $this->Equipment->add($Equipment);
         }
 
         return $this;
     }
 
-    public function removeEquipement(Equipement $equipement): static
+    public function removeEquipment(Equipment $Equipment): static
     {
-        $this->equipement->removeElement($equipement);
+        $this->Equipment->removeElement($Equipment);
 
         return $this;
     }
