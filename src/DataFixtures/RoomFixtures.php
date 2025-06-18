@@ -20,6 +20,7 @@ class RoomFixtures extends Fixture
             ->setIsAvailable($faker->boolean())
         ;
         $manager->persist($room);
+        $this->addReference('ROOM_', $room);
 
         $manager->flush();
     }
