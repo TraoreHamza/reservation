@@ -27,13 +27,13 @@ final class Version20250618091541 extends AbstractMigration
             )
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE booking_equipement (booking_id INTEGER NOT NULL, equipement_id INTEGER NOT NULL, PRIMARY KEY(booking_id, equipement_id), CONSTRAINT FK_212EA5823301C60 FOREIGN KEY (booking_id) REFERENCES booking (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_212EA582806F0F5C FOREIGN KEY (equipement_id) REFERENCES equipement (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE)
+            CREATE TABLE booking_Equipment (booking_id INTEGER NOT NULL, Equipment_id INTEGER NOT NULL, PRIMARY KEY(booking_id, Equipment_id), CONSTRAINT FK_212EA5823301C60 FOREIGN KEY (booking_id) REFERENCES booking (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_212EA582806F0F5C FOREIGN KEY (Equipment_id) REFERENCES Equipment (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE)
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE INDEX IDX_212EA5823301C60 ON booking_equipement (booking_id)
+            CREATE INDEX IDX_212EA5823301C60 ON booking_Equipment (booking_id)
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE INDEX IDX_212EA582806F0F5C ON booking_equipement (equipement_id)
+            CREATE INDEX IDX_212EA582806F0F5C ON booking_Equipment (Equipment_id)
         SQL);
         $this->addSql(<<<'SQL'
             CREATE TABLE booking_option (booking_id INTEGER NOT NULL, option_id INTEGER NOT NULL, PRIMARY KEY(booking_id, option_id), CONSTRAINT FK_E11C3B4E3301C60 FOREIGN KEY (booking_id) REFERENCES booking (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_E11C3B4EA7C41D6F FOREIGN KEY (option_id) REFERENCES option (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE)
@@ -48,16 +48,16 @@ final class Version20250618091541 extends AbstractMigration
             CREATE TABLE client (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name VARCHAR(50) DEFAULT NULL, addresse VARCHAR(255) DEFAULT NULL)
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE equipement (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name VARCHAR(60) NOT NULL, type VARCHAR(255) NOT NULL)
+            CREATE TABLE Equipment (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name VARCHAR(60) NOT NULL, type VARCHAR(255) NOT NULL)
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE equipement_room (equipement_id INTEGER NOT NULL, room_id INTEGER NOT NULL, PRIMARY KEY(equipement_id, room_id), CONSTRAINT FK_9D43C8AB806F0F5C FOREIGN KEY (equipement_id) REFERENCES equipement (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_9D43C8AB54177093 FOREIGN KEY (room_id) REFERENCES room (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE)
+            CREATE TABLE Equipment_room (Equipment_id INTEGER NOT NULL, room_id INTEGER NOT NULL, PRIMARY KEY(Equipment_id, room_id), CONSTRAINT FK_9D43C8AB806F0F5C FOREIGN KEY (Equipment_id) REFERENCES Equipment (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_9D43C8AB54177093 FOREIGN KEY (room_id) REFERENCES room (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE)
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE INDEX IDX_9D43C8AB806F0F5C ON equipement_room (equipement_id)
+            CREATE INDEX IDX_9D43C8AB806F0F5C ON Equipment_room (Equipment_id)
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE INDEX IDX_9D43C8AB54177093 ON equipement_room (room_id)
+            CREATE INDEX IDX_9D43C8AB54177093 ON Equipment_room (room_id)
         SQL);
         $this->addSql(<<<'SQL'
             CREATE TABLE favorite (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, room_id INTEGER DEFAULT NULL, users_id INTEGER DEFAULT NULL, added_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
@@ -140,7 +140,7 @@ final class Version20250618091541 extends AbstractMigration
             DROP TABLE booking
         SQL);
         $this->addSql(<<<'SQL'
-            DROP TABLE booking_equipement
+            DROP TABLE booking_Equipment
         SQL);
         $this->addSql(<<<'SQL'
             DROP TABLE booking_option
@@ -149,10 +149,10 @@ final class Version20250618091541 extends AbstractMigration
             DROP TABLE client
         SQL);
         $this->addSql(<<<'SQL'
-            DROP TABLE equipement
+            DROP TABLE Equipment
         SQL);
         $this->addSql(<<<'SQL'
-            DROP TABLE equipement_room
+            DROP TABLE Equipment_room
         SQL);
         $this->addSql(<<<'SQL'
             DROP TABLE favorite
