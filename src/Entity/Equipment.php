@@ -85,6 +85,14 @@ class Equipment
 
         return $this;
     }
+<<<<<<< HEAD
 
 
+=======
+    
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+>>>>>>> origin/yasmina
 }

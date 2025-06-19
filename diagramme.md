@@ -47,7 +47,7 @@ classDiagram
     class Client{
     - int id NN
     - string name
-    - string addresse
+    - string address
     }
 
   
@@ -55,6 +55,7 @@ classDiagram
   class Room {
     - int id NN
     - string name NN
+    - string image NN
     - int capacity NN
     - text description
     - bool isAvailable NN
