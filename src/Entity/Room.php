@@ -36,6 +36,10 @@ class Room
     #[ORM\Column]
     private ?bool $isAvailable = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $image = 'default.png';
+    
+
     /**
      * @var Collection<int, Equipment>
      */
@@ -80,7 +84,7 @@ class Room
         $this->favorites = new ArrayCollection();
         $this->bookings = new ArrayCollection();
         $this->reviews = new ArrayCollection();
-    }
+}
 
     public function getId(): ?int
     {
@@ -114,6 +118,30 @@ class Room
     public function getDescription(): ?string
     {
         return $this->description;
+    }
+
+    public function getImagePath(): ?string
+    {
+        $path = '/medias/uploads/images/';
+        if ($this->image !== 'default.png') {
+            return $path . $this->image;
+        }
+        return $path = '/medias/images/' . 'default.png';
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+    public function setImage(?string $image): static
+    {
+        if ($image) {
+            $this->image = $image;
+        } else {
+            $this->image = 'default.png';
+        }
+
+        return $this;
     }
 
     public function setDescription(?string $description): static
