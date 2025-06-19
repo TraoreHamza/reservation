@@ -1,0 +1,16 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Welcome to the Admin Dashboard</h1>
+                <p>This is your central hub for managing the application.</p>
+            </div>
+        </div>
+        <div class="row">
+        {{bookings|length}} au total
+        </div>
+    </div>
+{% endblock %}
