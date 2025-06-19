@@ -25,7 +25,7 @@ class Room
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $image = null;
+    private ?string $image = 'default.png';
 
     #[ORM\Column]
     private ?int $capacity = null;
@@ -35,10 +35,6 @@ class Room
 
     #[ORM\Column]
     private ?bool $isAvailable = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $image = 'default.png';
-    
 
     /**
      * @var Collection<int, Equipment>
@@ -333,18 +329,6 @@ class Room
                 $review->setRoom(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(string $image): static
-    {
-        $this->image = $image;
 
         return $this;
     }
