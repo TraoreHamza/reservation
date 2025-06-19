@@ -2,12 +2,15 @@
 
 namespace App\Form;
 
+use App\Entity\Option;
 use App\Entity\Booking;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Equipment;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class BookingForm extends AbstractType
 {

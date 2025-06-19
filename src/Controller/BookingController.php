@@ -26,10 +26,10 @@ class BookingController extends AbstractController
         private OptionRepository $or
     ) {}
 
-    #[Route('s', name: 'booking_index', methods: ['GET'])]
+    #[Route('s', name: 'bookings', methods: ['GET'])]
     public function index(): Response
     {
-        $bookings = $this->br->findBy(['user' => $this->getUser()]);
+        $bookings = $this->br->findBy(['client' => $this->getUser()]);
         return $this->render('booking/index.html.twig', ['bookings' => $bookings]);
     }
 
