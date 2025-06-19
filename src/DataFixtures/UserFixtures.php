@@ -22,7 +22,7 @@ class UserFixtures extends Fixture
         $user = new User();
         $user
             ->setEmail($faker->email())
-            ->setPassword($this->hasher->hashPassword($user, 'admin'))
+            ->setPassword($faker->password())
             ->setWarning($faker->numberBetween(0, 1, 2, 3))
             ->setIsBanned($faker->boolean(56))
             ->setIsActive($faker->boolean(75))
