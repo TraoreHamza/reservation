@@ -25,9 +25,7 @@ class Room
     #[Assert\Regex(Pattern: '/\.(jpg|jpeg|png|webp)$/')]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $image = null;
-
+    
     #[ORM\Column]
     private ?int $capacity = null;
 
