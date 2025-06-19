@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Réservations{% endblock %}
+
+{% block body %}
+    <h1>Mes Réservations</h1>
+
+    {% for booking in bookings %}
+        <div class="booking">
+            <h2>Réservation de la salle : {{ booking.room.name }}</h2>
+            <ul>
+                <li>Statut : {{ booking.status }}</li>
+                <li>Date de début : {{ booking.startDate|date('d/m/Y H:i') }}</li>
+                <li>Date de fin : {{ booking.endDate|date('d/m/Y H:i') }}</li>
+                <li>Client : {{ booking.client.nom }}</li>
+                <li>Équipements :
+                    <ul>
+                        {% for equipment in booking.equipment %}
+                            <li>{{ equipment.name }}</li>
+                        {% else %}
+                            <li>Aucun</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                <li>Options :
+                    <ul>
+                        {% for option in booking.options %}
+                            <li>{{ option.name }}</li>
+                        {% else %}
+                            <li>Aucune</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    {% else %}
+        <p>Aucune réservation trouvée.</p>
+    {% endfor %}
+{% endblock %}

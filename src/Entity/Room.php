@@ -25,7 +25,9 @@ class Room
     #[Assert\Regex(Pattern: '/\.(jpg|jpeg|png|webp)$/')]
     private ?string $name = null;
 
-    
+    #[ORM\Column(length: 255)]
+    private ?string $image = 'default.png';
+
     #[ORM\Column]
     private ?int $capacity = null;
 
@@ -34,10 +36,6 @@ class Room
 
     #[ORM\Column]
     private ?bool $isAvailable = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $image = 'default.png';
-    
 
     /**
      * @var Collection<int, Equipment>
@@ -83,7 +81,7 @@ class Room
         $this->favorites = new ArrayCollection();
         $this->bookings = new ArrayCollection();
         $this->reviews = new ArrayCollection();
-}
+    }
 
     public function getId(): ?int
     {
