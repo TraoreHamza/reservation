@@ -40,4 +40,18 @@ class RoomRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    /**
+     * Recherche les salles par nom (contient la chaîne $query)
+     * @param string $query
+     * @return Room[]
+     */
+    public function searchByName(string $query): array
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.name LIKE :q')
+            ->setParameter('q', '%' . $query . '%')
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -1,3 +1,5 @@
+<?php
+
 namespace App\Event;
 
 use App\Entity\Booking;
