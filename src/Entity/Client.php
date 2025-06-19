@@ -20,7 +20,7 @@ class Client
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $addresse = null;
+    private ?string $address = null;
 
     /**
      * @var Collection<int, Quotation>
@@ -62,12 +62,12 @@ class Client
 
     public function getAddresse(): ?string
     {
-        return $this->addresse;
+        return $this->address;
     }
 
-    public function setAddress(?string $addresse): static
+    public function setAddress(?string $address): static
     {
-        $this->addresse = $addresse;
+        $this->address = $address;
 
         return $this;
     }
