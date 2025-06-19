@@ -27,7 +27,7 @@ class Room
     #[ORM\Column(length: 255)]
     private ?string $image = 'default.png';
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $capacity = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
