@@ -62,24 +62,24 @@ class Quotation
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getcreated_at(): ?\DateTimeImmutable
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    public function setcreated_at(\DateTimeImmutable $created_at): static
     {
         $this->created_at = $created_at;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getupdated_at(): ?\DateTimeImmutable
     {
         return $this->updated_at;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): static
+    public function setupdated_at(\DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
 

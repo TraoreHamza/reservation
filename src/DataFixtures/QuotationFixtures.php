@@ -29,16 +29,16 @@ class QuotationFixtures extends Fixture implements DependentFixtureInterface
         }
         // Création d'une nouvelle instance de Quotation
         for ($i = 0; $i < 10; $i++) {
-        $quotation = new Quotation();
-        $quotation
-            ->setPrice($faker->randomFloat(2, 100, 1000))
-            ->setDate($faker->date())
-            ->setCreatedAt(new \DateTimeImmutable())
-            ->setUpdatedAt(new \DateTimeImmutable())
-            ->setRoom($faker->randomElement($room)) // Associe une room aléatoire
-            ->setClient($faker->randomElement($client)) // Associe un client aléatoire
-        ;
-        $manager->persist($quotation);
+            $quotation = new Quotation();
+            $quotation
+                ->setPrice($faker->randomFloat(2, 100, 1000))
+                ->setDate($faker->date())
+                ->setcreated_at(new \DateTimeImmutable())
+                ->setupdated_at(new \DateTimeImmutable())
+                ->setRoom($faker->randomElement($room)) // Associe une room aléatoire
+                ->setClient($faker->randomElement($client)) // Associe un client aléatoire
+            ;
+            $manager->persist($quotation);
         }
 
         $manager->flush();

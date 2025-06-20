@@ -30,13 +30,13 @@ class BookingFixtures extends Fixture implements DependentFixtureInterface
         $booking = new Booking();
         $booking
             ->setStatus($faker->randomElement())
-            ->setCreatedAt(new \DateTimeImmutable())
+            ->setcreated_at(new \DateTimeImmutable())
             ->setStartDate(new \DateTimeImmutable())
             ->setEndDate(new \DateTimeImmutable())
             ->setRoom($faker->randomElement($room)) // Associe une room aléatoire
             ->setClient($faker->randomElement($client))
 
-// Associe un client al 
+            // Associe un client al 
         ;
         $manager->persist($booking);
 

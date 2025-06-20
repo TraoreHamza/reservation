@@ -16,7 +16,7 @@ class Booking
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Status = null;
+    private ?string $status = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $startDate = null;
@@ -25,7 +25,7 @@ class Booking
     private ?\DateTimeImmutable $endDate = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?\DateTimeImmutable $created_at = null;
 
     /**
      * @var Collection<int, Equipment>
@@ -60,12 +60,12 @@ class Booking
 
     public function getStatus(): ?string
     {
-        return $this->Status;
+        return $this->status;
     }
 
-    public function setStatus(string $Status): static
+    public function setStatus(string $status): static
     {
-        $this->Status = $Status;
+        $this->status = $status;
 
         return $this;
     }
@@ -94,14 +94,14 @@ class Booking
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getcreated_at(): ?\DateTimeImmutable
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setcreated_at(\DateTimeImmutable $created_at): static
     {
-        $this->createdAt = $createdAt;
+        $this->created_at = $created_at;
 
         return $this;
     }
