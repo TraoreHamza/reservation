@@ -31,13 +31,13 @@ class Booking
      * @var Collection<int, Equipment>
      */
     #[ORM\ManyToMany(targetEntity: Equipment::class, inversedBy: 'bookings')]
-    private Collection $equipment;
+    private Collection $equipments;
 
     /**
      * @var Collection<int, Option>
      */
     #[ORM\ManyToMany(targetEntity: Option::class, inversedBy: 'bookings')]
-    private Collection $option;
+    private Collection $options;
 
     #[ORM\ManyToOne(inversedBy: 'bookings')]
     #[ORM\JoinColumn(nullable: false)]
@@ -52,8 +52,8 @@ class Booking
 
     public function __construct()
     {
-        $this->equipment = new ArrayCollection();
-        $this->option = new ArrayCollection();
+        $this->equipments = new ArrayCollection();
+        $this->options = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -114,13 +114,13 @@ class Booking
      */
     public function getEquipment(): Collection
     {
-        return $this->equipment;
+        return $this->equipments;
     }
 
     public function addEquipment(Equipment $equipment): static
     {
-        if (!$this->equipment->contains($equipment)) {
-            $this->equipment->add($equipment);
+        if (!$this->equipments->contains($equipment)) {
+            $this->equipments->add($equipment);
         }
 
         return $this;
@@ -128,7 +128,7 @@ class Booking
 
     public function removeEquipment(Equipment $equipment): static
     {
-        $this->equipment->removeElement($equipment);
+        $this->equipments->removeElement($equipment);
 
         return $this;
     }
@@ -138,13 +138,13 @@ class Booking
      */
     public function getOption(): Collection
     {
-        return $this->option;
+        return $this->options;
     }
 
     public function addOption(Option $option): static
     {
-        if (!$this->option->contains($option)) {
-            $this->option->add($option);
+        if (!$this->options->contains($option)) {
+            $this->options->add($option);
         }
 
         return $this;
@@ -152,7 +152,7 @@ class Booking
 
     public function removeOption(Option $option): static
     {
-        $this->option->removeElement($option);
+        $this->options->removeElement($option);
 
         return $this;
     }
