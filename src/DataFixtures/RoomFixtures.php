@@ -15,19 +15,134 @@ class RoomFixtures extends Fixture
 {
 
     public function load(ObjectManager $manager): void
-    {   
+    {
         $faker = Factory::create('fr_FR');
-        
-        for ($i = 0; $i < 10; $i++) {
+
+        $rooms = [
+            'Salle Victor Hugo',
+            'Salle Eiffel',
+            'Salle Pasteur',
+            'Salle Curie',
+            'Salle Molière',
+            'Salle Voltaire',
+            'Salle Zola',
+            'Salle Diderot',
+            'Salle Monet',
+            'Salle Renoir',
+            'Salle Rodin',
+            'Salle Balzac',
+            'Salle Proust',
+            'Salle Camus',
+            'Salle Sartre',
+            'Salle Baudelaire',
+            'Salle Verne',
+            'Salle Colette',
+            'Salle Cézanne',
+            'Salle Gaumont',
+            'Salle Lumière',
+            'Salle Turing',
+            'Salle Descartes',
+            'Salle Rousseau',
+            'Salle De Vinci',
+            'Salle Picasso',
+            'Salle Ravel',
+            'Salle Debussy',
+            'Salle Chopin',
+            'Salle Bizet',
+            'Salle Offenbach',
+            'Salle Gounod',
+            'Salle Berlioz',
+            'Salle Saint-Saëns',
+            'Salle Fauré',
+            'Salle Poulenc',
+            'Salle Satie',
+            'Salle Vivaldi',
+            'Salle Mozart',
+            'Salle Beethoven',
+            'Salle Bach',
+            'Salle Schubert',
+            'Salle Liszt',
+            'Salle Mendelssohn',
+            'Salle Brahms',
+            'Salle Wagner',
+            'Salle Strauss',
+            'Salle Mahler',
+            'Salle Rameau',
+            'Salle Lully',
+            'Salle Couperin',
+        ];
+
+        $descriptions = [
+            "Salle lumineuse idéale pour les réunions d'équipe.",
+            "Espace moderne équipé d'un vidéoprojecteur.",
+            "Salle polyvalente adaptée aux formations et ateliers.",
+            "Salle calme avec vue sur le jardin, parfaite pour la concentration.",
+            "Espace convivial pour les séances de brainstorming.",
+            "Salle de conférence avec système audio intégré.",
+            "Salle équipée pour visioconférences internationales.",
+            "Ambiance chaleureuse, idéale pour des petits groupes.",
+            "Grande salle modulable pour événements et séminaires.",
+            "Espace équipé de tableaux blancs et paperboards.",
+            "Salle insonorisée pour réunions confidentielles.",
+            "Salle de travail avec accès Wi-Fi haut débit.",
+            "Salle spacieuse avec coin détente.",
+            "Salle adaptée aux ateliers créatifs et artistiques.",
+            "Espace de réunion avec lumière naturelle abondante.",
+            "Salle équipée d’un écran interactif tactile.",
+            "Salle de formation avec 20 postes informatiques.",
+            "Espace réservé aux réunions de direction.",
+            "Salle confortable avec fauteuils ergonomiques.",
+            "Salle équipée pour projections vidéo HD.",
+            "Salle accessible aux personnes à mobilité réduite.",
+            "Espace modulable pour réunions et banquets.",
+            "Salle équipée d’un système de climatisation.",
+            "Salle à l’acoustique optimisée pour la musique.",
+            "Salle de réunion avec kitchenette attenante.",
+            "Salle décorée dans un style contemporain.",
+            "Espace chaleureux pour réunions informelles.",
+            "Salle avec accès direct à une terrasse extérieure.",
+            "Salle idéale pour formations en petits groupes.",
+            "Salle équipée de prises électriques individuelles.",
+            "Salle de réunion avec tableau interactif.",
+            "Salle avec vue panoramique sur la ville.",
+            "Espace de travail collaboratif et flexible.",
+            "Salle adaptée aux visioconférences et webinaires.",
+            "Salle dotée d’un système de sonorisation performant.",
+            "Salle de réunion avec mobilier modulable.",
+            "Espace sécurisé pour réunions confidentielles.",
+            "Salle équipée de stores occultants.",
+            "Salle avec accès direct au parking.",
+            "Salle de réunion avec bibliothèque intégrée.",
+            "Salle lumineuse avec grandes baies vitrées.",
+            "Salle de conférence avec scène et pupitre.",
+            "Salle avec espace de rangement pour matériel.",
+            "Salle équipée de prises réseau RJ45.",
+            "Salle de réunion avec espace lounge.",
+            "Salle adaptée aux ateliers de formation pratique.",
+            "Espace convivial pour pauses café et échanges.",
+            "Salle avec accès privatif et sécurisé.",
+            "Salle de réunion avec système de réservation en ligne.",
+            "Salle équipée pour projections 4K.",
+            "Salle avec coin vestiaire pour les participants.",
+        ];
+
+        $i = 0;
+        foreach ($rooms as $index => $roomName) {
             $room = new Room();
             $room
-                ->setName($faker->word())
+                ->setName($roomName)
                 ->setCapacity($faker->numberBetween(1, 100))
-                ->setDescription($faker->sentence())
+                ->setDescription($descriptions[$index])
                 ->setIsAvailable($faker->boolean())
             ;
             $manager->persist($room);
             $this->addReference('ROOM_' . $i, $room);
+
+            // Si tu veux flush tous les 10 éléments (optionnel)
+            if ($i % 100 === 0 ) {
+                $manager->flush();
+            }
+            $i++;
         }
         $manager->flush();
     }
