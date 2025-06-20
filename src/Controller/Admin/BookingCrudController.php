@@ -60,7 +60,7 @@ class BookingCrudController extends AbstractCrudController
                     'Annulé' => 'cancelled',
                 ])
                 ->setHelp('Statut actuel de la réservation (par exemple, validé, en attente, annulé).'),
-            AssociationField::new('equipment')
+            AssociationField::new('equipments')
                 ->setLabel('Équipement')
                 ->renderAsNativeWidget()
                 ->setHelp('Nom de l\'équipement associé à la réservation.'),
