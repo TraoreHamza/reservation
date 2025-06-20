@@ -3,8 +3,6 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
-use App\Entity\Room;
-use App\Entity\Client;
 use App\Entity\Booking;
 use App\Entity\Quotation;
 use Doctrine\Persistence\ObjectManager;
@@ -27,11 +25,11 @@ class QuotationFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < 10; $i++) {
             $quotation = new Quotation();
             $quotation
-                ->setPrice($faker->randomFloat(2, 100, 1000))
+                ->setPrice($faker->numberBetween(200, 2000)) // Prix aléatoire entre 200 et 2000 euros
                 ->setDate($faker->date())
                 ->setcreated_at(new \DateTimeImmutable())
                 ->setupdated_at(new \DateTimeImmutable())
-                ->addBooking($faker->randomElement($booking)) // Associe une booking aléatoire
+                ->setBooking($faker->randomElement($booking)) // Associe un booking aléatoire
             ;
             $manager->persist($quotation);
         }
