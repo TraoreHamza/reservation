@@ -4,8 +4,10 @@ namespace App\Entity;
 
 use App\Repository\FavoriteRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 
 #[ORM\Entity(repositoryClass: FavoriteRepository::class)]
+#[HasLifecycleCallbacks]
 class Favorite
 {
     #[ORM\Id]
@@ -14,7 +16,7 @@ class Favorite
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $addedAt = null;
+    private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\ManyToOne(inversedBy: 'favorites')]
     private ?Room $room = null;
@@ -26,15 +28,25 @@ class Favorite
     {
         return $this->id;
     }
-
-    public function getAddedAt(): ?\DateTimeImmutable
+    
+    /**
+     * Les évènements du cycle de vie de l'entité
+     * La mise à jour des dates de création et de modification de l'entité
+     */
+    #[ORM\PrePersist] // Premier enregistrement d'un objet de l'entité
+    public function setCreatedAtValue(): void
     {
-        return $this->addedAt;
+        $this->created_at = new \DateTimeImmutable();
     }
 
-    public function setAddedAt(\DateTimeImmutable $addedAt): static
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
-        $this->addedAt = $addedAt;
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }
