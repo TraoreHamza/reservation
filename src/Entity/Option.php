@@ -24,6 +24,11 @@ class Option
     #[ORM\ManyToMany(targetEntity: Room::class, inversedBy: 'options')]
     private Collection $rooms;
 
+    public function __construct()
+    {
+        $this->rooms = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

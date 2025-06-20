@@ -50,13 +50,21 @@ class OptionFixtures extends Fixture
         for ($i = 0; $i < 10; $i++) {
             $room[] = $this->getReference('ROOM_' . $i, Room::class);
         }
-        foreach ($options as $optionName) {
+        foreach ($options as $index => $optionName) {
             $option = new Option();
             $option
-                ->setName($optionName);
+                ->setName($optionName)
+                ->addRoom($faker->randomElement($room)) // Associe une room aléatoire
+            ;
             $manager->persist($option);
         }
 
         $manager->flush();
+    }
+    public function getDependencies(): array
+    {
+        return [
+            RoomFixtures::class,
+        ];
     }
 }
