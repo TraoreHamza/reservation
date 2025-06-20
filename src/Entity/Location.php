@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\LocationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LocationRepository::class)]
@@ -25,6 +27,17 @@ class Location
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $state = null;
 
+    /**
+     * @var Collection<int, Room>
+     */
+    #[ORM\OneToMany(targetEntity: Room::class, mappedBy: 'locations')]
+    private Collection $room;
+
+    public function __construct()
+    {
+        $this->room = new ArrayCollection();
+    }
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +87,36 @@ class Location
     public function setState(?string $state): static
     {
         $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Room>
+     */
+    public function getRoom(): Collection
+    {
+        return $this->room;
+    }
+
+    public function addRoom(Room $room): static
+    {
+        if (!$this->room->contains($room)) {
+            $this->room->add($room);
+            $room->setLocation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRoom(Room $room): static
+    {
+        if ($this->room->removeElement($room)) {
+            // set the owning side to null (unless already changed)
+            if ($room->getLocation() === $this) {
+                $room->setLocation(null);
+            }
+        }
 
         return $this;
     }
