@@ -13,38 +13,7 @@ class EquipmentFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
-        $equipements = [
-            'Vidéoprojecteur',
-            'Écran de projection',
-            'Tableau interactif',
-            'Tableau blanc',
-            'Paperboard',
-            'Système de visioconférence',
-            'Ordinateur portable',
-            'Télévision',
-            'Enceintes audio',
-            'Microphone sans fil',
-            'Caméra de surveillance',
-            'Imprimante',
-            'Scanner',
-            'Photocopieuse',
-            'Routeur Wi-Fi',
-            'Prises électriques multiples',
-            'Prises réseau RJ45',
-            'Climatisation',
-            'Chauffage d’appoint',
-            'Lumière LED réglable',
-            'Webcam HD',
-            'Lecteur DVD/Blu-ray',
-            'Télécommande universelle',
-            'Chargeur universel',
-            'Station de recharge USB',
-            'Distributeur de boissons',
-            'Fontaine à eau',
-            'Machine à café',
-            'Mini-frigo',
-            'Vestiaire mobile',
-        ];
+    
 
         $typeEquipements = [
             'Mobilier' => [
@@ -123,7 +92,7 @@ class EquipmentFixtures extends Fixture
             $room[] = $this->getReference('ROOM_' . $i, Room::class);
         }
         foreach ($typeEquipements as $type => $equipments) {
-            foreach ($equipements as $equipementName) {
+            foreach ($equipments as $equipementName) {
             $equipment = new Equipment();
             $equipment
                 ->setName($equipementName)
