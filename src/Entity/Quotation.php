@@ -120,6 +120,4 @@ class Quotation
 
         return $this;
     }
-
- 
 }

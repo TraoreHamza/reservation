@@ -1,100 +1,195 @@
 <?php
 
-namespace App\Controller;
+namespace App\Entity;
 
-use App\Entity\Booking;
-use App\Form\BookingForm;
-use App\Form\BookingFormType;
-use App\Repository\RoomRepository;
-use App\Repository\OptionRepository;
 use App\Repository\BookingRepository;
-use App\Repository\EquipmentRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 
-#[Route('/booking')]
-class BookingController extends AbstractController
+#[ORM\Entity(repositoryClass: BookingRepository::class)]
+class Booking
 {
-    public function __construct(
-        private EntityManagerInterface $em,
-        private BookingRepository $br,
-        private RoomRepository $rr,
-        private EquipmentRepository $er,
-        private OptionRepository $or
-    ) {}
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    #[Route('s', name: 'bookings', methods: ['GET'])]
-    public function index(): Response
+    #[ORM\Column(length: 255)]
+    private ?string $status = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $startDate = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $endDate = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $created_at = null;
+
+    /**
+     * @var Collection<int, Equipment>
+     */
+    #[ORM\ManyToMany(targetEntity: Equipment::class, inversedBy: 'bookings')]
+    private Collection $equipments;
+
+    /**
+     * @var Collection<int, Option>
+     */
+    #[ORM\ManyToMany(targetEntity: Option::class, inversedBy: 'bookings')]
+    private Collection $options;
+
+    #[ORM\ManyToOne(inversedBy: 'bookings')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Room $room = null;
+
+    #[ORM\ManyToOne(inversedBy: 'bookings')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Client $client = null;
+
+    #[ORM\ManyToOne(inversedBy: 'bookings')]
+    private ?Quotation $quotation = null;
+
+    public function __construct()
     {
-        $bookings = $this->br->findBy(['client' => $this->getUser()]);
-        return $this->render('booking/index.html.twig', ['bookings' => $bookings]);
+        $this->equipments = new ArrayCollection();
+        $this->options = new ArrayCollection();
     }
 
-    #[Route('/book/{id}', name: 'booking_book_room', methods: ['POST'])]
-    public function bookRoom(Request $request, int $id): Response
+    public function getId(): ?int
     {
-        /** @var User $user */
-        $user = $this->getUser();
-        $booking = new Booking();
-        $data = $request->request->all();
-        $booking
-            ->setRoom($this->rr->find($id))
-            ->setStatus("en attente")
-            ->setStartDate($data['startDate'])
-            ->setEndDate($data['endDate'])
-            ->setClient($user->getClient())
-        ;
-
-
-
-        if ($data['equipment']) {
-            foreach ($data['equipment'] as $value) {
-                $booking->addEquipment($this->er->find($value));
-            }
-        }
-        if ($data['options']) {
-            foreach ($data['options'] as $value) {
-                $booking->addOption($this->or->find($value));
-            }
-        }
-
-
-        $this->em->persist($booking);
-        $this->em->flush();
-        $this->addFlash('success', 'Réservation enregistrée');
-
-
-        return $this->redirectToRoute('booking_index');
+        return $this->id;
     }
 
-    #[Route('/{id}/edit', name: 'booking_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Booking $booking): Response
+    public function getStatus(): ?string
     {
-        $form = $this->createForm(BookingForm::class, $booking);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($booking);
-            $this->em->flush();
-            $this->addFlash('success', 'Réservation mise à jour');
-            return $this->redirectToRoute('booking_index');
-        }
-
-        return $this->render('booking/edit.html.twig', [
-            'form' => $form,
-            'booking' => $booking
-        ]);
+        return $this->status;
     }
 
-    #[Route('/{id}/cancel', name: 'booking_cancel', methods: ['POST'])]
-    public function cancel(Booking $booking): Response
+    public function setStatus(string $status): static
     {
-        $this->em->remove($booking);
-        $this->em->flush();
-        $this->addFlash('success', 'Réservation annulée');
-        return $this->redirectToRoute('booking_index');
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getStartDate(): ?\DateTimeImmutable
+    {
+        return $this->startDate;
+    }
+
+    public function setStartDate(\DateTimeImmutable $startDate): static
+    {
+        $this->startDate = $startDate;
+
+        return $this;
+    }
+
+    public function getEndDate(): ?\DateTimeImmutable
+    {
+        return $this->endDate;
+    }
+
+    public function setEndDate(\DateTimeImmutable $endDate): static
+    {
+        $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    public function getcreated_at(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setcreated_at(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Equipment>
+     */
+    public function getEquipment(): Collection
+    {
+        return $this->equipments;
+    }
+
+    public function addEquipment(Equipment $equipment): static
+    {
+        if (!$this->equipments->contains($equipment)) {
+            $this->equipments->add($equipment);
+        }
+
+        return $this;
+    }
+
+    public function removeEquipment(Equipment $equipment): static
+    {
+        $this->equipments->removeElement($equipment);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Option>
+     */
+    public function getOption(): Collection
+    {
+        return $this->options;
+    }
+
+    public function addOption(Option $option): static
+    {
+        if (!$this->options->contains($option)) {
+            $this->options->add($option);
+        }
+
+        return $this;
+    }
+
+    public function removeOption(Option $option): static
+    {
+        $this->options->removeElement($option);
+
+        return $this;
+    }
+
+    public function getRoom(): ?Room
+    {
+        return $this->room;
+    }
+
+    public function setRoom(?Room $room): static
+    {
+        $this->room = $room;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): static
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    public function getQuotation(): ?Quotation
+    {
+        return $this->quotation;
+    }
+
+    public function setQuotation(?Quotation $quotation): static
+    {
+        $this->quotation = $quotation;
+
+        return $this;
     }
 }
