@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\QuotationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: QuotationRepository::class)]
@@ -25,13 +27,16 @@ class Quotation
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\ManyToOne(inversedBy: 'quotations')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Room $room = null;
+    /**
+     * @var Collection<int, Booking>
+     */
+    #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'quotation')]
+    private Collection $bookings;
 
-    #[ORM\ManyToOne(inversedBy: 'quotations')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Client $client = null;
+    public function __construct()
+    {
+        $this->bookings = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -86,27 +91,35 @@ class Quotation
         return $this;
     }
 
-    public function getRoom(): ?Room
+    /**
+     * @return Collection<int, Booking>
+     */
+    public function getBooking(): Collection
     {
-        return $this->room;
+        return $this->bookings;
     }
 
-    public function setRoom(?Room $room): static
+    public function addBooking(Booking $booking): static
     {
-        $this->room = $room;
+        if (!$this->bookings->contains($booking)) {
+            $this->bookings->add($booking);
+            $booking->setQuotation($this);
+        }
 
         return $this;
     }
 
-    public function getClient(): ?Client
+    public function removeBooking(Booking $booking): static
     {
-        return $this->client;
-    }
-
-    public function setClient(?Client $client): static
-    {
-        $this->client = $client;
+        if ($this->bookings->removeElement($booking)) {
+            // set the owning side to null (unless already changed)
+            if ($booking->getQuotation() === $this) {
+                $booking->setQuotation(null);
+            }
+        }
 
         return $this;
     }
+
+ 
 }
