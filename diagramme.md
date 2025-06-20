@@ -41,6 +41,7 @@ classDiagram
     - string department
     - string number
     - string state
+    - Room room
     
     }
 
@@ -68,8 +69,6 @@ classDiagram
     - dateTime endDate NN
     - string status NN
     - dateTime created_at NN
-    - Equipment equipment
-    - Option option
     - Room room
     - Client client
 
@@ -103,18 +102,16 @@ classDiagram
  
 
 
-  
+  User "0..*" -- "1" Review : donner
   User "1" -- "0..*" Booking : effectue 
   User "1" -- "1" Client : possede 
-  User "1" -- "0..*" Quotation : reçoit 
+  Booking "0..*" -- "1" Quotation : reçoit 
   Room "1" -- "0..*" Quotation : concerne 
   Booking "1" -- "1" Room : concerne  
   Review "0..*" -- "1" Room : reçoit
   Room "*" -- "*" Equipment: contient
-  Booking "*" -- "*" Equipment: contient
   Room "1" -- "1" Location: situé
-  Room "*" -- "*" Option : respecte 
-  Booking "*" -- "*" Option : respecte 
+  Room "*" -- "*" Option : respecte  
   User "1" -- "0..*" Favorite : ajoute 
   Favorite "0..*" -- "1" Room : marque 
 
