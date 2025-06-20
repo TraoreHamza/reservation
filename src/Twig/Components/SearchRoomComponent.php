@@ -17,11 +17,9 @@ class SearchRoomComponent
     #[LiveProp(writable: true)]
     public string $query = '';
 
-    public array $rooms = [];
-
     public function __construct(private RoomRepository $roomRepository)
     {
-        $this->rooms = $this->getRooms();
+        // Plus besoin d'initialiser $rooms ici
     }
 
     public function getRooms(): array
@@ -31,10 +29,5 @@ class SearchRoomComponent
             return $this->roomRepository->findAll();
         }
         return $this->roomRepository->searchByName($this->query);
-    }
-
-    public function getResults(): array
-    {
-        return $this->rooms;
     }
 }
