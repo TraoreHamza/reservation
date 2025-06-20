@@ -5,7 +5,6 @@ namespace App\Controller\Admin;
 use App\Entity\Room;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
@@ -41,15 +40,21 @@ class RoomCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('name')->setHelp('Nom de la salle.'),
-            TextEditorField::new('description'),
+            TextField::new('name')
+                ->setLabel('Nom')
+                ->setHelp('Nom de la salle.'),
+            TextEditorField::new('description')
+                ->setLabel('Description'),
             ImageField::new('image')
+                ->setLabel('Sélectionnez une image')
                 ->setBasePath('medias/images/')
                 ->setUploadDir('public/medias/images')
                 ->setUploadedFileNamePattern('[year]/[month]/[day]/[slug]-[contenthash].[extension]'),
             IntegerField::new('capacity')
+                ->setLabel('Capacité')
                 ->setHelp('Capacité maximale de la salle.'),
             BooleanField::new('isAvailable')
+                ->setLabel('Disponibilité')
                 ->setHelp('Indique si la salle est disponible pour réservation.'),
         ];
     }
