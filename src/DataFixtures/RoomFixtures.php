@@ -138,7 +138,6 @@ class RoomFixtures extends Fixture
             $manager->persist($room);
             $this->addReference('ROOM_' . $i, $room);
 
-            // Si tu veux flush tous les 10 éléments (optionnel)
             if ($i % 100 === 0 ) {
                 $manager->flush();
             }
