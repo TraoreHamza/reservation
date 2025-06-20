@@ -22,7 +22,6 @@ class OptionFixtures extends Fixture
             $option = new Option();
             $option
                 ->setName($faker->word(2))
-               
             ;
             $manager->persist($option);
         } 
