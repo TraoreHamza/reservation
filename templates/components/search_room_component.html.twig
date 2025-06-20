@@ -1,88 +1,59 @@
-{# <div{{ attributes }}>
-    <input type="text" data-model="query" value="{{ query }}" placeholder="Nom de la salle..." class="form-control" />
-    <div class="">
-        {% set rooms = this.getRooms %}
-        {% if rooms|length > 0 %}
-            {% for room in rooms %}
-                <h3>{{ room.name }}</h3>
-                <p>Capacité : {{ room.capacity }}</p>
-                <a href="{{ path('room_view', { 'id': room.id }) }}">Voir la salle</a>
-                <hr>
-            {% endfor %}
-        {% else %}
-            <p>Aucune salle trouvée.</p>
-        {% endif %}
+<div{{ attributes }}>
+    <div class="search-container">
+        <form method="GET" action="{{ path('search_room') }}" class="mb-3">
+            <div class="input-group">
+                <input 
+                    type="text" 
+                    name="q" 
+                    value="{{ query }}" 
+                    placeholder="Nom de la salle..." 
+                    class="form-control" 
+                    autocomplete="off"
+                />
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Rechercher
+                </button>
+            </div>
+        </form>
+        
+        <div class="results-container">
+            {% set rooms = this.getRooms %}
+            {% if rooms|length > 0 %}
+                <div class="row">
+                    {% for room in rooms %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ room.name }}</h5>
+                                    <p class="card-text">
+                                        <strong>Capacité :</strong> {{ room.capacity }} personnes<br>
+                                        {% if room.description %}
+                                            <strong>Description :</strong> {{ room.description|slice(0, 100) }}{% if room.description|length > 100 %}...{% endif %}<br>
+                                        {% endif %}
+                                        <strong>Disponible :</strong> 
+                                        {% if room.isAvailable %}
+                                            <span class="badge bg-success">Oui</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Non</span>
+                                        {% endif %}
+                                    </p>
+                                    <a href="{{ path('room_view', { 'id': room.id }) }}" class="btn btn-primary">Voir la salle</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {% if query %}
+                    <div class="alert alert-info">
+                        <p class="mb-0">Aucune salle trouvée pour "{{ query }}".</p>
+                    </div>
+                {% else %}
+                    <div class="alert alert-secondary">
+                        <p class="mb-0">Commencez à taper pour rechercher une salle...</p>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
     </div>
 </div>
- #}
-
-<div class="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4 py-8">
-  <h1 class="text-2xl md:text-4xl font-bold text-gray-800 mb-6 text-center">
-    Trouvez la salle idéale pour votre afterwork
-  </h1>
-
-  <div class="w-full max-w-2xl relative">
-    <div class="flex bg-white shadow-lg rounded-xl overflow-hidden">
-      <input id="searchInput"
-             type="text"
-             placeholder="Événement, type de lieu, équipement..."
-             class="w-2/3 px-4 py-3 text-gray-700 focus:outline-none"
-      />
-      <input id="locationInput"
-             type="text"
-             placeholder="Où souhaitez-vous aller ?"
-             class="w-1/3 px-4 py-3 text-gray-700 border-l border-gray-200 focus:outline-none"
-      />
-      <div class="flex items-center justify-center px-4 bg-green-500 text-white">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
-             viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M21 21l-4.35-4.35M16.65 16.65A7.5 7.5 0 1116.65 2a7.5 7.5 0 010 15z"/>
-        </svg>
-      </div>
-    </div>
-
-    <div id="searchResults"
-         class="absolute z-10 w-full bg-white border border-gray-200 mt-1 rounded-lg shadow-lg max-h-60 overflow-auto hidden">
-      <!-- Résultats ici -->
-    </div>
-  </div>
-</div>
-
-<script>
-document.getElementById('searchInput').addEventListener('input', handleSearch);
-document.getElementById('locationInput').addEventListener('input', handleSearch);
-
-function handleSearch() {
-    const query = document.getElementById('searchInput').value;
-    const location = document.getElementById('locationInput').value;
-    const searchResults = document.getElementById('searchResults');
-
-    if (query.length < 2 && location.length < 2) {
-        searchResults.classList.add('hidden');
-        searchResults.innerHTML = '';
-        return;
-    }
-
-    
-    fetch(`/search-room?q=${encodeURIComponent(query + ' ' + location)}`)
-        .then(res => res.json())
-        .then(data => {
-            searchResults.innerHTML = '';
-            if (data.length === 0) {
-                searchResults.classList.add('hidden');
-                return;
-            }
-
-            data.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'px-4 py-2 hover:bg-gray-100 cursor-pointer';
-                div.innerHTML = `<strong>${item.name}</strong> — ${item.category} à ${item.location}`;
-                searchResults.appendChild(div);
-            });
-
-            searchResults.classList.remove('hidden');
-        });
-
-}
-</script>

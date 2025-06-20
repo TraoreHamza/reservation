@@ -26,6 +26,6 @@ return [
         'version' => '7.3.0',
     ],
     '@symfony/ux-live-component' => [
-        'version' => '2.26.1',
+        'path' => './vendor/symfony/ux-live-component/assets/dist/live_controller.js',
     ],
 ];

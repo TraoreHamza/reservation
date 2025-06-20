@@ -12,9 +12,23 @@ use Symfony\Component\HttpFoundation\Response;
 class SearchRoomController extends AbstractController
 {
     #[Route('/search-room', name: 'search_room', methods: ['GET'])]
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        return $this->render('search_room/index.html.twig');
+        $query = $request->query->get('q', '');
+
+        return $this->render('search_room/index.html.twig', [
+            'query' => $query
+        ]);
+    }
+
+    #[Route('/test-search', name: 'test_search', methods: ['GET'])]
+    public function test(RoomRepository $roomRepository): Response
+    {
+        $rooms = $roomRepository->findAll();
+
+        return $this->render('search_room/test.html.twig', [
+            'rooms' => $rooms
+        ]);
     }
 
     #[Route('/api/search-room', name: 'api_search_room', methods: ['GET'])]

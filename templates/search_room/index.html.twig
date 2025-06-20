@@ -4,5 +4,5 @@
 
 {% block body %}
     <h1>🔍 Rechercher une salle</h1>
-    {{ component('SearchRoomComponent') }}
+    {{ component('search_room_component', { query: query }) }}
 {% endblock %}

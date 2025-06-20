@@ -54,6 +54,26 @@ class RoomRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Recherche les salles par différents critères
+     * @param string $query
+     * @return array
+     */
+    public function searchRooms(string $query): array
+    {
+        return $this->createQueryBuilder('r')
+            ->leftJoin('r.options', 'o')
+            ->leftJoin('r.equipments', 'e')
+            ->where('r.name LIKE :q')
+            ->orWhere('r.description LIKE :q')
+            ->orWhere('o.name LIKE :q')
+            ->orWhere('e.name LIKE :q')
+            ->setParameter('q', '%' . $query . '%')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
 }
 
 // namespace App\Repository;
