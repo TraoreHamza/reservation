@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -60,11 +61,11 @@ class BookingCrudController extends AbstractCrudController
                     'Annulé' => 'cancelled',
                 ])
                 ->setHelp('Statut actuel de la réservation (par exemple, validé, en attente, annulé).'),
-            AssociationField::new('equipment')
+            AssociationField::new('equipments')
                 ->setLabel('Équipement')
                 ->renderAsNativeWidget()
                 ->setHelp('Nom de l\'équipement associé à la réservation.'),
-            AssociationField::new('option')
+            AssociationField::new('options')
                 ->setLabel('Option')
                 ->renderAsNativeWidget()
                 ->setHelp('Nom de l\'option associée à la réservation.'),

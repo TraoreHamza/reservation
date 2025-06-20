@@ -16,7 +16,7 @@ class Booking
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Status = null;
+    private ?string $status = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $startDate = null;
@@ -25,19 +25,19 @@ class Booking
     private ?\DateTimeImmutable $endDate = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?\DateTimeImmutable $created_at = null;
 
     /**
      * @var Collection<int, Equipment>
      */
     #[ORM\ManyToMany(targetEntity: Equipment::class, inversedBy: 'bookings')]
-    private Collection $equipment;
+    private Collection $equipments;
 
     /**
      * @var Collection<int, Option>
      */
     #[ORM\ManyToMany(targetEntity: Option::class, inversedBy: 'bookings')]
-    private Collection $option;
+    private Collection $options;
 
     #[ORM\ManyToOne(inversedBy: 'bookings')]
     #[ORM\JoinColumn(nullable: false)]
@@ -47,10 +47,13 @@ class Booking
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $client = null;
 
+    #[ORM\ManyToOne(inversedBy: 'bookings')]
+    private ?Quotation $quotation = null;
+
     public function __construct()
     {
-        $this->equipment = new ArrayCollection();
-        $this->option = new ArrayCollection();
+        $this->equipments = new ArrayCollection();
+        $this->options = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -60,12 +63,12 @@ class Booking
 
     public function getStatus(): ?string
     {
-        return $this->Status;
+        return $this->status;
     }
 
-    public function setStatus(string $Status): static
+    public function setStatus(string $status): static
     {
-        $this->Status = $Status;
+        $this->status = $status;
 
         return $this;
     }
@@ -94,14 +97,14 @@ class Booking
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getcreated_at(): ?\DateTimeImmutable
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setcreated_at(\DateTimeImmutable $created_at): static
     {
-        $this->createdAt = $createdAt;
+        $this->created_at = $created_at;
 
         return $this;
     }
@@ -111,13 +114,13 @@ class Booking
      */
     public function getEquipment(): Collection
     {
-        return $this->equipment;
+        return $this->equipments;
     }
 
     public function addEquipment(Equipment $equipment): static
     {
-        if (!$this->equipment->contains($equipment)) {
-            $this->equipment->add($equipment);
+        if (!$this->equipments->contains($equipment)) {
+            $this->equipments->add($equipment);
         }
 
         return $this;
@@ -125,7 +128,7 @@ class Booking
 
     public function removeEquipment(Equipment $equipment): static
     {
-        $this->equipment->removeElement($equipment);
+        $this->equipments->removeElement($equipment);
 
         return $this;
     }
@@ -135,13 +138,13 @@ class Booking
      */
     public function getOption(): Collection
     {
-        return $this->option;
+        return $this->options;
     }
 
     public function addOption(Option $option): static
     {
-        if (!$this->option->contains($option)) {
-            $this->option->add($option);
+        if (!$this->options->contains($option)) {
+            $this->options->add($option);
         }
 
         return $this;
@@ -149,7 +152,7 @@ class Booking
 
     public function removeOption(Option $option): static
     {
-        $this->option->removeElement($option);
+        $this->options->removeElement($option);
 
         return $this;
     }
@@ -174,6 +177,18 @@ class Booking
     public function setClient(?Client $client): static
     {
         $this->client = $client;
+
+        return $this;
+    }
+
+    public function getQuotation(): ?Quotation
+    {
+        return $this->quotation;
+    }
+
+    public function setQuotation(?Quotation $quotation): static
+    {
+        $this->quotation = $quotation;
 
         return $this;
     }

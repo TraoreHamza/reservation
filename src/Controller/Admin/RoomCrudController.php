@@ -41,12 +41,10 @@ class RoomCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-
-            TextField::new('name')
-                ->setHelp('Nom de la salle.'),
+            TextField::new('name')->setHelp('Nom de la salle.'),
             TextEditorField::new('description'),
             ImageField::new('image')
-                ->setBasePath('public/medias/images/')
+                ->setBasePath('medias/images/')
                 ->setUploadDir('public/medias/images')
                 ->setUploadedFileNamePattern('[year]/[month]/[day]/[slug]-[contenthash].[extension]'),
             IntegerField::new('capacity')

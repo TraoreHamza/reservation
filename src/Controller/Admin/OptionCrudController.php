@@ -41,7 +41,7 @@ class OptionCrudController extends AbstractCrudController
 
             TextField::new('name')
                 ->setHelp('Nom de l\'option.'),
-            AssociationField::new('room')
+            AssociationField::new('rooms')
                 ->setHelp('Type de salle pour laquelle cette option est applicable.'),
         ];
     }
