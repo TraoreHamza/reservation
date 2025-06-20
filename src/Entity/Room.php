@@ -20,11 +20,11 @@ class Room
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Assert\Length(max: 255, maxMessage: '{{ max}} caractères maximum.')]
-    #[Assert\Regex(Pattern: '/\.(jpg|jpeg|png|webp)$/')]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(max: 255, maxMessage: '{{ max}} caractères maximum.')]
+    #[Assert\Regex(Pattern: '/\.(jpg|jpeg|png|webp)$/')]
     private ?string $image = 'default.png';
 
     #[ORM\Column(type: 'integer')]
