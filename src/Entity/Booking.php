@@ -47,6 +47,9 @@ class Booking
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $client = null;
 
+    #[ORM\ManyToOne(inversedBy: 'bookings')]
+    private ?Quotation $quotation = null;
+
     public function __construct()
     {
         $this->equipment = new ArrayCollection();
@@ -174,6 +177,18 @@ class Booking
     public function setClient(?Client $client): static
     {
         $this->client = $client;
+
+        return $this;
+    }
+
+    public function getQuotation(): ?Quotation
+    {
+        return $this->quotation;
+    }
+
+    public function setQuotation(?Quotation $quotation): static
+    {
+        $this->quotation = $quotation;
 
         return $this;
     }
