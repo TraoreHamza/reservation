@@ -49,8 +49,8 @@ class RoomRepository extends ServiceEntityRepository
     public function searchByName(string $query): array
     {
         return $this->createQueryBuilder('r')
-            ->where('r.name LIKE :q')
-            ->setParameter('q', '%' . $query . '%')
+            ->where('LOWER(r.name) LIKE LOWER(:q)')
+            ->setParameter('q', '%' . strtolower($query) . '%')
             ->getQuery()
             ->getResult();
     }

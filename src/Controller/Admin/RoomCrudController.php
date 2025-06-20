@@ -11,6 +11,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class RoomCrudController extends AbstractCrudController
@@ -48,7 +49,7 @@ class RoomCrudController extends AbstractCrudController
                 ->setBasePath('public/medias/images/')
                 ->setUploadDir('public/medias/images')
                 ->setUploadedFileNamePattern('[year]/[month]/[day]/[slug]-[contenthash].[extension]'),
-            TextField::new('capacity')
+            IntegerField::new('capacity')
                 ->setHelp('Capacité maximale de la salle.'),
             BooleanField::new('isAvailable')
                 ->setHelp('Indique si la salle est disponible pour réservation.'),

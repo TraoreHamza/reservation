@@ -104,7 +104,8 @@ class NotificationListener
             ->from('no-reply@monsite.com')
             ->to($to)
             ->subject($subject)
-            ->text($body);
+            ->text($body)
+            ->html($body);
 
         $this->mailer->send($email);
     }

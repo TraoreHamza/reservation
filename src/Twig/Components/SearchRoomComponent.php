@@ -9,32 +9,26 @@ use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent('search_room_component')]
-#[AsLiveComponent]
+#[AsLiveComponent('SearchRoomComponent', template: 'components/search_room_component.html.twig')]
 class SearchRoomComponent
 {
     use DefaultActionTrait;
 
-    #[LiveProp(writable: true)]
-    public string $query = '';
+    #[LiveProp(writable: true, url: true)]
+    public ?string $query = null;
 
-    public array $rooms = [];
-
-    public function __construct(private RoomRepository $roomRepository)
-    {
-        $this->rooms = $this->getRooms();
-    }
+    public function __construct(private RoomRepository $roomRepository) {}
 
     public function getRooms(): array
     {
-        if (strlen($this->query) < 2) {
-            // Affiche toutes les salles si la recherche est vide ou trop courte
-            return $this->roomRepository->findAll();
+        if ($this->query) {
+            return $this->roomRepository->searchByName($this->query);
         }
-        return $this->roomRepository->searchByName($this->query);
+        return $this->roomRepository->findBy([], ['id' => 'DESC'], 10);
     }
 
-    public function getResults(): array
-    {
-        return $this->rooms;
-    }
+    // public function getResults(): array
+    // {
+    //     return $this->rooms;
+    // }
 }

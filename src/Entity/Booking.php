@@ -15,8 +15,8 @@ class Booking
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $Status = null;
+    #[ORM\Column(length: 255, options: ["default" => "en_attente"])]
+    private ?string $Status = 'en_attente';
 
     #[ORM\Column]
     private ?\DateTimeImmutable $startDate = null;
