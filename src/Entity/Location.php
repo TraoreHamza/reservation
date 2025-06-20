@@ -31,11 +31,11 @@ class Location
      * @var Collection<int, Room>
      */
     #[ORM\OneToMany(targetEntity: Room::class, mappedBy: 'locations')]
-    private Collection $room;
+    private Collection $rooms;
 
     public function __construct()
     {
-        $this->room = new ArrayCollection();
+        $this->rooms = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -96,13 +96,13 @@ class Location
      */
     public function getRoom(): Collection
     {
-        return $this->room;
+        return $this->rooms;
     }
 
     public function addRoom(Room $room): static
     {
-        if (!$this->room->contains($room)) {
-            $this->room->add($room);
+        if (!$this->rooms->contains($room)) {
+            $this->rooms->add($room);
             $room->setLocation($this);
         }
 
@@ -111,7 +111,7 @@ class Location
 
     public function removeRoom(Room $room): static
     {
-        if ($this->room->removeElement($room)) {
+        if ($this->rooms->removeElement($room)) {
             // set the owning side to null (unless already changed)
             if ($room->getLocation() === $this) {
                 $room->setLocation(null);
