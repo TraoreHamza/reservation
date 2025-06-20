@@ -23,12 +23,6 @@ class Client
     private ?string $address = null;
 
     /**
-     * @var Collection<int, Quotation>
-     */
-    #[ORM\OneToMany(targetEntity: Quotation::class, mappedBy: 'client')]
-    private Collection $quotations;
-
-    /**
      * @var Collection<int, Booking>
      */
     #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'client', orphanRemoval: true)]
@@ -39,7 +33,6 @@ class Client
 
     public function __construct()
     {
-        $this->quotations = new ArrayCollection();
         $this->bookings = new ArrayCollection();
     }
 
@@ -68,35 +61,6 @@ class Client
     public function setAddress(?string $address): static
     {
         $this->address = $address;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Quotation>
-     */
-    public function getQuotations(): Collection
-    {
-        return $this->quotations;
-    }
-
-    public function addQuotation(Quotation $quotation): static
-    {
-        if (!$this->quotations->contains($quotation)) {
-            $this->quotations->add($quotation);
-            $quotation->setClient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeQuotation(Quotation $quotation): static
-    {
-        if ($this->quotations->removeElement($quotation)) {
-            if ($quotation->getClient() === $this) {
-                $quotation->setClient(null);
-            }
-        }
 
         return $this;
     }
