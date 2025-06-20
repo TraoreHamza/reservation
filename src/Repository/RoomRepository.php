@@ -16,6 +16,53 @@ class RoomRepository extends ServiceEntityRepository
         parent::__construct($registry, Room::class);
     }
 
+    /**
+     * Recherche les salles par nom (contient la chaîne $query)
+     * @param string $query
+     * @return Room[]
+     */
+    public function searchByName(string $query): array
+    {
+        return $this->createQueryBuilder('r')
+            ->where('LOWER(r.name) LIKE LOWER(:q)')
+            ->andWhere('r.isAvailable = true')
+            ->setParameter('q', '%' . strtolower($query) . '%')
+            ->orderBy('r.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Recherche les salles par différents critères
+     * @param string $query
+     * @return array
+     */
+    public function searchRooms(string $query): array
+    {
+        return $this->createQueryBuilder('r')
+            ->leftJoin('r.options', 'o')
+            ->leftJoin('r.equipments', 'e')
+            ->where('r.name LIKE :q')
+            ->orWhere('r.description LIKE :q')
+            ->orWhere('o.name LIKE :q')
+            ->orWhere('e.name LIKE :q')
+            ->setParameter('q', '%' . $query . '%')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
+
+    //    public function findOneBySomeField($value): ?Article
+    //    {
+    //        return $this->createQueryBuilder('a')
+    //            ->andWhere('a.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
+
+
     //    /**
     //     * @return Room[] Returns an array of Room objects
     //     */
@@ -40,40 +87,6 @@ class RoomRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
-
-    /**
-     * Recherche les salles par nom (contient la chaîne $query)
-     * @param string $query
-     * @return Room[]
-     */
-    public function searchByName(string $query): array
-    {
-        return $this->createQueryBuilder('r')
-            ->where('LOWER(r.name) LIKE LOWER(:q)')
-            ->setParameter('q', '%' . strtolower($query) . '%')
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * Recherche les salles par différents critères
-     * @param string $query
-     * @return array
-     */
-    public function searchRooms(string $query): array
-    {
-        return $this->createQueryBuilder('r')
-            ->leftJoin('r.options', 'o')
-            ->leftJoin('r.equipments', 'e')
-            ->where('r.name LIKE :q')
-            ->orWhere('r.description LIKE :q')
-            ->orWhere('o.name LIKE :q')
-            ->orWhere('e.name LIKE :q')
-            ->setParameter('q', '%' . $query . '%')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult();
-    }
 }
 
 // namespace App\Repository;

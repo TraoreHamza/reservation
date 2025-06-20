@@ -2,6 +2,16 @@
 Diagramme de classes (UML) — Description textuelle + explications
 Classes principales :
 
+   _____       _       _     
+  / ____|     | |     | |   
+ | (___   __ _| |_   _| |_  
+  \___ \ / _` | | | | | __| 
+  ____) | (_| | | |_| | |_  
+ |_____/ \__,_|_|\__,_|\__| 
+              
+                                              
+
+
 ```mermaid
 classDiagram
   class User {
@@ -41,6 +51,7 @@ classDiagram
     - string department
     - string number
     - string state
+    - Room room
     
     }
 
@@ -68,8 +79,6 @@ classDiagram
     - dateTime endDate NN
     - string status NN
     - dateTime created_at NN
-    - Equipment equipment
-    - Option option
     - Room room
     - Client client
 
@@ -103,18 +112,15 @@ classDiagram
  
 
 
-  
-  User "1" -- "0..*" Booking : effectue 
+  User "1" -- "0..*" Review : donner
+  Client "1" -- "0..*" Booking : effectue 
   User "1" -- "1" Client : possede 
-  User "1" -- "0..*" Quotation : reçoit 
-  Room "1" -- "0..*" Quotation : concerne 
+  Booking "1" -- "0..*" Quotation : reçoit 
   Booking "1" -- "1" Room : concerne  
   Review "0..*" -- "1" Room : reçoit
   Room "*" -- "*" Equipment: contient
-  Booking "*" -- "*" Equipment: contient
   Room "1" -- "1" Location: situé
-  Room "*" -- "*" Option : respecte 
-  Booking "*" -- "*" Option : respecte 
+  Room "*" -- "*" Option : respecte  
   User "1" -- "0..*" Favorite : ajoute 
   Favorite "0..*" -- "1" Room : marque 
 

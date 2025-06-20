@@ -3,10 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\QuotationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 
 #[ORM\Entity(repositoryClass: QuotationRepository::class)]
+#[HasLifecycleCallbacks]
 class Quotation
 {
     #[ORM\Id]
@@ -14,20 +17,10 @@ class Quotation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'quotations')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Room $room = null;
-
-    #[ORM\ManyToOne(inversedBy: 'quotations')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Client $client = null;
-
     #[ORM\Column(length: 50)]
-    #[Assert\NotBlank]
     private ?string $price = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
     private ?string $date = null;
 
     #[ORM\Column]
@@ -36,51 +29,53 @@ class Quotation
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\Column(type: 'string', length: 20)]
-    #[Assert\Choice(choices: ['en_attente', 'validé', 'refusé'], message: 'Statut invalide.')]
-    private ?string $status = 'en_attente';
-
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $notes = null;
-
-    #[ORM\Column(type: 'json', nullable: true)]
-    private ?array $selectedOptions = [];
+    #[ORM\ManyToOne(inversedBy: 'quotations')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Booking $booking = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getRoom(): ?Room
+    /**
+     * Les évènements du cycle de vie de l'entité
+     * La mise à jour des dates de création et de modification de l'entité
+     */
+    #[ORM\PrePersist] // Premier enregistrement d'un objet de l'entité
+    public function setCreatedAtValue(): void
     {
-        return $this->room;
+        $this->created_at = new \DateTimeImmutable();
+        $this->updated_at = new \DateTimeImmutable();
     }
 
-    public function setRoom(?Room $room): static
+    #[ORM\PreUpdate] // Modification d'un objet de l'entité
+    public function setUpdatedAtValue(): void
     {
-        $this->room = $room;
-        return $this;
+        $this->updated_at = new \DateTimeImmutable();
     }
 
-    public function getClient(): ?Client
+    // Récupère le nom de la salle via la propriété booking
+    public function getRoom(): ?string
     {
-        return $this->client;
+        return $this->booking->getRoom()->getName();
     }
-
-    public function setClient(?Client $client): static
+    
+    // Récupère le nom du client via la propriété booking
+    public function getClient(): ?string
     {
-        $this->client = $client;
-        return $this;
+        return $this->booking->getClient()->getName();
     }
 
     public function getPrice(): ?string
     {
-        return $this->price;
+        return $this->price . ' €';
     }
 
     public function setPrice(string $price): static
     {
         $this->price = $price;
+
         return $this;
     }
 
@@ -92,61 +87,43 @@ class Quotation
     public function setDate(string $date): static
     {
         $this->date = $date;
+
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getcreated_at(): ?\DateTimeImmutable
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    public function setcreated_at(\DateTimeImmutable $created_at): static
     {
         $this->created_at = $created_at;
+
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getupdated_at(): ?\DateTimeImmutable
     {
         return $this->updated_at;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): static
+    public function setupdated_at(\DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
+
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getBooking(): ?Booking
     {
-        return $this->status;
+        return $this->booking;
     }
 
-    public function setStatus(string $status): static
+    public function setBooking(?Booking $booking): static
     {
-        $this->status = $status;
-        return $this;
-    }
+        $this->booking = $booking;
 
-    public function getNotes(): ?string
-    {
-        return $this->notes;
-    }
-
-    public function setNotes(?string $notes): static
-    {
-        $this->notes = $notes;
-        return $this;
-    }
-
-    public function getSelectedOptions(): ?array
-    {
-        return $this->selectedOptions;
-    }
-
-    public function setSelectedOptions(?array $selectedOptions): static
-    {
-        $this->selectedOptions = $selectedOptions;
         return $this;
     }
 }

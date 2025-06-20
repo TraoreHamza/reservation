@@ -19,9 +19,4 @@ class SearchRoomComponent
         }
         return $this->roomRepository->findBy([], ['id' => 'DESC'], 10);
     }
-
-    // public function getResults(): array
-    // {
-    //     return $this->rooms;
-    // }
 }

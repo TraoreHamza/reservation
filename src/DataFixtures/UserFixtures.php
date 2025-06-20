@@ -13,25 +13,25 @@ class UserFixtures extends Fixture
 {
     public function __construct(
         private readonly UserPasswordHasherInterface $hasher
-    ){}
+    ) {}
     public function load(ObjectManager $manager): void
-    {  
+    {
         $faker = Factory::create('fr_FR');
 
         for ($i = 0; $i < 50; $i++) {
-        $user = new User();
-        $user
-            ->setEmail($faker->email())
-            ->setPassword($faker->password())
-            ->setWarning($faker->numberBetween(0, 1, 2, 3))
-            ->setIsBanned($faker->boolean(56))
-            ->setIsActive($faker->boolean(75))
-            ->setCreatedAt(new \DateTimeImmutable())
-            ->setUpdatedAt(new \DateTimeImmutable())
-        ;
-        $manager->persist($user);
-        $this->addReference('USER_' . $i, $user);
-    }
+            $user = new User();
+            $user
+                ->setEmail($faker->email())
+                ->setPassword($faker->password())
+                ->setWarning($faker->numberBetween(0, 1, 2, 3))
+                ->setIsBanned($faker->boolean(56))
+                ->setIsActive($faker->boolean(75))
+                ->setcreated_at(new \DateTimeImmutable())
+                ->setupdated_at(new \DateTimeImmutable())
+            ;
+            $manager->persist($user);
+            $this->addReference('USER_' . $i, $user);
+        }
 
         $manager->flush();
     }

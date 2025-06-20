@@ -1,0 +1,16 @@
+<div{{attributes}}>
+	<label class="input mt-10 border">
+		<input type="text" data-model="query" class="grow" placeholder="Tapez un mot-clé..."/>
+	</label>
+
+	{% set rooms = this.rooms %}
+	{% if rooms|length > 0 %}
+
+		{% for item in rooms %}
+			{{ dump(item)}}
+		{% endfor %}
+	{% else %}
+
+		<p>Pas de resultat</p>
+	{% endif %}
+</div>

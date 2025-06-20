@@ -19,16 +19,15 @@ class Room
     #[ORM\Column]
     private ?int $id = null;
 
-    
     #[ORM\Column(length: 50)]
-    #[Assert\Length(max: 255, maxMessage: '{{ max}} caractères maximum.')]
-    #[Assert\Regex(Pattern: '/\.(jpg|jpeg|png|webp)$/')]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(max: 255, maxMessage: '{{ max}} caractères maximum.')]
+    #[Assert\Regex(Pattern: '/\.(jpg|jpeg|png|webp)$/')]
     private ?string $image = 'default.png';
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $capacity = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -50,12 +49,6 @@ class Room
     private Collection $options;
 
     /**
-     * @var Collection<int, Quotation>
-     */
-    #[ORM\OneToMany(targetEntity: Quotation::class, mappedBy: 'room')]
-    private Collection $quotations;
-
-    /**
      * @var Collection<int, Favorite>
      */
     #[ORM\OneToMany(targetEntity: Favorite::class, mappedBy: 'room')]
@@ -73,11 +66,13 @@ class Room
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'room', orphanRemoval: true)]
     private Collection $reviews;
 
+    #[ORM\ManyToOne(inversedBy: 'room')]
+    private ?Location $location = null;
+
     public function __construct()
     {
         $this->equipments = new ArrayCollection();
         $this->options = new ArrayCollection();
-        $this->quotations = new ArrayCollection();
         $this->favorites = new ArrayCollection();
         $this->bookings = new ArrayCollection();
         $this->reviews = new ArrayCollection();
@@ -117,26 +112,14 @@ class Room
         return $this->description;
     }
 
-    public function getImagePath(): ?string
-    {
-        $path = '/medias/uploads/images/';
-        if ($this->image !== 'default.png') {
-            return $path . $this->image;
-        }
-        return $path = '/medias/images/' . 'default.png';
-    }
-
     public function getImage(): ?string
     {
         return $this->image;
     }
+
     public function setImage(?string $image): static
     {
-        if ($image) {
-            $this->image = $image;
-        } else {
-            $this->image = 'default.png';
-        }
+        $this->image = $image;
 
         return $this;
     }
@@ -209,36 +192,6 @@ class Room
     {
         if ($this->options->removeElement($option)) {
             $option->removeRoom($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Quotation>
-     */
-    public function getQuotations(): Collection
-    {
-        return $this->quotations;
-    }
-
-    public function addQuotation(Quotation $quotation): static
-    {
-        if (!$this->quotations->contains($quotation)) {
-            $this->quotations->add($quotation);
-            $quotation->setRoom($this);
-        }
-
-        return $this;
-    }
-
-    public function removeQuotation(Quotation $quotation): static
-    {
-        if ($this->quotations->removeElement($quotation)) {
-            // set the owning side to null (unless already changed)
-            if ($quotation->getRoom() === $this) {
-                $quotation->setRoom(null);
-            }
         }
 
         return $this;
@@ -337,5 +290,17 @@ class Room
     public function __toString(): string
     {
         return $this->name;
+    }
+
+    public function getLocation(): ?Location
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?Location $location): static
+    {
+        $this->location = $location;
+
+        return $this;
     }
 }

@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BookingRepository::class)]
+#[ORM\HasLifecycleCallbacks] // Gestion auto des évènements par Doctrine
 class Booking
 {
     #[ORM\Id]
@@ -15,8 +16,8 @@ class Booking
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, options: ["default" => "en_attente"])]
-    private ?string $Status = 'en_attente';
+    #[ORM\Column(length: 255)]
+    private ?string $status = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $startDate = null;
@@ -25,19 +26,19 @@ class Booking
     private ?\DateTimeImmutable $endDate = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?\DateTimeImmutable $created_at = null;
 
     /**
      * @var Collection<int, Equipment>
      */
     #[ORM\ManyToMany(targetEntity: Equipment::class, inversedBy: 'bookings')]
-    private Collection $equipment;
+    private Collection $equipments;
 
     /**
      * @var Collection<int, Option>
      */
     #[ORM\ManyToMany(targetEntity: Option::class, inversedBy: 'bookings')]
-    private Collection $option;
+    private Collection $options;
 
     #[ORM\ManyToOne(inversedBy: 'bookings')]
     #[ORM\JoinColumn(nullable: false)]
@@ -47,10 +48,28 @@ class Booking
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $client = null;
 
+    /**
+     * @var Collection<int, Quotation>
+     */
+    #[ORM\OneToMany(targetEntity: Quotation::class, mappedBy: 'booking')]
+    private Collection $quotations;
+
     public function __construct()
     {
-        $this->equipment = new ArrayCollection();
-        $this->option = new ArrayCollection();
+        $this->equipments = new ArrayCollection();
+        $this->options = new ArrayCollection();
+        $this->quotations = new ArrayCollection();
+        $this->status = "pending";
+    }
+
+    /**
+     * Les évènements du cycle de vie de l'entité
+     * La mise à jour des dates de création et de modification de l'entité
+     */
+    #[ORM\PrePersist] // Premier enregistrement d'un objet de l'entité
+    public function setCreatedAtValue(): void
+    {
+        $this->created_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -60,12 +79,12 @@ class Booking
 
     public function getStatus(): ?string
     {
-        return $this->Status;
+        return $this->status;
     }
 
-    public function setStatus(string $Status): static
+    public function setStatus(string $status): static
     {
-        $this->Status = $Status;
+        $this->status = $status;
 
         return $this;
     }
@@ -96,12 +115,12 @@ class Booking
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
-        $this->createdAt = $createdAt;
+        $this->created_at = $created_at;
 
         return $this;
     }
@@ -109,15 +128,15 @@ class Booking
     /**
      * @return Collection<int, Equipment>
      */
-    public function getEquipment(): Collection
+    public function getEquipments(): Collection
     {
-        return $this->equipment;
+        return $this->equipments;
     }
 
     public function addEquipment(Equipment $equipment): static
     {
-        if (!$this->equipment->contains($equipment)) {
-            $this->equipment->add($equipment);
+        if (!$this->equipments->contains($equipment)) {
+            $this->equipments->add($equipment);
         }
 
         return $this;
@@ -125,7 +144,7 @@ class Booking
 
     public function removeEquipment(Equipment $equipment): static
     {
-        $this->equipment->removeElement($equipment);
+        $this->equipments->removeElement($equipment);
 
         return $this;
     }
@@ -133,15 +152,15 @@ class Booking
     /**
      * @return Collection<int, Option>
      */
-    public function getOption(): Collection
+    public function getOptions(): Collection
     {
-        return $this->option;
+        return $this->options;
     }
 
     public function addOption(Option $option): static
     {
-        if (!$this->option->contains($option)) {
-            $this->option->add($option);
+        if (!$this->options->contains($option)) {
+            $this->options->add($option);
         }
 
         return $this;
@@ -149,7 +168,7 @@ class Booking
 
     public function removeOption(Option $option): static
     {
-        $this->option->removeElement($option);
+        $this->options->removeElement($option);
 
         return $this;
     }
@@ -176,5 +195,40 @@ class Booking
         $this->client = $client;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Quotation>
+     */
+    public function getQuotations(): Collection
+    {
+        return $this->quotations;
+    }
+
+    public function addQuotation(Quotation $quotation): static
+    {
+        if (!$this->quotations->contains($quotation)) {
+            $this->quotations->add($quotation);
+            $quotation->setBooking($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuotation(Quotation $quotation): static
+    {
+        if ($this->quotations->removeElement($quotation)) {
+            // set the owning side to null (unless already changed)
+            if ($quotation->getBooking() === $this) {
+                $quotation->setBooking(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->room->getName() . ' - ' . $this->startDate->format('d/m/Y');
     }
 }

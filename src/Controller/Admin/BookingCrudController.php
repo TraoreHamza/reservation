@@ -6,9 +6,10 @@ use App\Entity\Booking;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
@@ -22,12 +23,12 @@ class BookingCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Équipement')
-            ->setEntityLabelInPlural('Équipements')
-            ->setPageTitle("index", 'Gestion des équipements')
-            ->setPageTitle("new", 'Ajouter un équipement')
-            ->setPageTitle("edit", 'Modifier un équipement')
-            ->setPageTitle("detail", "Detail de l'équipement")
+            ->setEntityLabelInSingular('Réservation')
+            ->setEntityLabelInPlural('Réservation')
+            ->setPageTitle("index", 'Gestion des réservations')
+            ->setPageTitle("new", 'Ajouter une réservation')
+            ->setPageTitle("edit", 'Modifier une réservation')
+            ->setPageTitle("detail", "Détail de la réservation")
         ;
     }
 
@@ -44,10 +45,10 @@ class BookingCrudController extends AbstractCrudController
             FormField::addTab('Réservation')
                 ->setIcon('fa fa-calendar'),
             FormField::addFieldset('Dates de la réservation'),
-            DateTimeField::new('startDate')
+            DateField::new('startDate')
                 ->setLabel('Date de démarrage')
                 ->setHelp('Date et heure de début de la réservation.'),
-            DateTimeField::new('endDate')
+            DateField::new('endDate')
                 ->setLabel('Date de fin')
                 ->setHelp('Date et heure de fin de la réservation.'),
 
@@ -60,13 +61,15 @@ class BookingCrudController extends AbstractCrudController
                     'Annulé' => 'cancelled',
                 ])
                 ->setHelp('Statut actuel de la réservation (par exemple, validé, en attente, annulé).'),
-            AssociationField::new('equipment')
+            CollectionField::new('equipments')
                 ->setLabel('Équipement')
-                ->renderAsNativeWidget()
+                ->hideOnIndex()
+                ->renderExpanded()
                 ->setHelp('Nom de l\'équipement associé à la réservation.'),
-            AssociationField::new('option')
+            CollectionField::new('options')
                 ->setLabel('Option')
-                ->renderAsNativeWidget()
+                ->hideOnIndex()
+                ->renderExpanded()
                 ->setHelp('Nom de l\'option associée à la réservation.'),
 
             FormField::addFieldset('Informations sur la salle et le client'),
