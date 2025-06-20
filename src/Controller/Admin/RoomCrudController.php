@@ -49,7 +49,7 @@ class RoomCrudController extends AbstractCrudController
                 ->setBasePath('public/medias/images/')
                 ->setUploadDir('public/medias/images')
                 ->setUploadedFileNamePattern('[year]/[month]/[day]/[slug]-[contenthash].[extension]'),
-            yield IntegerField::new('capacity')
+            IntegerField::new('capacity')
                 ->setHelp('Capacité maximale de la salle.'),
             BooleanField::new('isAvailable')
                 ->setHelp('Indique si la salle est disponible pour réservation.'),
