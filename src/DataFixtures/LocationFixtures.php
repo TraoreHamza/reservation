@@ -120,7 +120,6 @@ class LocationFixtures extends Fixture implements DependentFixtureInterface
             'Maine-et-Loire',
         ];
 
-
         //Recuperation des room nouvellement crées
         $room = [];
         for ($i = 0; $i < 10; $i++) {
