@@ -125,20 +125,25 @@ class RoomFixtures extends Fixture
             "Salle équipée pour projections 4K.",
             "Salle avec coin vestiaire pour les participants.",
         ];
-
+        $imageFilenames = [
+            'default.png',
+        ];
+    
         $i = 0;
         foreach ($rooms as $index => $roomName) {
             $room = new Room();
+            $imageFilename = $imageFilenames[$index % count($imageFilenames)];
             $room
                 ->setName($roomName)
                 ->setCapacity($faker->numberBetween(1, 100))
+                ->setImage($imageFilename) // On stocke juste le nom du fichier !
                 ->setDescription($descriptions[$index])
                 ->setIsAvailable($faker->boolean())
             ;
             $manager->persist($room);
             $this->addReference('ROOM_' . $i, $room);
 
-            if ($i % 100 === 0 ) {
+            if ($i % 100 === 0) {
                 $manager->flush();
             }
             $i++;
