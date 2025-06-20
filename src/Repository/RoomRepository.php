@@ -16,6 +16,34 @@ class RoomRepository extends ServiceEntityRepository
         parent::__construct($registry, Room::class);
     }
 
+
+    /** 
+     * @return Room[]  // Returns an array of room objects
+     */
+    public function searchByName(string $query): array
+    {
+        return $this->createQueryBuilder('a') //définition du query builder
+            ->Where('a.name LIKE :val') // ou on cherche le titre ou le slug
+            ->andWhere('a.isAvailable = true') //les Room publiés
+            ->setParameter('val', '%' . strtolower($query) . '%') //on met en minuscule et on ajoute les % pour la recherche
+            ->orderBy('a.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+
+    //    public function findOneBySomeField($value): ?Article
+    //    {
+    //        return $this->createQueryBuilder('a')
+    //            ->andWhere('a.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
+
+
     //    /**
     //     * @return Room[] Returns an array of Room objects
     //     */
@@ -40,4 +68,5 @@ class RoomRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
 }

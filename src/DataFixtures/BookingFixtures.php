@@ -27,18 +27,25 @@ class BookingFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < 10; $i++) {
             $client[] = $this->getReference('CLIENT_' . $i, Client::class);
         }
-        $booking = new Booking();
-        $booking
-            ->setStatus($faker->randomElement())
-            ->setCreatedAt(new \DateTimeImmutable())
-            ->setStartDate(new \DateTimeImmutable())
-            ->setEndDate(new \DateTimeImmutable())
-            ->setRoom($faker->randomElement($room)) // Associe une room aléatoire
-            ->setClient($faker->randomElement($client))
+        for ($i = 0; $i < 10; $i++) {
+            $booking = new Booking();
+            $startDate = $faker->dateTimeBetween('-1 week', '+1 week'); // Date de début aléatoire
+            $endDate = $faker->dateTimeBetween($startDate, '+1 week'); // Date de fin après la date de début
 
-// Associe un client al 
-        ;
-        $manager->persist($booking);
+            $booking
+                ->setStatus($faker->randomElement([
+                    "Validée",
+                    "En attente",
+                    "Annulée",
+                ]))
+                ->setCreatedAt(new \DateTimeImmutable())
+                ->setStartDate(\DateTimeImmutable::createFromMutable($startDate)) // Conversion en DateTimeImmutable
+                ->setEndDate(\DateTimeImmutable::createFromMutable($endDate)) // Conversion en DateTimeImmutable
+                ->setRoom($faker->randomElement($room)) // Associe une room aléatoire
+                ->setClient($faker->randomElement($client));
+
+            $manager->persist($booking);
+        }
 
         $manager->flush();
     }
