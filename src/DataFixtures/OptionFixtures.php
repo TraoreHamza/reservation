@@ -13,18 +13,49 @@ class OptionFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
+        $options = [
+            'Vidéoprojecteur',
+            'Tableau blanc',
+            'Paperboard',
+            'Connexion Wi-Fi',
+            'Climatisation',
+            'Chauffage',
+            'Système audio',
+            'Micro sans fil',
+            'Ordinateur portable',
+            'Télévision',
+            'Salle insonorisée',
+            'Accès PMR',
+            'Espace café',
+            'Fontaine à eau',
+            'Service traiteur',
+            'Chaises supplémentaires',
+            'Tables modulables',
+            'Lumière naturelle',
+            'Rideaux occultants',
+            'Prises électriques',
+            'Prises réseau RJ45',
+            'Imprimante',
+            'Scanner',
+            'Photocopieuse',
+            'Terrasse extérieure',
+            'Parking privé',
+            'Vestiaire',
+            'Espace détente',
+            'Salle de pause',
+            'Accueil personnalisé',
+        ];
 
         $room = [];
         for ($i = 0; $i < 10; $i++) {
             $room[] = $this->getReference('ROOM_' . $i, Room::class);
         }
-        for ($i = 0; $i < 10; $i++) {
+        foreach ($options as $optionName) {
             $option = new Option();
             $option
-                ->setName($faker->word(2))
-            ;
+                ->setName($optionName);
             $manager->persist($option);
-        } 
+        }
 
         $manager->flush();
     }
