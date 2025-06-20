@@ -5,10 +5,8 @@ namespace App\Controller\Admin;
 use App\Entity\Option;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class OptionCrudController extends AbstractCrudController
@@ -41,8 +39,7 @@ class OptionCrudController extends AbstractCrudController
 
             TextField::new('name')
                 ->setHelp('Nom de l\'option.'),
-            AssociationField::new('rooms')
-                ->setHelp('Type de salle pour laquelle cette option est applicable.'),
+            
         ];
     }
 }
