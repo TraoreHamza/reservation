@@ -112,26 +112,14 @@ class Room
         return $this->description;
     }
 
-    public function getImagePath(): ?string
-    {
-        $path = '/medias/uploads/images/';
-        if ($this->image !== 'default.png') {
-            return $path . $this->image;
-        }
-        return $path = '/medias/images/' . 'default.png';
-    }
-
     public function getImage(): ?string
     {
         return $this->image;
     }
+
     public function setImage(?string $image): static
     {
-        if ($image) {
-            $this->image = $image;
-        } else {
-            $this->image = 'default.png';
-        }
+        $this->image = $image;
 
         return $this;
     }
