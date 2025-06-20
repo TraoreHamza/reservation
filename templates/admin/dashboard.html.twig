@@ -2,15 +2,36 @@
 
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>Welcome to the Admin Dashboard</h1>
-                <p>This is your central hub for managing the application.</p>
-            </div>
-        </div>
-        <div class="row">
-        {{bookings|length}} au total
-        </div>
-    </div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h1>Welcome to the Admin Dashboard</h1>
+				<p>This is your central hub for managing the application.</p>
+			</div>
+		</div>
+        <div id="calendar"></div>
+	</div>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+const calendarEl = document.getElementById("calendar");
+if (calendarEl) {
+const calendar = new FullCalendar.Calendar(calendarEl, {
+locale: 'fr',
+headerToolbar: {
+left: "prev,next today",
+center: "title",
+right: "dayGridMonth,listWeek"
+},
+events: {{ bookings|raw }}
+});
+
+
+calendar.render();
+
+} else {
+console.error("Element with ID 'calendar' not found.");
+}
+});
+	</script>
 {% endblock %}
