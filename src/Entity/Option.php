@@ -22,7 +22,7 @@ class Option
      * @var Collection<int, Room>
      */
     #[ORM\ManyToMany(targetEntity: Room::class, inversedBy: 'options')]
-    private Collection $room;
+    private Collection $rooms;
 
     public function getId(): ?int
     {
@@ -46,13 +46,13 @@ class Option
      */
     public function getRoom(): Collection
     {
-        return $this->room;
+        return $this->rooms;
     }
 
     public function addRoom(Room $room): static
     {
-        if (!$this->room->contains($room)) {
-            $this->room->add($room);
+        if (!$this->rooms->contains($room)) {
+            $this->rooms->add($room);
         }
 
         return $this;
@@ -60,7 +60,7 @@ class Option
 
     public function removeRoom(Room $room): static
     {
-        $this->room->removeElement($room);
+        $this->rooms->removeElement($room);
 
         return $this;
     }
