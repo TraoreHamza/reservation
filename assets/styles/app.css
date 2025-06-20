@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .land{
     fill:#a3a3a3;
     stroke:#fff;
