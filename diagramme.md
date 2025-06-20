@@ -2,6 +2,16 @@
 Diagramme de classes (UML) — Description textuelle + explications
 Classes principales :
 
+   _____       _       _     
+  / ____|     | |     | |   
+ | (___   __ _| |_   _| |_  
+  \___ \ / _` | | | | | __| 
+  ____) | (_| | | |_| | |_  
+ |_____/ \__,_|_|\__,_|\__| 
+              
+                                              
+
+
 ```mermaid
 classDiagram
   class User {
@@ -102,11 +112,10 @@ classDiagram
  
 
 
-  User "0..*" -- "1" Review : donner
-  User "1" -- "0..*" Booking : effectue 
+  User "1" -- "0..*" Review : donner
+  Client "1" -- "0..*" Booking : effectue 
   User "1" -- "1" Client : possede 
-  Booking "0..*" -- "1" Quotation : reçoit 
-  Room "1" -- "0..*" Quotation : concerne 
+  Booking "1" -- "0..*" Quotation : reçoit 
   Booking "1" -- "1" Room : concerne  
   Review "0..*" -- "1" Room : reçoit
   Room "*" -- "*" Equipment: contient
