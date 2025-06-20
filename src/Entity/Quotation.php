@@ -6,8 +6,10 @@ use App\Repository\QuotationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 
 #[ORM\Entity(repositoryClass: QuotationRepository::class)]
+#[HasLifecycleCallbacks]
 class Quotation
 {
     #[ORM\Id]
@@ -27,25 +29,47 @@ class Quotation
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
 
-    /**
-     * @var Collection<int, Booking>
-     */
-    #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'quotation')]
-    private Collection $bookings;
-
-    public function __construct()
-    {
-        $this->bookings = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'quotations')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Booking $booking = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * Les évènements du cycle de vie de l'entité
+     * La mise à jour des dates de création et de modification de l'entité
+     */
+    #[ORM\PrePersist] // Premier enregistrement d'un objet de l'entité
+    public function setCreatedAtValue(): void
+    {
+        $this->created_at = new \DateTimeImmutable();
+        $this->updated_at = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate] // Modification d'un objet de l'entité
+    public function setUpdatedAtValue(): void
+    {
+        $this->updated_at = new \DateTimeImmutable();
+    }
+
+    // Récupère le nom de la salle via la propriété booking
+    public function getRoom(): ?string
+    {
+        return $this->booking->getRoom()->getName();
+    }
+    
+    // Récupère le nom du client via la propriété booking
+    public function getClient(): ?string
+    {
+        return $this->booking->getClient()->getName();
+    }
+
     public function getPrice(): ?string
     {
-        return $this->price;
+        return $this->price . ' €';
     }
 
     public function setPrice(string $price): static
@@ -91,32 +115,14 @@ class Quotation
         return $this;
     }
 
-    /**
-     * @return Collection<int, Booking>
-     */
-    public function getBooking(): Collection
+    public function getBooking(): ?Booking
     {
-        return $this->bookings;
+        return $this->booking;
     }
 
-    public function addBooking(Booking $booking): static
+    public function setBooking(?Booking $booking): static
     {
-        if (!$this->bookings->contains($booking)) {
-            $this->bookings->add($booking);
-            $booking->setQuotation($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBooking(Booking $booking): static
-    {
-        if ($this->bookings->removeElement($booking)) {
-            // set the owning side to null (unless already changed)
-            if ($booking->getQuotation() === $this) {
-                $booking->setQuotation(null);
-            }
-        }
+        $this->booking = $booking;
 
         return $this;
     }
