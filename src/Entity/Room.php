@@ -49,12 +49,6 @@ class Room
     private Collection $options;
 
     /**
-     * @var Collection<int, Quotation>
-     */
-    #[ORM\OneToMany(targetEntity: Quotation::class, mappedBy: 'room')]
-    private Collection $quotations;
-
-    /**
      * @var Collection<int, Favorite>
      */
     #[ORM\OneToMany(targetEntity: Favorite::class, mappedBy: 'room')]
@@ -72,11 +66,13 @@ class Room
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'room', orphanRemoval: true)]
     private Collection $reviews;
 
+    #[ORM\ManyToOne(inversedBy: 'room')]
+    private ?Location $location = null;
+
     public function __construct()
     {
         $this->equipments = new ArrayCollection();
         $this->options = new ArrayCollection();
-        $this->quotations = new ArrayCollection();
         $this->favorites = new ArrayCollection();
         $this->bookings = new ArrayCollection();
         $this->reviews = new ArrayCollection();
@@ -214,36 +210,6 @@ class Room
     }
 
     /**
-     * @return Collection<int, Quotation>
-     */
-    public function getQuotations(): Collection
-    {
-        return $this->quotations;
-    }
-
-    public function addQuotation(Quotation $quotation): static
-    {
-        if (!$this->quotations->contains($quotation)) {
-            $this->quotations->add($quotation);
-            $quotation->setRoom($this);
-        }
-
-        return $this;
-    }
-
-    public function removeQuotation(Quotation $quotation): static
-    {
-        if ($this->quotations->removeElement($quotation)) {
-            // set the owning side to null (unless already changed)
-            if ($quotation->getRoom() === $this) {
-                $quotation->setRoom(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Favorite>
      */
     public function getFavorites(): Collection
@@ -336,5 +302,17 @@ class Room
     public function __toString(): string
     {
         return $this->name;
+    }
+
+    public function getLocation(): ?Location
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?Location $location): static
+    {
+        $this->location = $location;
+
+        return $this;
     }
 }
