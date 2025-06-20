@@ -18,12 +18,12 @@ class NotificationListener
     public function onBookingCreated(BookingCreatedEvent $event): void
     {
         $booking = $event->getBooking();
-        $user = $booking->getUser();
+        $client = $booking->getClient();
         $adminEmail = 'admin@monsite.com';
 
         // Notification pour l'utilisateur
         $this->send(
-            $user->getEmail(),
+            $client->getUser()?->getEmail(),
             'Réservation enregistrée',
             "Votre réservation pour la salle " . $booking->getRoom()->getName() . " a bien été prise en compte."
         );
@@ -32,18 +32,18 @@ class NotificationListener
         $this->send(
             $adminEmail,
             'Nouvelle réservation',
-            "Nouvelle réservation effectuée par " . $user->getEmail()
+            "Nouvelle réservation effectuée par " . $client->getUser()?->getEmail()
         );
     }
 
     public function onBookingUpdated(BookingUpdatedEvent $event): void
     {
         $booking = $event->getBooking();
-        $user = $booking->getUser();
+        $client = $booking->getClient();
         $adminEmail = 'admin@monsite.com';
 
         $this->send(
-            $user->getEmail(),
+            $client->getUser()?->getEmail(),
             'Réservation modifiée',
             "Votre réservation pour la salle " . $booking->getRoom()->getName() . " a été modifiée."
         );
@@ -51,18 +51,18 @@ class NotificationListener
         $this->send(
             $adminEmail,
             'Réservation modifiée',
-            "La réservation de " . $user->getEmail() . " a été modifiée."
+            "La réservation de " . $client->getUser()?->getEmail() . " a été modifiée."
         );
     }
 
     public function onBookingCancelled(BookingCancelledEvent $event): void
     {
         $booking = $event->getBooking();
-        $user = $booking->getUser();
+        $client = $booking->getClient();
         $adminEmail = 'admin@monsite.com';
 
         $this->send(
-            $user->getEmail(),
+            $client->getUser()?->getEmail(),
             'Réservation annulée',
             "Votre réservation a bien été annulée."
         );
@@ -70,17 +70,17 @@ class NotificationListener
         $this->send(
             $adminEmail,
             'Réservation annulée',
-            "La réservation de " . $user->getEmail() . " a été annulée."
+            "La réservation de " . $client->getUser()?->getEmail() . " a été annulée."
         );
     }
 
     public function onBookingValidated(BookingValidatedEvent $event): void
     {
         $booking = $event->getBooking();
-        $user = $booking->getUser();
+        $client = $booking->getClient();
 
         $this->send(
-            $user->getEmail(),
+            $client->getUser()?->getEmail(),
             'Réservation validée',
             "Votre réservation pour la salle " . $booking->getRoom()->getName() . " a été validée par l'administrateur."
         );

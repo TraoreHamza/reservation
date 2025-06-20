@@ -1,4 +1,4 @@
-<div{{ attributes }}>
+{# <div{{ attributes }}>
     <input type="text" data-model="query" value="{{ query }}" placeholder="Nom de la salle..." class="form-control" />
     <div class="">
         {% set rooms = this.getRooms %}
@@ -14,4 +14,75 @@
         {% endif %}
     </div>
 </div>
+ #}
 
+<div class="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4 py-8">
+  <h1 class="text-2xl md:text-4xl font-bold text-gray-800 mb-6 text-center">
+    Trouvez la salle idéale pour votre afterwork
+  </h1>
+
+  <div class="w-full max-w-2xl relative">
+    <div class="flex bg-white shadow-lg rounded-xl overflow-hidden">
+      <input id="searchInput"
+             type="text"
+             placeholder="Événement, type de lieu, équipement..."
+             class="w-2/3 px-4 py-3 text-gray-700 focus:outline-none"
+      />
+      <input id="locationInput"
+             type="text"
+             placeholder="Où souhaitez-vous aller ?"
+             class="w-1/3 px-4 py-3 text-gray-700 border-l border-gray-200 focus:outline-none"
+      />
+      <div class="flex items-center justify-center px-4 bg-green-500 text-white">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M21 21l-4.35-4.35M16.65 16.65A7.5 7.5 0 1116.65 2a7.5 7.5 0 010 15z"/>
+        </svg>
+      </div>
+    </div>
+
+    <div id="searchResults"
+         class="absolute z-10 w-full bg-white border border-gray-200 mt-1 rounded-lg shadow-lg max-h-60 overflow-auto hidden">
+      <!-- Résultats ici -->
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('searchInput').addEventListener('input', handleSearch);
+document.getElementById('locationInput').addEventListener('input', handleSearch);
+
+function handleSearch() {
+    const query = document.getElementById('searchInput').value;
+    const location = document.getElementById('locationInput').value;
+    const searchResults = document.getElementById('searchResults');
+
+    if (query.length < 2 && location.length < 2) {
+        searchResults.classList.add('hidden');
+        searchResults.innerHTML = '';
+        return;
+    }
+
+    
+    fetch(`/search-room?q=${encodeURIComponent(query + ' ' + location)}`)
+        .then(res => res.json())
+        .then(data => {
+            searchResults.innerHTML = '';
+            if (data.length === 0) {
+                searchResults.classList.add('hidden');
+                return;
+            }
+
+            data.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'px-4 py-2 hover:bg-gray-100 cursor-pointer';
+                div.innerHTML = `<strong>${item.name}</strong> — ${item.category} à ${item.location}`;
+                searchResults.appendChild(div);
+            });
+
+            searchResults.classList.remove('hidden');
+        });
+
+}
+</script>

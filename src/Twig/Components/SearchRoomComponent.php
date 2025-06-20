@@ -22,7 +22,7 @@ class SearchRoomComponent
     public function getRooms(): array
     {
         if ($this->query) {
-            return $this->roomRepository->searchByName($this->query);
+            return $this->roomRepository->searchRooms($this->query);
         }
         return $this->roomRepository->findBy([], ['id' => 'DESC'], 10);
     }
