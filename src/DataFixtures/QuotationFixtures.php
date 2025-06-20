@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use Faker\Factory;
 use App\Entity\Room;
 use App\Entity\Client;
+use App\Entity\Booking;
 use App\Entity\Quotation;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -16,17 +17,12 @@ class QuotationFixtures extends Fixture implements DependentFixtureInterface
     {
         $faker = Factory::create('fr_FR');
 
-        //  Recuperation des room nouvellement crées
-        $room = [];
+        //  Recuperation des booking nouvellement crées
+        $booking = [];
         for ($i = 0; $i < 10; $i++) {
-            $room[] = $this->getReference('ROOM_' . $i, Room::class);
+            $booking[] = $this->getReference('BOOKING_' . $i, Booking::class);
         }
-
-        // Recuperation des client nouvellement crées
-        $client = [];
-        for ($i = 0; $i < 10; $i++) {
-            $client[] = $this->getReference('CLIENT_' . $i, Client::class);
-        }
+        
         // Création d'une nouvelle instance de Quotation
         for ($i = 0; $i < 10; $i++) {
             $quotation = new Quotation();
@@ -35,8 +31,7 @@ class QuotationFixtures extends Fixture implements DependentFixtureInterface
                 ->setDate($faker->date())
                 ->setcreated_at(new \DateTimeImmutable())
                 ->setupdated_at(new \DateTimeImmutable())
-                ->setRoom($faker->randomElement($room)) // Associe une room aléatoire
-                ->setClient($faker->randomElement($client)) // Associe un client aléatoire
+                ->addBooking($faker->randomElement($booking)) // Associe une booking aléatoire
             ;
             $manager->persist($quotation);
         }
@@ -46,8 +41,7 @@ class QuotationFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies(): array
     {
         return [
-            RoomFixtures::class,
-            ClientFixtures::class,
+            BookingFixtures::class,
         ];
     }
 }
