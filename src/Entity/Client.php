@@ -53,7 +53,7 @@ class Client
         return $this;
     }
 
-    public function getAddresse(): ?string
+    public function getAddress(): ?string
     {
         return $this->address;
     }
@@ -61,7 +61,6 @@ class Client
     public function setAddress(?string $address): static
     {
         $this->address = $address;
-
         return $this;
     }
 

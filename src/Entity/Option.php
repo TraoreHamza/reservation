@@ -24,19 +24,15 @@ class Option
     #[ORM\ManyToMany(targetEntity: Room::class, inversedBy: 'options')]
     private Collection $rooms;
 
-    public function __construct()
-    {
-        $this->rooms = new ArrayCollection();
-    }
-
     /**
      * @var Collection<int, Booking>
      */
-    #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'option')]
+    #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'options')]
     private Collection $bookings;
 
     public function __construct()
     {
+        $this->rooms = new ArrayCollection();
         $this->bookings = new ArrayCollection();
     }
 
@@ -60,7 +56,7 @@ class Option
     /**
      * @return Collection<int, Room>
      */
-    public function getRoom(): Collection
+    public function getRooms(): Collection
     {
         return $this->rooms;
     }

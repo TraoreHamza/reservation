@@ -39,13 +39,13 @@ class Room
     /**
      * @var Collection<int, Equipment>
      */
-    #[ORM\ManyToMany(targetEntity: Equipment::class, mappedBy: 'room')]
+    #[ORM\ManyToMany(targetEntity: Equipment::class, mappedBy: 'rooms')]
     private Collection $equipments;
 
     /**
      * @var Collection<int, Option>
      */
-    #[ORM\ManyToMany(targetEntity: Option::class, mappedBy: 'room')]
+    #[ORM\ManyToMany(targetEntity: Option::class, mappedBy: 'rooms')]
     private Collection $options;
 
     /**
@@ -66,7 +66,8 @@ class Room
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'room', orphanRemoval: true)]
     private Collection $reviews;
 
-    #[ORM\ManyToOne(inversedBy: 'room')]
+    #[ORM\ManyToOne(inversedBy: 'rooms')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Location $location = null;
 
     public function __construct()

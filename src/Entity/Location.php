@@ -27,17 +27,20 @@ class Location
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $state = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $address = null;
+
     /**
      * @var Collection<int, Room>
      */
-    #[ORM\OneToMany(targetEntity: Room::class, mappedBy: 'locations')]
+    #[ORM\OneToMany(targetEntity: Room::class, mappedBy: 'location')]
     private Collection $rooms;
 
     public function __construct()
     {
         $this->rooms = new ArrayCollection();
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;
@@ -88,6 +91,17 @@ class Location
     {
         $this->state = $state;
 
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): static
+    {
+        $this->address = $address;
         return $this;
     }
 
