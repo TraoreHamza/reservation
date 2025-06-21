@@ -34,17 +34,17 @@ class BookingFixtures extends Fixture implements DependentFixtureInterface
 
             $booking
                 ->setStatus($faker->randomElement([
-                    "Validée",
-                    "En attente",
-                    "Annulée",
+                    "confirmed",
+                    "pending",
+                    "cancelled",
                 ]))
-                ->setCreatedAt(new \DateTimeImmutable())
                 ->setStartDate(\DateTimeImmutable::createFromMutable($startDate)) // Conversion en DateTimeImmutable
                 ->setEndDate(\DateTimeImmutable::createFromMutable($endDate)) // Conversion en DateTimeImmutable
                 ->setRoom($faker->randomElement($room)) // Associe une room aléatoire
                 ->setClient($faker->randomElement($client));
 
             $manager->persist($booking);
+            $this->addReference('BOOKING_' . $i, $booking); // Ajout de la référence pour les autres fixtures
         }
 
         $manager->flush();
