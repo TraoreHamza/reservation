@@ -8,12 +8,12 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-
 class UserFixtures extends Fixture
 {
     public function __construct(
         private readonly UserPasswordHasherInterface $hasher
     ) {}
+
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
@@ -22,12 +22,12 @@ class UserFixtures extends Fixture
             $user = new User();
             $user
                 ->setEmail($faker->email())
-                ->setPassword($faker->password())
-                ->setWarning($faker->numberBetween(0, 1, 2, 3))
+                ->setPassword($this->hasher->hashPassword($user, 'admin'))
+                ->setWarning($faker->numberBetween(0, 3))
                 ->setIsBanned($faker->boolean(56))
                 ->setIsActive($faker->boolean(75))
-                ->setcreated_at(new \DateTimeImmutable())
-                ->setupdated_at(new \DateTimeImmutable())
+                ->setCreated_at(new \DateTimeImmutable())
+                ->setUpdated_at(new \DateTimeImmutable())
             ;
             $manager->persist($user);
             $this->addReference('USER_' . $i, $user);
