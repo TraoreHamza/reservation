@@ -21,21 +21,21 @@ class FavoriteFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < 10; $i++) {
             $room[] = $this->getReference('ROOM_' . $i, Room::class);
         }
-         //  Recuperation des utilisateur nouvellement crées
+        //  Recuperation des utilisateur nouvellement crées
         $users = [];
-        for($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $users[] = $this->getReference('USER_' . $i, User::class);
         }
-
+        // Création d'une nouvelle instance de Favorite
         for ($i = 0; $i < 10; $i++) {
-        $favorite = new Favorite();
-        $favorite
-            ->setaddedAt(new \DateTimeImmutable())
-            ->setRoom($faker->randomElement($room)) // Associe une room aléatoire
-            ->setUser($faker->randomElement($users)) // Associe un utilisateur aléatoire
-            
-        ;
-        $manager->persist($favorite);
+            $favorite = new Favorite();
+            $favorite
+
+                ->setRoom($faker->randomElement($room)) // Associe une room aléatoire
+                ->setUser($faker->randomElement($users)) // Associe un utilisateur aléatoire
+
+            ;
+            $manager->persist($favorite);
         }
 
         $manager->flush();
