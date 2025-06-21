@@ -1,10 +1,122 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% endblock %}
+{% block title %}Accueil - Réservation de Chambres{% endblock %}
 
 {% block body %}
-	<twig:SearchRoom />
-	<twig:Map/>
+<div class="container mx-auto px-4 py-8">
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">🏨 Système de Réservation</h1>
+        <p class="text-xl text-gray-600">Bienvenue dans votre plateforme de réservation de chambres</p>
+    </div>
 
+    <!-- Menu déroulant principal -->
+    <div class="max-w-md mx-auto">
+        <div class="relative">
+            <!-- Bouton du menu -->
+            <button id="menuButton" class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-between">
+                <span class="text-lg font-medium">📋 Menu Principal</span>
+                <span id="menuIcon" class="text-xl transform transition-transform">▼</span>
+            </button>
 
+            <!-- Menu déroulant -->
+            <div id="dropdownMenu" class="absolute w-full mt-2 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-50">
+                <div class="py-2">
+                    <!-- Recherche avancée -->
+                    <a href="{{ path('search_room') }}" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors border-b border-gray-100">
+                        <div class="flex items-center">
+                            <span class="text-blue-500 mr-3">🔍</span>
+                            <div>
+                                <div class="font-medium">Recherche avancée</div>
+                                <div class="text-sm text-gray-500">Filtrer par tous les critères</div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Chambres -->
+                    <a href="{{ path('admin_room_index') }}" class="block px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors border-b border-gray-100">
+                        <div class="flex items-center">
+                            <span class="text-green-500 mr-3">🏠</span>
+                            <div>
+                                <div class="font-medium">Toutes les chambres</div>
+                                <div class="text-sm text-gray-500">Consulter le catalogue</div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Réservations -->
+                    <a href="{{ path('bookings') }}" class="block px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors border-b border-gray-100">
+                        <div class="flex items-center">
+                            <span class="text-purple-500 mr-3">📅</span>
+                            <div>
+                                <div class="font-medium">Mes réservations</div>
+                                <div class="text-sm text-gray-500">Gérer mes réservations</div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Administration -->
+                    <a href="{{ path('admin') }}" class="block px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors border-b border-gray-100">
+                        <div class="flex items-center">
+                            <span class="text-orange-500 mr-3">⚙️</span>
+                            <div>
+                                <div class="font-medium">Administration</div>
+                                <div class="text-sm text-gray-500">Panneau d'administration</div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Compte -->
+                    <div class="px-4 py-3 border-b border-gray-100">
+                        <div class="flex items-center mb-2">
+                            <span class="text-gray-500 mr-3">👤</span>
+                            <div class="font-medium text-gray-700">Compte</div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <a href="{{ path('app_login') }}" class="flex-1 bg-gray-600 text-white px-3 py-1 rounded text-sm hover:bg-gray-700 transition-colors text-center">
+                                Connexion
+                            </a>
+                            <a href="{{ path('app_register') }}" class="flex-1 bg-indigo-600 text-white px-3 py-1 rounded text-sm hover:bg-indigo-700 transition-colors text-center">
+                                Inscription
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Carte -->
+    <div class="mt-8">
+        <twig:Map/>
+    </div>
+</div>
+
+<!-- JavaScript pour le menu déroulant -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const menuButton = document.getElementById('menuButton');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    const menuIcon = document.getElementById('menuIcon');
+    
+    menuButton.addEventListener('click', function() {
+        const isHidden = dropdownMenu.classList.contains('hidden');
+        
+        if (isHidden) {
+            dropdownMenu.classList.remove('hidden');
+            menuIcon.style.transform = 'rotate(180deg)';
+        } else {
+            dropdownMenu.classList.add('hidden');
+            menuIcon.style.transform = 'rotate(0deg)';
+        }
+    });
+    
+    // Fermer le menu en cliquant ailleurs
+    document.addEventListener('click', function(event) {
+        if (!menuButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+            dropdownMenu.classList.add('hidden');
+            menuIcon.style.transform = 'rotate(0deg)';
+        }
+    });
+});
+</script>
 {% endblock %}
