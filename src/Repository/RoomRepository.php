@@ -24,7 +24,14 @@ class RoomRepository extends ServiceEntityRepository
     public function searchByName(string $query): array
     {
         return $this->createQueryBuilder('r')
+            ->leftJoin('r.location', 'l')
+            ->leftJoin('r.equipments', 'e')
+            ->leftJoin('r.options', 'o')
             ->where('LOWER(r.name) LIKE LOWER(:q)')
+            ->orWhere('LOWER(r.description) LIKE LOWER(:q)')
+            ->orWhere('LOWER(l.city) LIKE LOWER(:q)')
+            ->orWhere('LOWER(e.name) LIKE LOWER(:q)')
+            ->orWhere('LOWER(o.name) LIKE LOWER(:q)')
             ->andWhere('r.isAvailable = true')
             ->setParameter('q', '%' . strtolower($query) . '%')
             ->orderBy('r.name', 'ASC')
@@ -33,20 +40,33 @@ class RoomRepository extends ServiceEntityRepository
     }
 
     /**
-     * Recherche les salles par différents critères
+     * Recherche les salles par tous les attributs et relations
      * @param string $query
      * @return array
      */
     public function searchRooms(string $query): array
     {
         return $this->createQueryBuilder('r')
-            ->leftJoin('r.options', 'o')
+            ->leftJoin('r.location', 'l')
             ->leftJoin('r.equipments', 'e')
+            ->leftJoin('r.options', 'o')
+            ->leftJoin('r.bookings', 'b')
+            ->leftJoin('b.client', 'c')
             ->where('r.name LIKE :q')
             ->orWhere('r.description LIKE :q')
-            ->orWhere('o.name LIKE :q')
+            ->orWhere('r.capacity LIKE :q')
+            ->orWhere('l.city LIKE :q')
+            ->orWhere('l.department LIKE :q')
+            ->orWhere('l.state LIKE :q')
+            ->orWhere('l.number LIKE :q')
+            ->orWhere('l.address LIKE :q')
             ->orWhere('e.name LIKE :q')
+            ->orWhere('e.type LIKE :q')
+            ->orWhere('o.name LIKE :q')
+            ->orWhere('c.address LIKE :q')
+            ->andWhere('r.isAvailable = true')
             ->setParameter('q', '%' . $query . '%')
+            ->orderBy('r.name', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult();
