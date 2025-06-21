@@ -7,6 +7,21 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Entité Location - Gestion des localisations des chambres
+ * 
+ * AMÉLIORATIONS APPORTÉES (Lawrence + Assistant) :
+ * - Ajout du champ address (en anglais) pour la recherche avancée
+ * - Correction de la relation avec Room (mappedBy: 'location')
+ * - Support de la recherche par adresse complète
+ * 
+ * CHAMPS DISPONIBLES :
+ * - city : Ville
+ * - department : Département
+ * - state : État/Région
+ * - number : Numéro
+ * - address : Adresse complète (AJOUTÉ)
+ */
 #[ORM\Entity(repositoryClass: LocationRepository::class)]
 class Location
 {
@@ -27,6 +42,14 @@ class Location
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $state = null;
 
+    /**
+     * Adresse complète de la localisation
+     * 
+     * AJOUTÉ pour améliorer la recherche avancée
+     * Permet de rechercher par adresse complète dans RoomRepository
+     * 
+     * @var string|null
+     */
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $address = null;
 

@@ -7,6 +7,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Entité Option - Gestion des options disponibles pour les chambres
+ * 
+ * CORRECTIONS APPORTÉES (Lawrence + Assistant) :
+ * - Résolution du conflit de merge avec Hamza
+ * - Fusion des deux méthodes __construct() en une seule
+ * - Correction des relations mappedBy (option → options)
+ * - Ajout des méthodes manquantes pour les bookings
+ * 
+ * RELATIONS :
+ * - ManyToMany avec Room (inversedBy: 'options')
+ * - ManyToMany avec Booking (mappedBy: 'options')
+ */
 #[ORM\Entity(repositoryClass: OptionRepository::class)]
 class Option
 {
@@ -19,17 +32,31 @@ class Option
     private ?string $name = null;
 
     /**
+     * Relation ManyToMany avec Room
+     * Une option peut être associée à plusieurs chambres
+     * 
      * @var Collection<int, Room>
      */
     #[ORM\ManyToMany(targetEntity: Room::class, inversedBy: 'options')]
     private Collection $rooms;
 
     /**
+     * Relation ManyToMany avec Booking
+     * Une option peut être associée à plusieurs réservations
+     * 
+     * CORRECTION : mappedBy corrigé de 'option' vers 'options' (pluriel)
+     * 
      * @var Collection<int, Booking>
      */
     #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'options')]
     private Collection $bookings;
 
+    /**
+     * Constructeur - Initialise les collections
+     * 
+     * CORRECTION : Fusion des deux constructeurs en un seul
+     * pour éviter l'erreur "Cannot redeclare __construct()"
+     */
     public function __construct()
     {
         $this->rooms = new ArrayCollection();

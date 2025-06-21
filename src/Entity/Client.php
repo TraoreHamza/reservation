@@ -8,6 +8,22 @@ use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+/**
+ * Entité Client - Gestion des clients du système
+ * 
+ * AMÉLIORATIONS APPORTÉES (Lawrence + Assistant) :
+ * - Ajout du champ address (en anglais) pour la recherche avancée
+ * - Support de la recherche par adresse du client
+ * - Intégration dans le système de recherche multi-critères
+ * 
+ * RELATIONS :
+ * - OneToMany avec Booking (mappedBy: 'client')
+ * - OneToOne avec User (mappedBy: 'client')
+ * 
+ * CHAMPS DISPONIBLES :
+ * - name : Nom du client
+ * - address : Adresse du client (AJOUTÉ pour la recherche)
+ */
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client
 {
@@ -19,6 +35,15 @@ class Client
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $name = null;
 
+    /**
+     * Adresse du client
+     * 
+     * AJOUTÉ pour améliorer la recherche avancée
+     * Permet de rechercher les chambres par adresse du client
+     * dans RoomRepository (recherche par c.address)
+     * 
+     * @var string|null
+     */
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $address = null;
 

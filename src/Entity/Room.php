@@ -37,12 +37,24 @@ class Room
     private ?bool $isAvailable = null;
 
     /**
+     * Relation ManyToMany avec Equipment
+     * Une chambre peut avoir plusieurs équipements
+     * 
+     * CORRECTION : mappedBy corrigé de 'room' vers 'rooms' (pluriel)
+     * pour correspondre à la relation dans Equipment
+     * 
      * @var Collection<int, Equipment>
      */
     #[ORM\ManyToMany(targetEntity: Equipment::class, mappedBy: 'rooms')]
     private Collection $equipments;
 
     /**
+     * Relation ManyToMany avec Option
+     * Une chambre peut avoir plusieurs options
+     * 
+     * CORRECTION : mappedBy corrigé de 'room' vers 'rooms' (pluriel)
+     * pour correspondre à la relation dans Option
+     * 
      * @var Collection<int, Option>
      */
     #[ORM\ManyToMany(targetEntity: Option::class, mappedBy: 'rooms')]
@@ -66,6 +78,16 @@ class Room
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'room', orphanRemoval: true)]
     private Collection $reviews;
 
+    /**
+     * Relation ManyToOne avec Location
+     * Une chambre appartient à une localisation
+     * 
+     * AMÉLIORATION : Ajout de la colonne de jointure et correction de inversedBy
+     * - inversedBy corrigé de 'room' vers 'rooms' (pluriel)
+     * - Ajout de JoinColumn pour définir la colonne location_id
+     * 
+     * @var Location|null
+     */
     #[ORM\ManyToOne(inversedBy: 'rooms')]
     #[ORM\JoinColumn(nullable: true)]
     private ?Location $location = null;

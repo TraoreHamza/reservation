@@ -7,6 +7,14 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
+ * Repository pour l'entité Room
+ * 
+ * AMÉLIORATIONS APPORTÉES (Lawrence + Assistant) :
+ * - Recherche multi-critères complète
+ * - Filtrage par tous les attributs de Room et ses relations
+ * - Ajout des champs address dans Location et Client
+ * - Optimisation des requêtes avec LEFT JOIN
+ * 
  * @extends ServiceEntityRepository<Room>
  */
 class RoomRepository extends ServiceEntityRepository
@@ -17,9 +25,22 @@ class RoomRepository extends ServiceEntityRepository
     }
 
     /**
-     * Recherche les salles par nom (contient la chaîne $query)
-     * @param string $query
-     * @return Room[]
+     * Recherche simple par nom et critères de base
+     * Utilisée sur la page d'accueil pour la recherche dynamique
+     * 
+     * CRITÈRES DE RECHERCHE :
+     * - Nom de la chambre (insensible à la casse)
+     * - Description de la chambre
+     * - Ville de la localisation
+     * - Nom des équipements
+     * - Nom des options
+     * 
+     * FILTRES APPLIQUÉS :
+     * - Seulement les chambres disponibles (isAvailable = true)
+     * - Tri par nom de chambre (ASC)
+     * 
+     * @param string $query Terme de recherche
+     * @return Room[] Liste des chambres correspondantes
      */
     public function searchByName(string $query): array
     {
@@ -40,9 +61,45 @@ class RoomRepository extends ServiceEntityRepository
     }
 
     /**
-     * Recherche les salles par tous les attributs et relations
-     * @param string $query
-     * @return array
+     * RECHERCHE AVANCÉE - Méthode principale pour la page de recherche dédiée
+     * 
+     * AMÉLIORATIONS MAJEURES (Lawrence + Assistant) :
+     * - Ajout de TOUS les attributs de Room et ses relations
+     * - Recherche dans les adresses (Location et Client)
+     * - Recherche par capacité, département, état, numéro
+     * - Recherche par type d'équipement
+     * 
+     * CRITÈRES DE RECHERCHE COMPLETS :
+     * 
+     * CHAMBRE (Room) :
+     * - r.name → Nom de la chambre
+     * - r.description → Description
+     * - r.capacity → Capacité
+     * 
+     * LOCALISATION (Location) :
+     * - l.city → Ville
+     * - l.department → Département
+     * - l.state → État/Région
+     * - l.number → Numéro
+     * - l.address → Adresse (AJOUTÉ)
+     * 
+     * ÉQUIPEMENTS (Equipment) :
+     * - e.name → Nom de l'équipement
+     * - e.type → Type d'équipement (AJOUTÉ)
+     * 
+     * OPTIONS (Option) :
+     * - o.name → Nom de l'option
+     * 
+     * CLIENTS (Client) :
+     * - c.address → Adresse du client (AJOUTÉ)
+     * 
+     * FILTRES APPLIQUÉS :
+     * - Seulement les chambres disponibles
+     * - Tri par nom de chambre
+     * - Limite de 10 résultats pour les performances
+     * 
+     * @param string $query Terme de recherche
+     * @return array Liste des chambres correspondantes
      */
     public function searchRooms(string $query): array
     {

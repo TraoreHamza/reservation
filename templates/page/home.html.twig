@@ -3,13 +3,40 @@
 {% block title %}Accueil - Réservation de Chambres{% endblock %}
 
 {% block body %}
+{# 
+    PAGE D'ACCUEIL - SYSTÈME DE RÉSERVATION
+    ======================================
+    
+    AMÉLIORATIONS APPORTÉES (Lawrence + Assistant) :
+    - Remplacement du composant SearchRoom par un menu déroulant
+    - Interface plus ergonomique et compacte
+    - Navigation claire vers toutes les fonctionnalités
+    - Design responsive avec Tailwind CSS
+    
+    FONCTIONNALITÉS DISPONIBLES :
+    - Recherche avancée (page dédiée)
+    - Consultation des chambres
+    - Gestion des réservations
+    - Administration
+    - Connexion/Inscription
+#}
+
 <div class="container mx-auto px-4 py-8">
     <div class="text-center mb-8">
         <h1 class="text-4xl font-bold text-gray-800 mb-4">🏨 Système de Réservation</h1>
         <p class="text-xl text-gray-600">Bienvenue dans votre plateforme de réservation de chambres</p>
     </div>
 
-    <!-- Menu déroulant principal -->
+    {# 
+        MENU DÉROULANT PRINCIPAL
+        ========================
+        
+        CARACTÉRISTIQUES :
+        - Bouton compact avec icône rotative
+        - Menu déroulant avec toutes les options
+        - Fermeture automatique en cliquant ailleurs
+        - Design responsive et moderne
+    #}
     <div class="max-w-md mx-auto">
         <div class="relative">
             <!-- Bouton du menu -->
@@ -91,13 +118,23 @@
     </div>
 </div>
 
-<!-- JavaScript pour le menu déroulant -->
+{# 
+    JAVASCRIPT POUR LE MENU DÉROULANT
+    =================================
+    
+    FONCTIONNALITÉS :
+    - Ouverture/fermeture du menu au clic
+    - Rotation de l'icône de flèche
+    - Fermeture automatique en cliquant ailleurs
+    - Transitions fluides
+#}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const menuButton = document.getElementById('menuButton');
     const dropdownMenu = document.getElementById('dropdownMenu');
     const menuIcon = document.getElementById('menuIcon');
     
+    // Gestion du clic sur le bouton du menu
     menuButton.addEventListener('click', function() {
         const isHidden = dropdownMenu.classList.contains('hidden');
         
