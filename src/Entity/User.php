@@ -33,13 +33,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     #[ORM\Column]
-    private ?int $warning = null;
+    private ?int $warning = 0;
 
     #[ORM\Column]
-    private ?bool $is_banned = null;
+    private ?bool $is_banned = false;
 
     #[ORM\Column]
-    private ?bool $is_active = null;
+    private ?bool $is_active = false;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
