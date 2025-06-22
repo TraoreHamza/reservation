@@ -23,18 +23,18 @@ class BookingForm extends AbstractType
             ->add('endDate', DateType::class, [
                 'widget' => 'single_text',
             ])
-            // ->add('equipment', EntityType::class, [
-            //     'class' => Equipment::class,
-            //     'choice_label' => 'name',
-            //     'multiple' => true,
-            //     'required' => false
-            // ])
-            // ->add('option', EntityType::class, [
-            //     'class' => Option::class,
-            //     'choice_label' => 'name',
-            //     'multiple' => true,
-            //     'required' => false
-            // ])
+            ->add('equipments', EntityType::class, [
+                'class' => Equipment::class,
+                'choice_label' => 'name',
+                'multiple' => true,
+                'required' => false
+            ])
+            ->add('options', EntityType::class, [
+                'class' => Option::class,
+                'choice_label' => 'name',
+                'multiple' => true,
+                'required' => false
+            ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Réserver',
             ])
