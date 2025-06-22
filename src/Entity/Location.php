@@ -94,7 +94,7 @@ class Location
     /**
      * @return Collection<int, Room>
      */
-    public function getRoom(): Collection
+    public function getRooms(): Collection
     {
         return $this->rooms;
     }

@@ -5,3 +5,9 @@ body {
   font-family: 'Questrial', sans-serif;
   @apply text-lg text-slate-700 bg-slate-100;
 }
+
+.land {
+    fill:#a3a3a3;
+    stroke:#fff;
+    stroke-width:0.5;
+}
