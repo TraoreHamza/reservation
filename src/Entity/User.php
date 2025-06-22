@@ -6,41 +6,52 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[HasLifecycleCallbacks]
-class User
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[ORM\HasLifecycleCallbacks]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $password = null;
-
+    /**
+     * @var list<string> The user roles
+     */
     #[ORM\Column]
     private array $roles = [];
 
+    /**
+     * @var string The hashed password
+     */
     #[ORM\Column]
-    private ?int $warning = null;
-
-    #[ORM\Column]
-    private ?bool $is_banned = null;
-
-    #[ORM\Column]
-    private ?bool $is_active = null;
+    private ?string $password = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
+
+    #[ORM\Column]
+    private ?bool $is_banned = false;
+
+    #[ORM\Column]
+    private ?bool $is_active = false;
+
+    #[ORM\Column]
+    private ?int $warning = 0;
+    
+    #[ORM\Column]
+    private ?bool $is_verified = false;
 
     /**
      * @var Collection<int, Favorite>
@@ -51,23 +62,25 @@ class User
     #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Client $client = null;
 
+    /**
+     * @var Collection<int, Review>
+     */
+    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'author', orphanRemoval: true)]
+    private Collection $reviews;
+
     public function __construct()
     {
         $this->favorites = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
-    /**
-     * Les évènements du cycle de vie de l'entité
-     * La mise à jour des dates de création et de modification de l'entité
-     */
-    #[ORM\PrePersist] // Premier enregistrement d'un objet de l'entité
-    public function setCreatedAtValue(): void
+    #[ORM\PrePersist]
+    public function setCreatedAddValue(): void
     {
         $this->created_at = new \DateTimeImmutable();
-        $this->updated_at = new \DateTimeImmutable();
+        $this->setUpdatedAtValue();
     }
-
-    #[ORM\PreUpdate] // Modification d'un objet de l'entité
+    #[ORM\PreUpdate] //modification d un objet de l entité
     public function setUpdatedAtValue(): void
     {
         $this->updated_at = new \DateTimeImmutable();
@@ -90,16 +103,14 @@ class User
         return $this;
     }
 
-    public function getPassword(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
     {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): static
-    {
-        $this->password = $password;
-
-        return $this;
+        return (string) $this->email;
     }
 
     /**
@@ -120,6 +131,54 @@ class User
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updated_at): static
+    {
+        $this->updated_at = $updated_at;
 
         return $this;
     }
@@ -160,26 +219,14 @@ class User
         return $this;
     }
 
-    public function getcreated_at(): ?\DateTimeImmutable
+    public function isVerified(): ?bool
     {
-        return $this->created_at;
+        return $this->is_verified;
     }
 
-    public function setcreated_at(\DateTimeImmutable $created_at): static
+    public function setIsVerified(bool $is_verified): static
     {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    public function getupdated_at(): ?\DateTimeImmutable
-    {
-        return $this->updated_at;
-    }
-
-    public function setupdated_at(\DateTimeImmutable $updated_at): static
-    {
-        $this->updated_at = $updated_at;
+        $this->is_verified = $is_verified;
 
         return $this;
     }
@@ -214,6 +261,36 @@ class User
         return $this;
     }
 
+    /**
+     * @return Collection<int, Review>
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): static
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): static
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getAuthor() === $this) {
+                $review->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
     public function getClient(): ?Client
     {
         return $this->client;
@@ -225,4 +302,6 @@ class User
 
         return $this;
     }
+
+
 }

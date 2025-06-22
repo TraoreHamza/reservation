@@ -22,6 +22,9 @@ class Room
     #[ORM\Column(length: 50)]
     private ?string $name = null;
 
+    #[ORM\Column(type: Types::BIGINT)]
+    private ?int $dailyRate = null; // Tarif journalier
+
     #[ORM\Column(length: 255)]
     #[Assert\Length(max: 255, maxMessage: '{{ max}} caractères maximum.')]
     #[Assert\Regex(Pattern: '/\.(jpg|jpeg|png|webp)$/')]
@@ -76,6 +79,7 @@ class Room
         $this->favorites = new ArrayCollection();
         $this->bookings = new ArrayCollection();
         $this->reviews = new ArrayCollection();
+        $this->dailyRate = 100; // Valeur par défaut
     }
 
     public function getId(): ?int
@@ -139,6 +143,19 @@ class Room
     public function setIsAvailable(bool $isAvailable): static
     {
         $this->isAvailable = $isAvailable;
+
+        return $this;
+    }
+
+
+    public function getDailyRate(): ?int
+    {
+        return $this->dailyRate;
+    }
+
+    public function setDailyRate(int $dailyRate): static
+    {
+        $this->dailyRate = $dailyRate;
 
         return $this;
     }

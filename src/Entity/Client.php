@@ -53,7 +53,7 @@ class Client
         return $this;
     }
 
-    public function getAddresse(): ?string
+    public function getAddress(): ?string
     {
         return $this->address;
     }
