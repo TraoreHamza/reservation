@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
+
 use App\Entity\Booking;
 use App\Form\BookingForm;
-use App\Form\BookingFormType;
 use App\Repository\RoomRepository;
 use App\Repository\OptionRepository;
 use App\Repository\BookingRepository;
@@ -23,9 +23,10 @@ class BookingController extends AbstractController
         private BookingRepository $br,
         private RoomRepository $rr,
         private EquipmentRepository $er,
-        private OptionRepository $or
+        private OptionRepository $or,
     ) {}
 
+    // Route pour touts les booking (réservations)
     #[Route('s', name: 'bookings', methods: ['GET'])]
     public function index(): Response
     {
@@ -33,42 +34,6 @@ class BookingController extends AbstractController
         return $this->render('booking/index.html.twig', ['bookings' => $bookings]);
     }
 
-    #[Route('/book/{id}', name: 'booking_book_room', methods: ['POST'])]
-    public function bookRoom(Request $request, int $id): Response
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        $booking = new Booking();
-        $data = $request->request->all();
-        $booking
-            ->setRoom($this->rr->find($id))
-            ->setStatus("en attente")
-            ->setStartDate($data['startDate'])
-            ->setEndDate($data['endDate'])
-            ->setClient($user->getClient())
-        ;
-
-
-
-        if ($data['equipment']) {
-            foreach ($data['equipment'] as $value) {
-                $booking->addEquipment($this->er->find($value));
-            }
-        }
-        if ($data['options']) {
-            foreach ($data['options'] as $value) {
-                $booking->addOption($this->or->find($value));
-            }
-        }
-
-
-        $this->em->persist($booking);
-        $this->em->flush();
-        $this->addFlash('success', 'Réservation enregistrée');
-
-
-        return $this->redirectToRoute('booking_index');
-    }
 
     #[Route('/{id}/edit', name: 'booking_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Booking $booking): Response
@@ -80,7 +45,7 @@ class BookingController extends AbstractController
             $this->em->persist($booking);
             $this->em->flush();
             $this->addFlash('success', 'Réservation mise à jour');
-            return $this->redirectToRoute('booking_index');
+            return $this->redirectToRoute('bookings');
         }
 
         return $this->render('booking/edit.html.twig', [
@@ -95,6 +60,6 @@ class BookingController extends AbstractController
         $this->em->remove($booking);
         $this->em->flush();
         $this->addFlash('success', 'Réservation annulée');
-        return $this->redirectToRoute('booking_index');
+        return $this->redirectToRoute('bookings');
     }
 }
