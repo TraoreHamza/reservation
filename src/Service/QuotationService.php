@@ -19,13 +19,20 @@ class QuotationService
         $quotation->setBooking($booking);
 
         // Calcul du prix en fonction du nombre de jours
+
         $startDate = $booking->getStartDate();
         $endDate = $booking->getEndDate();
         $dailyRate = $booking->getRoom()->getDailyRate();
 
+
         if ($startDate && $endDate && $dailyRate > 0) {
             $days = $startDate->diff($endDate)->days; // Calcul du nombre de jours
+            if ($days < 1) {
+                $days = 1; // Assurer qu'il y a au moins un jour de réservation
+            }
             $price = $days * $dailyRate;
+
+
             $quotation->setPrice((string)$price); // Conversion en string pour correspondre au type défini dans Quotation
         } else {
             $quotation->setPrice('100'); // Valeur par défaut si les données sont manquantes
