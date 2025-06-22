@@ -22,6 +22,16 @@ final class SearchRoom
     #[LiveProp(writable: true, url: true)]
     public ?string $query = null;
 
+    #[LiveProp(writable: true, url: true)]
+    public ?string $equipment = null;
+
+    #[LiveProp(writable: true, url: true)]
+    public ?string $option = null;
+
+
+    #[LiveProp(writable: true, url: true)]
+    public ?string $location = null;
+
     public function __construct(private RoomRepository $rr) {}
 
 
@@ -29,10 +39,15 @@ final class SearchRoom
     public function getRooms(): array
 
     {
-        if ($this->query) { //s'il y a une requete query les articles correspondants
-            return $this->rr->searchByName($this->query);
+        if ($this->query || $this->equipment || $this->option || $this->location) { //s'il y a une requete query les articles correspondants
+            return $this->rr->searchRooms(
+                $this->query ?? null,
+                $this->option ?? null,
+                $this->equipment ?? null,
+                $this->location ?? null
+            );
         }
 
-        return $this->rr->findBy([], ['name' => 'ASC'], 4); //sinon les 10 derniers articles par defaut
+        return $this->rr->findBy([], ['name' => 'ASC'], 4) ?? []; //sinon les 10 derniers articles par defaut
     }
 }
