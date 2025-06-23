@@ -29,7 +29,7 @@ class BookingCrudController extends AbstractCrudController
             ->setPageTitle("new", 'Ajouter une réservation')
             ->setPageTitle("edit", 'Modifier une réservation')
             ->setPageTitle("detail", "Détail de la réservation")
-        ;
+            ->setSearchFields(['status', 'startDate', 'endDate']);
     }
 
     public function configureActions(Actions $actions): Actions

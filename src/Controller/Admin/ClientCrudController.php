@@ -6,6 +6,7 @@ use App\Entity\Client;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -34,12 +35,19 @@ class ClientCrudController extends AbstractCrudController
             ->add(Crud::PAGE_INDEX, Action::DETAIL);
     }
 
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('name')
+            ->add('address');
+    }
+
     public function configureFields(string $pageName): iterable
     {
         return [
             TextField::new('name')
                 ->setHelp('Nom du client.'),
-            TextField::new('addresse')
+            TextField::new('address')
                 ->setHelp('Adresse du client.'),
         ];
     }
