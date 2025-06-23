@@ -126,7 +126,14 @@ class RoomFixtures extends Fixture
             "Salle avec coin vestiaire pour les participants.",
         ];
         $imageFilenames = [
-            'default.png',
+            'salle_victor_hugo.png',
+            'brit-hotel-saint-meen-le-grand-adresse.jpeg',
+            'urban-soccer-rennes-vern-seiche.jpg',
+            'cap-events-la-reposee-3.jpg',
+            'cgr-vry-17.jpg',
+            'espace-de-conferences-iris-10.jpg',
+            'espace-de-conferences-iris-10.jpg',
+            'mega-cgr-blagnac-16.jpg',
         ];
     
         $i = 0;
