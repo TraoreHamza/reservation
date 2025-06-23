@@ -27,8 +27,8 @@ class UserFixtures extends Fixture
                 ->setWarning($faker->numberBetween(0, 3))
                 ->setIsBanned($faker->boolean(56))
                 ->setIsActive($faker->boolean(75))
-                ->setCreated_at(new \DateTimeImmutable())
-                ->setUpdated_at(new \DateTimeImmutable())
+                ->setCreatedAt(new \DateTimeImmutable())
+                ->setUpdatedAt(new \DateTimeImmutable())
             ;
             $manager->persist($user);
             $this->addReference('USER_' . $i, $user);
