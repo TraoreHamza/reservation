@@ -15,8 +15,7 @@ document.addEventListener('turbo:load', () => {
 const region = document.querySelectorAll('.geo-map g path');
 region.forEach((el) => {
     el.addEventListener('click', () => {
-        const regionId = el.getAttribute('id');
-        const regionTitle = el.getAttribute('title');
+        const regionTitle = el.getAttribute('data-slug');
         console.log(`Clicked on region: ${regionTitle}`);
         location.href = `/region/${regionTitle}`;
         // Here you can add more logic to handle the click event

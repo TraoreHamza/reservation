@@ -30,14 +30,14 @@ class Location
     /**
      * @var Collection<int, Room>
      */
-    #[ORM\OneToMany(targetEntity: Room::class, mappedBy: 'locations')]
+    #[ORM\OneToMany(targetEntity: Room::class, mappedBy: 'location')]
     private Collection $rooms;
 
     public function __construct()
     {
         $this->rooms = new ArrayCollection();
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;
