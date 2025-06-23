@@ -4,7 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "content-hash": "f8fd865da2c42258befc8b8bcd4284e6",
+=======
+    "content-hash": "78645c2583a427c2accf02ddc32478c0",
+>>>>>>> origin/yasmina
     "packages": [
         {
             "name": "cocur/slugify",

@@ -42,8 +42,9 @@ class RoomRepository extends ServiceEntityRepository
      * @param string $query Terme de recherche
      * @return Room[] Liste des chambres correspondantes
      */
-    public function searchByName(string $query): array
+    public function searchRooms(?string $query, ?string $option, ?string $equipment, ?string $location): array
     {
+<<<<<<< HEAD
         return $this->createQueryBuilder('r')
             ->leftJoin('r.location', 'l')
             ->leftJoin('r.equipments', 'e')
@@ -58,6 +59,40 @@ class RoomRepository extends ServiceEntityRepository
             ->orderBy('r.name', 'ASC')
             ->getQuery()
             ->getResult();
+=======
+        $qb = $this
+            ->createQueryBuilder('r') //définition du query builder
+            ->leftJoin('r.options', 'o') // on fait une jointure avec la table des options
+            ->leftJoin('r.equipments', 'e') // on fait une jointure avec la table des équipements
+            ->leftJoin('r.location', 'l'); // on fait une jointure avec la table des locations
+
+        if ($query) {
+            $qb->andWhere('r.name LIKE :val OR r.description LIKE :val') // on cherche le titre ou la description
+                ->setParameter('val', '%' . strtolower($query) . '%'); // on met en minuscule et on ajoute les % pour la recherche
+        }
+
+        if ($option) {
+            $qb->andWhere('o.name LIKE :option') // on cherche l'option
+                ->setParameter('option', '%' . strtolower($option) . '%'); // on met en minuscule et on ajoute les % pour la recherche 
+        }
+
+        if ($equipment) {
+            $qb->andWhere('e.name LIKE :equipment') // on cherche l'équipement
+                ->setParameter('equipment', '%' . strtolower($equipment) . '%'); // on met en minuscule et on ajoute les % pour la recherche
+        }
+
+        if ($location) {
+            $qb->andWhere('l.department LIKE :location') // on cherche la localisation
+                ->setParameter('location', '%' . strtolower($location) . '%'); // on met en minuscule et on ajoute les % pour la recherche
+        }
+
+        $qb->distinct() // on utilise distinct pour ne pas avoir de doublons
+            ->orderBy('r.name', 'ASC'); // on trie par nom de la salle
+        return $qb->getQuery()->getResult(); // on retourne le résultat de la requête
+
+
+        ;
+>>>>>>> origin/yasmina
     }
 
     /**
@@ -129,15 +164,6 @@ class RoomRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    //    public function findOneBySomeField($value): ?Article
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 
 
     //    /**

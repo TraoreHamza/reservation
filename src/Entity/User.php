@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[ORM\HasLifecycleCallbacks]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')] // Gestion auto des évènements par Doctrine
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -23,17 +23,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $password = null;
-
+    /**
+     * @var list<string> The user roles
+     */
     #[ORM\Column]
     private array $roles = [];
 
+    /**
+     * @var string The hashed password
+     */
     #[ORM\Column]
-    private ?int $warning = 0;
+    private ?string $password = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $created_at = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $updated_at = null;
 
     #[ORM\Column]
     private ?bool $is_banned = false;
@@ -42,10 +51,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?bool $is_active = false;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    private ?int $warning = 0;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updated_at = null;
+    private ?bool $is_verified = false;
 
     /**
      * @var Collection<int, Favorite>
@@ -56,26 +65,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Client $client = null;
 
-    #[ORM\Column]
-    private bool $isVerified = false;
+    /**
+     * @var Collection<int, Review>
+     */
+    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'author', orphanRemoval: true)]
+    private Collection $reviews;
 
     public function __construct()
     {
         $this->favorites = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
-    /**
-     * Les évènements du cycle de vie de l'entité
-     * La mise à jour des dates de création et de modification de l'entité
-     */
-    #[ORM\PrePersist] // Premier enregistrement d'un objet de l'entité
-    public function setCreatedAtValue(): void
+    #[ORM\PrePersist]
+    public function setCreatedAddValue(): void
     {
         $this->created_at = new \DateTimeImmutable();
-        $this->updated_at = new \DateTimeImmutable();
+        $this->setUpdatedAtValue();
     }
 
-    #[ORM\PreUpdate] // Modification d'un objet de l'entité
+    #[ORM\PreUpdate]
     public function setUpdatedAtValue(): void
     {
         $this->updated_at = new \DateTimeImmutable();
@@ -94,25 +103,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): static
-    {
-        $this->password = $password;
-
         return $this;
     }
 
     /**
      * A visual identifier that represents this user.
-     * 
+     *
      * @see UserInterface
      */
     public function getUserIdentifier(): string
@@ -120,14 +116,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->email;
     }
 
-    /**
-     * Removes sensitive data from the user.
-     */
-    public function eraseCredentials(): void
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
-    }
     /**
      * @see UserInterface
      */
@@ -146,7 +134,53 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
+        return $this;
+    }
 
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
+        return $this;
+    }
+
+    /**
+     * Removes sensitive data from the user.
+     *
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updated_at): static
+    {
+        $this->updated_at = $updated_at;
         return $this;
     }
 
@@ -158,7 +192,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setWarning(int $warning): static
     {
         $this->warning = $warning;
-
         return $this;
     }
 
@@ -170,7 +203,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsBanned(bool $is_banned): static
     {
         $this->is_banned = $is_banned;
-
         return $this;
     }
 
@@ -182,31 +214,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsActive(bool $is_active): static
     {
         $this->is_active = $is_active;
-
         return $this;
     }
 
-    public function getcreated_at(): ?\DateTimeImmutable
+    public function isVerified(): ?bool
     {
-        return $this->created_at;
+        return $this->is_verified;
     }
 
-    public function setcreated_at(\DateTimeImmutable $created_at): static
+    public function setIsVerified(bool $is_verified): static
     {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    public function getupdated_at(): ?\DateTimeImmutable
-    {
-        return $this->updated_at;
-    }
-
-    public function setupdated_at(\DateTimeImmutable $updated_at): static
-    {
-        $this->updated_at = $updated_at;
-
+        $this->is_verified = $is_verified;
         return $this;
     }
 
@@ -240,6 +258,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @return Collection<int, Review>
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): static
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): static
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getAuthor() === $this) {
+                $review->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
     public function getClient(): ?Client
     {
         return $this->client;
@@ -248,19 +296,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setClient(?Client $client): static
     {
         $this->client = $client;
-
-        return $this;
-    }
-
-    public function isVerified(): bool
-    {
-        return $this->isVerified;
-    }
-
-    public function setIsVerified(bool $isVerified): static
-    {
-        $this->isVerified = $isVerified;
-
         return $this;
     }
 }

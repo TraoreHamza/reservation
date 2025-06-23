@@ -32,3 +32,16 @@ select {
 button[type="submit"] {
     @apply bg-violet-500 text-white rounded-full px-3 py-2 hover:bg-violet-400 transition duration-300 ease-in-out;
 }
+
+/* STYLES AJOUTÉS PAR YASMINA : Carte interactive des régions */
+.land {
+    fill: #a3a3a3;
+    stroke: #fff;
+    stroke-width: 0.5;
+    cursor: pointer;
+    transition: fill 0.3s ease;
+}
+
+.land:hover {
+    fill: #6366f1;
+}

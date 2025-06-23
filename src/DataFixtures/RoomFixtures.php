@@ -139,6 +139,7 @@ class RoomFixtures extends Fixture
                 ->setImage($imageFilename) // On stocke juste le nom du fichier !
                 ->setDescription($descriptions[$index])
                 ->setIsAvailable($faker->boolean())
+                ->setDailyRate($faker->numberBetween(100,2500)) // Prix journalier entre 100 et 2500 euros
             ;
             $manager->persist($room);
             $this->addReference('ROOM_' . $i, $room);
