@@ -57,7 +57,20 @@ class RoomRepository extends ServiceEntityRepository
     }
 
 
-
+    /**
+     * Retourne le tableau de salle en fonction de la région sélectionnée
+     * @return Room[] 
+     */
+    public function serachByRegion(string $region)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.location = :region')
+            ->setParameter('region', $region)
+            ->orderBy('r.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
     //    /**
     //     * @return Room[] Returns an array of Room objects
