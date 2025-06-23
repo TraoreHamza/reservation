@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+{{ room.name}}
+{% endblock %}
+
+{% block body %}
+<h1>{{ room.name }}</h1>
+
+{{ dump(room)}}
+
+{{ form(bookingForm) }}
+
+<a href="{{path('rooms')}}">retour</a>
+
+
+{% endblock %}

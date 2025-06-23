@@ -4,8 +4,10 @@ namespace App\DataFixtures;
 
 use Faker\Factory;
 use App\Entity\Room;
-use App\Entity\Client;
+use App\Entity\User;
 use App\Entity\Booking;
+use App\DataFixtures\RoomFixtures;
+use App\DataFixtures\UserFixtures;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -23,11 +25,13 @@ class BookingFixtures extends Fixture implements DependentFixtureInterface
         }
 
         // Recuperation des client nouvellement crées
-        $client = [];
-        for ($i = 0; $i < 10; $i++) {
-            $client[] = $this->getReference('CLIENT_' . $i, Client::class);
+        $users = [];
+        for ($i = 0; $i < 50; $i++) {
+            $users[] = $this->getReference('USER_' . $i, User::class);
         }
+
         for ($i = 0; $i < 10; $i++) {
+            $user = $faker->randomElement($users);
             $booking = new Booking();
             $startDate = $faker->dateTimeBetween('-1 week', '+1 week'); // Date de début aléatoire
             $endDate = $faker->dateTimeBetween($startDate, '+1 week'); // Date de fin après la date de début
@@ -41,7 +45,7 @@ class BookingFixtures extends Fixture implements DependentFixtureInterface
                 ->setStartDate(\DateTimeImmutable::createFromMutable($startDate)) // Conversion en DateTimeImmutable
                 ->setEndDate(\DateTimeImmutable::createFromMutable($endDate)) // Conversion en DateTimeImmutable
                 ->setRoom($faker->randomElement($room)) // Associe une room aléatoire
-                ->setClient($faker->randomElement($client));
+                ->setClient($user->getClient());
 
             $manager->persist($booking);
             $this->addReference('BOOKING_' . $i, $booking); // Ajout de la référence pour les autres fixtures
@@ -52,7 +56,7 @@ class BookingFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies(): array
     {
         return [
-            ClientFixtures::class,
+            UserFixtures::class,
             RoomFixtures::class,
         ];
     }

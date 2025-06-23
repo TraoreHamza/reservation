@@ -1,33 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-	<h1 class="text-3xl font-bold text-center mt-8 mb-8 text-blue-900">Liste des salles</h1>
-	
-	{{ component('search_room_component') }}
+{% block title %}Recherche de salle{% endblock %}
 
-	<div class="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-4">
-		{% for room in rooms %}
-			<div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-200 flex flex-col overflow-hidden">
-				<img src="{{ asset('medias/images/' ~ room.image) }}" alt="Image de la salle {{ room.name }}" class="h-44 w-full object-cover bg-gray-100 border-b"/>
-				<div class="p-5 flex flex-col flex-1">
-					<h2 class="text-xl font-semibold text-blue-800 mb-2 text-center">{{ room.name }}</h2>
-					<p class="text-gray-600 mb-1 text-center">
-						<span class="font-bold text-blue-600">Capacité :</span>
-						{{ room.capacity }}</p>
-					<p class="text-gray-700 mb-2 text-center">
-						<span class="font-bold text-blue-600">Description :</span>
-						{{ room.description|length > 90 ? room.description|slice(0,87) ~ '…' : room.description }}
-					</p>
-					<div class="mt-auto flex justify-center">
-						<span class="inline-block px-3 py-1 rounded-full text-sm font-semibold
-							{{ room.isAvailable ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-							{{ room.isAvailable ? 'Disponible' : 'Indisponible' }}
-						</span>
-					</div>
-				</div>
-			</div>
-		{% else %}
-			<p class="col-span-full text-center text-gray-500">Aucune salle trouvée.</p>
-		{% endfor %}
-	</div>
+{% block body %}
+    <h1>🔍les salles</h1>
+
+    {% for item in rooms %}
+    <h3>{{ item.name }}</h3>
+    <a href="{{path('room_view',{'id': item.id})}}">voir la salle</a>
+
+<hr>
+{% endfor %}
+
+
 {% endblock %}

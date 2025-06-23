@@ -91,12 +91,14 @@ class EquipmentFixtures extends Fixture
         for ($i = 0; $i < 10; $i++) {
             $room[] = $this->getReference('ROOM_' . $i, Room::class);
         }
+
         foreach ($typeEquipements as $type => $equipments) {
             foreach ($equipments as $equipementName) {
             $equipment = new Equipment();
             $equipment
                 ->setName($equipementName)
                 ->setType($type)
+                ->addRoom($faker->randomElement($room))
             ;
             $manager->persist($equipment);
             }
