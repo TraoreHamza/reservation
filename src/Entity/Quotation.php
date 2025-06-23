@@ -43,7 +43,7 @@ class Quotation
      * La mise à jour des dates de création et de modification de l'entité
      */
     #[ORM\PrePersist] // Premier enregistrement d'un objet de l'entité
-    public function setCreatedAtValue(): void
+    public function setcreated_atValue(): void
     {
         $this->created_at = new \DateTimeImmutable();
         $this->updated_at = new \DateTimeImmutable();
@@ -60,7 +60,7 @@ class Quotation
     {
         return $this->booking->getRoom()->getName();
     }
-    
+
     // Récupère le nom du client via la propriété booking
     public function getClient(): ?string
     {
