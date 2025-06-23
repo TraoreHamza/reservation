@@ -4,35 +4,38 @@
 
 	<select data-model="option" id="">
 
-        <option value="">Les options</option>
-		<option value="Vidéoprojecteur">Vidéoprojecteur</option>
-		<option value="Tableau blanc">Tableau blanc</option>
-		<option value="Paperboard">Paperboard</option>
-		<option value="Connexion Wi-Fi">Connexion Wi-Fi</option>
-		<option value="Climatisation">Climatisation</option>
-		
+		<option value="">Les options</option>
+		{% set options = this.options %}
+
+		{% for item in options %}
+			<option value={{item.name}}>{{item.name}}</option>
+		{% endfor %}
+
+
 	</select>
 
 	<select data-model="equipment" id="">
 
-        <option value="">Les equipements</option>
-		<option value="Vidéoprojecteur">Vidéoprojecteur</option>
-		<option value="Tableau blanc">Tableau blanc</option>
-		<option value="Paperboard">Paperboard</option>
-		<option value="Connexion Wi-Fi">Connexion Wi-Fi</option>
-		<option value="Climatisation">Climatisation</option>
-		
+		<option value="">Les equipements</option>
+		{% set equipments = this.equipments %}
+
+		{% for item in equipments %}
+			<option value={{item.name}}>{{item.name}}</option>
+		{% endfor %}
+
+
 	</select>
 
 	<select data-model="location" id="">
 
-        <option value="">La location</option>
-		<option value="Vidéoprojecteur">Vidéoprojecteur</option>
-		<option value="Tableau blanc">Tableau blanc</option>
-		<option value="Paperboard">Paperboard</option>
-		<option value="Connexion Wi-Fi">Connexion Wi-Fi</option>
-		<option value="Climatisation">Climatisation</option>
-		
+		<option value="">La location</option>
+		{% set locations = this.locations %}
+
+		{% for item in locations %}
+			<option value={{item.department}}>{{item.department}}</option>
+		{% endfor %}
+
+
 	</select>
 
 
@@ -40,7 +43,7 @@
 	{% if rooms|length > 0 %}
 
 		{% for item in rooms %}
-			{{ dump(item)}}
+			{{ dump(item) }}
 		{% endfor %}
 	{% else %}
 

@@ -3,6 +3,9 @@
 namespace App\Twig\Components;
 
 use App\Repository\RoomRepository;
+use App\Repository\OptionRepository;
+use App\Repository\LocationRepository;
+use App\Repository\EquipmentRepository;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
@@ -32,12 +35,18 @@ final class SearchRoom
     #[LiveProp(writable: true, url: true)]
     public ?string $location = null;
 
-    public function __construct(private RoomRepository $rr) {}
+    public function __construct(
+        private RoomRepository $rr, 
+        private OptionRepository $or,
+        private EquipmentRepository $er,
+        private LocationRepository $lr,
+        
+        
+        ) {}
 
 
 
     public function getRooms(): array
-
     {
         if ($this->query || $this->equipment || $this->option || $this->location) { //s'il y a une requete query les articles correspondants
             return $this->rr->searchRooms(
@@ -50,4 +59,25 @@ final class SearchRoom
 
         return $this->rr->findBy([], ['name' => 'ASC'], 4) ?? []; //sinon les 10 derniers articles par defaut
     }
+
+
+    public function getOptions(): array
+    {
+        return  $this->or->findAll() ?? [];
+    }
+
+
+    public function getEquipments(): array
+    {
+        return $this->er->findAll() ?? [];
+    }
+
+
+    public function getLocations(): array
+    {
+        return $this->lr->findDepartment() ??  [];
+    }
+
+
+
 }
