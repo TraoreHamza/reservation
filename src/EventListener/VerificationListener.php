@@ -3,6 +3,7 @@
 namespace App\EventListener;
 
 use App\Repository\ClientRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -10,22 +11,22 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class VerificationListener
 {
     public function __construct(
-        private ClientRepository $clientRepo,
         private Security $security,
         private RequestStack $requestStack
     ) {}
 
     public function onKernelController(ControllerEvent $event): void
     {
+        /** @var User $user */
         $user = $this->security->getUser();
 
         if (!$user) {
             return; // aucun utilisateur connecté
         }
 
-        $client = $this->clientRepo->findOneBy(['user' => $user]);
+        $client = $user->getClient();
 
-        if (!$client || !$client->getAdresse()) {
+        if (!$client) {
             /** @var \Symfony\Component\HttpFoundation\Session\Session $session */
             $session = $this->requestStack->getSession();
             if ($session) {
