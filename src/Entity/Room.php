@@ -37,6 +37,13 @@ class Room
     private ?bool $isAvailable = null;
 
     /**
+     * Prix de la chambre par jour
+     * AJOUT : Champ prix pour le système de devis
+     */
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
+    private ?float $price = null;
+
+    /**
      * Relation ManyToMany avec Equipment
      * Une chambre peut avoir plusieurs équipements
      * 
@@ -164,6 +171,34 @@ class Room
         $this->isAvailable = $isAvailable;
 
         return $this;
+    }
+
+    /**
+     * Récupère le prix de la chambre par jour
+     * AJOUT : Méthode pour le système de devis
+     */
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    /**
+     * Définit le prix de la chambre par jour
+     * AJOUT : Méthode pour le système de devis
+     */
+    public function setPrice(float $price): static
+    {
+        $this->price = $price;
+        return $this;
+    }
+
+    /**
+     * Récupère le prix formaté avec le symbole euro
+     * AJOUT : Méthode pour l'affichage dans les templates
+     */
+    public function getFormattedPrice(): string
+    {
+        return number_format($this->price ?? 0, 2, ',', ' ') . ' €';
     }
 
     /**

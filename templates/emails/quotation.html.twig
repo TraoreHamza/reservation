@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devis - {{ quotation.reference }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 24px;
+        }
+        .info-section {
+            margin-bottom: 25px;
+        }
+        .info-section h2 {
+            color: #34495e;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            font-size: 18px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .info-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #7f8c8d;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        .info-value {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .price-section {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .total {
+            font-weight: bold;
+            font-size: 18px;
+            color: #2c3e50;
+            border-top: 2px solid #bdc3c7;
+            padding-top: 10px;
+        }
+        .description {
+            background: #fff;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin: 20px 0;
+        }
+        .footer {
+            background: #34495e;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .footer p {
+            margin: 5px 0;
+            font-size: 12px;
+        }
+        .btn {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 5px;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Devis {{ quotation.reference }}</h1>
+        <p>Service de Réservation de Salles</p>
+    </div>
+
+    <div class="info-section">
+        <h2>Informations du devis</h2>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-label">Référence</div>
+                <div class="info-value">{{ quotation.reference }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Date de création</div>
+                <div class="info-value">{{ quotation.created_at|date('d/m/Y') }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Valide jusqu'au</div>
+                <div class="info-value">{{ quotation.validUntil|date('d/m/Y') }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Statut</div>
+                <div class="info-value">{{ quotation.statusLabel }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-section">
+        <h2>Détails de la réservation</h2>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-label">Salle</div>
+                <div class="info-value">{{ room.name }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Capacité</div>
+                <div class="info-value">{{ room.capacity }} personnes</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Date de début</div>
+                <div class="info-value">{{ booking.startDate|date('d/m/Y') }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Date de fin</div>
+                <div class="info-value">{{ booking.endDate|date('d/m/Y') }}</div>
+            </div>
+        </div>
+    </div>
+
+    {% if quotation.description %}
+    <div class="description">
+        <h3>Description de la prestation</h3>
+        <p>{{ quotation.description|nl2br }}</p>
+    </div>
+    {% endif %}
+
+    <div class="price-section">
+        <h2>Détail des prix</h2>
+        <div class="price-item">
+            <span>Prix HT :</span>
+            <span>{{ quotation.formattedPrice }}</span>
+        </div>
+        <div class="price-item">
+            <span>TVA ({{ quotation.taxRate }}%) :</span>
+            <span>{{ quotation.formattedTaxAmount }}</span>
+        </div>
+        <div class="price-item total">
+            <span>Total TTC :</span>
+            <span>{{ quotation.formattedTotalPrice }}</span>
+        </div>
+    </div>
+
+    <div class="info-section">
+        <h2>Informations client</h2>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-label">Nom</div>
+                <div class="info-value">{{ client.name }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Email</div>
+                <div class="info-value">{{ user.email }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin: 30px 0;">
+        <a href="#" class="btn">Accepter le devis</a>
+        <a href="#" class="btn" style="background: #e74c3c;">Refuser le devis</a>
+    </div>
+
+    <div class="footer">
+        <p><strong>Service de Réservation de Salles</strong></p>
+        <p>Ce devis est valable jusqu'au {{ quotation.validUntil|date('d/m/Y') }}</p>
+        <p>Pour toute question, contactez-nous à contact@reservation.com</p>
+        <p style="font-size: 10px; margin-top: 15px;">
+            Ce devis a été généré automatiquement. 
+            Le PDF joint contient les conditions détaillées.
+        </p>
+    </div>
+</body>
+</html> 

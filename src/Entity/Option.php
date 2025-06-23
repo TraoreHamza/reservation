@@ -32,6 +32,13 @@ class Option
     private ?string $name = null;
 
     /**
+     * Prix de l'option
+     * AJOUT : Champ prix pour le système de devis
+     */
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
+    private ?float $price = null;
+
+    /**
      * Relation ManyToMany avec Room
      * Une option peut être associée à plusieurs chambres
      * 
@@ -78,6 +85,34 @@ class Option
         $this->name = $name;
 
         return $this;
+    }
+
+    /**
+     * Récupère le prix de l'option
+     * AJOUT : Méthode pour le système de devis
+     */
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    /**
+     * Définit le prix de l'option
+     * AJOUT : Méthode pour le système de devis
+     */
+    public function setPrice(?float $price): static
+    {
+        $this->price = $price;
+        return $this;
+    }
+
+    /**
+     * Récupère le prix formaté avec le symbole euro
+     * AJOUT : Méthode pour l'affichage dans les templates
+     */
+    public function getFormattedPrice(): string
+    {
+        return number_format($this->price ?? 0, 2, ',', ' ') . ' €';
     }
 
     /**

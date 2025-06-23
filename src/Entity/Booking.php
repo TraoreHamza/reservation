@@ -49,6 +49,16 @@ class Booking
     private ?Client $client = null;
 
     /**
+     * Relation ManyToOne avec User
+     * Une réservation appartient à un utilisateur
+     * AJOUT : Relation pour le système de devis et d'authentification
+     * TEMPORAIRE : Rendu nullable pour éviter les erreurs de migration
+     */
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $user = null;
+
+    /**
      * @var Collection<int, Quotation>
      */
     #[ORM\OneToMany(targetEntity: Quotation::class, mappedBy: 'booking')]
@@ -194,6 +204,25 @@ class Booking
     {
         $this->client = $client;
 
+        return $this;
+    }
+
+    /**
+     * Récupère l'utilisateur qui a créé la réservation
+     * AJOUT : Méthode pour le système de devis
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    /**
+     * Définit l'utilisateur qui a créé la réservation
+     * AJOUT : Méthode pour le système de devis
+     */
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
         return $this;
     }
 
