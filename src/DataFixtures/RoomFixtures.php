@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Location;
 use Faker\Factory;
 use App\Entity\Room;
 use App\Entity\User;
@@ -11,7 +12,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class RoomFixtures extends Fixture
+class RoomFixtures extends Fixture implements DependentFixtureInterface
 {
 
     public function load(ObjectManager $manager): void
@@ -128,6 +129,11 @@ class RoomFixtures extends Fixture
         $imageFilenames = [
             'default.png',
         ];
+
+        $locations = [];
+        for ($i = 0; $i < 10; $i++) {
+            $locations[] = $this->getReference('LOCATION_' . $i, Location::class);
+        }
     
         $i = 0;
         foreach ($rooms as $index => $roomName) {
@@ -138,8 +144,9 @@ class RoomFixtures extends Fixture
                 ->setCapacity($faker->numberBetween(1, 100))
                 ->setImage($imageFilename) // On stocke juste le nom du fichier !
                 ->setDescription($descriptions[$index])
-                ->setIsAvailable($faker->boolean())
+                ->setIsAvailable($faker->boolean(80))
                 ->setDailyRate($faker->numberBetween(100,2500)) // Prix journalier entre 100 et 2500 euros
+                ->setLocation($faker->randomElement($locations)) // Associer une location aléatoire
             ;
             $manager->persist($room);
             $this->addReference('ROOM_' . $i, $room);
@@ -150,5 +157,12 @@ class RoomFixtures extends Fixture
             $i++;
         }
         $manager->flush();
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            LocationFixtures::class,
+        ];
     }
 }
