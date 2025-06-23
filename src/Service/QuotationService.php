@@ -36,7 +36,6 @@ class QuotationService
         private Environment $twig
     ) {}
 
-<<<<<<< HEAD
     /**
      * Crée un devis à partir d'une réservation
      * 
@@ -57,55 +56,29 @@ class QuotationService
         $quotation->setBooking($booking);
         $quotation->setCreatedBy($createdBy);
 
-        // Calculer le prix basé sur la chambre et la durée
+        // Calculer le prix basé sur la chambre, la durée et les options
         $price = $this->calculatePrice($booking);
         $quotation->setPrice($price);
 
-        // Définir la description
+        // Générer une description
         $description = $this->generateDescription($booking);
         $quotation->setDescription($description);
 
-        // Définir les conditions
+        // Ajouter les conditions par défaut
         $quotation->setTerms($this->getDefaultTerms());
-=======
-    public function create(Booking $booking): Quotation
-    {
-        $quotation = new Quotation();
-        
->>>>>>> origin/yasmina
 
-        // Association de la réservation à la quotation
-        $quotation->setBooking($booking);
-
-        // Calcul du prix en fonction du nombre de jours
-
+        // Formatter la date pour l'ancien champ 'date' si nécessaire
         $startDate = $booking->getStartDate();
         $endDate = $booking->getEndDate();
-        $dailyRate = $booking->getRoom()->getDailyRate();
+        // if ($startDate && $endDate) {
+        //      $quotation->setDate('Du ' . $startDate->format('d-m-Y') . ' au ' . $endDate->format('d-m-Y'));
+        // }
 
-
-        if ($startDate && $endDate && $dailyRate > 0) {
-            $days = $startDate->diff($endDate)->days; // Calcul du nombre de jours
-            if ($days < 1) {
-                $days = 1; // Assurer qu'il y a au moins un jour de réservation
-            }
-            $price = $days * $dailyRate;
-
-
-            $quotation->setPrice((string)$price); // Conversion en string pour correspondre au type défini dans Quotation
-        } else {
-            $quotation->setPrice('100'); // Valeur par défaut si les données sont manquantes
-        }
-
-        $quotation->setDate('Du ' . $startDate->format('d-m-Y') . ' au ' . $endDate->format('d-m-Y'));
-
-        // Persister et sauvegarder la quotation
         $this->em->persist($quotation);
         $this->em->flush();
 
         return $quotation;
     }
-<<<<<<< HEAD
 
     /**
      * Calcule le prix total de la réservation
@@ -120,17 +93,21 @@ class QuotationService
     private function calculatePrice(Booking $booking): float
     {
         $room = $booking->getRoom();
-        $basePrice = $room->getPrice() ?? 0; // Prix par jour de la chambre
+        $dailyRate = $room->getPrice() ?? 0;
 
-        // Calculer la durée en jours
         $startDate = $booking->getStartDate();
         $endDate = $booking->getEndDate();
-        $duration = $startDate->diff($endDate)->days;
 
-        // Prix de base par jour
-        $totalPrice = $basePrice * $duration;
+        $duration = 1;
+        if ($startDate && $endDate) {
+            $duration = $startDate->diff($endDate)->days;
+            if ($duration < 1) {
+                $duration = 1;
+            }
+        }
 
-        // Ajouter les options si présentes
+        $totalPrice = $duration * $dailyRate;
+
         foreach ($booking->getOptions() as $option) {
             $totalPrice += $option->getPrice() ?? 0;
         }
@@ -198,10 +175,8 @@ class QuotationService
             $client = $booking->getClient();
             $user = $booking->getUser();
 
-            // Générer le PDF
             $pdfContent = $this->generatePdf($quotation);
 
-            // Créer l'email
             $email = (new Email())
                 ->from(new Address('noreply@reservation.com', 'Service Réservation'))
                 ->to(new Address($user->getEmail(), $client->getName()))
@@ -211,7 +186,6 @@ class QuotationService
 
             $this->mailer->send($email);
 
-            // Mettre à jour le statut
             $quotation->setStatus('sent');
             $this->em->flush();
 
@@ -231,15 +205,11 @@ class QuotationService
      */
     private function generateEmailContent(Quotation $quotation): string
     {
-        $booking = $quotation->getBooking();
-        $client = $booking->getClient();
-        $room = $booking->getRoom();
-
         return $this->twig->render('emails/quotation.html.twig', [
             'quotation' => $quotation,
-            'booking' => $booking,
-            'client' => $client,
-            'room' => $room
+            'booking' => $quotation->getBooking(),
+            'client' => $quotation->getBooking()->getClient(),
+            'room' => $quotation->getBooking()->getRoom()
         ]);
     }
 
@@ -356,6 +326,3 @@ class QuotationService
         return $stats;
     }
 }
-=======
-}
->>>>>>> origin/yasmina

@@ -9,11 +9,11 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository pour l'entité Room
  * 
- * AMÉLIORATIONS APPORTÉES (Lawrence + Assistant) :
- * - Recherche multi-critères complète
+ * AMÉLIORATIONS APPORTÉES (Lawrence + Yasmina + Assistant) :
+ * - Fusion des méthodes de recherche de Lawrence et Yasmina
+ * - Recherche multi-critères complète et flexible
  * - Filtrage par tous les attributs de Room et ses relations
- * - Ajout des champs address dans Location et Client
- * - Optimisation des requêtes avec LEFT JOIN
+ * - Optimisation des requêtes avec LEFT JOIN et distinct
  * 
  * @extends ServiceEntityRepository<Room>
  */
@@ -25,146 +25,57 @@ class RoomRepository extends ServiceEntityRepository
     }
 
     /**
-     * Recherche simple par nom et critères de base
-     * Utilisée sur la page d'accueil pour la recherche dynamique
+     * Recherche avancée et flexible des chambres
+     * 
+     * Cette méthode combine les approches de Lawrence et Yasmina pour offrir une recherche puissante.
+     * Elle est utilisée à la fois pour la recherche dynamique et la page de recherche dédiée.
      * 
      * CRITÈRES DE RECHERCHE :
-     * - Nom de la chambre (insensible à la casse)
-     * - Description de la chambre
-     * - Ville de la localisation
-     * - Nom des équipements
-     * - Nom des options
+     * - `query`: Terme de recherche principal (nom, description, ville...)
+     * - `option`: Nom d'une option spécifique
+     * - `equipment`: Nom d'un équipement spécifique
+     * - `location`: Département ou ville
      * 
-     * FILTRES APPLIQUÉS :
-     * - Seulement les chambres disponibles (isAvailable = true)
-     * - Tri par nom de chambre (ASC)
-     * 
-     * @param string $query Terme de recherche
+     * @param string|null $query Terme de recherche général
+     * @param string|null $option Filtre par nom d'option
+     * @param string|null $equipment Filtre par nom d'équipement
+     * @param string|null $location Filtre par localisation (département/ville)
      * @return Room[] Liste des chambres correspondantes
      */
     public function searchRooms(?string $query, ?string $option, ?string $equipment, ?string $location): array
     {
-<<<<<<< HEAD
-        return $this->createQueryBuilder('r')
+        $qb = $this
+            ->createQueryBuilder('r')
             ->leftJoin('r.location', 'l')
             ->leftJoin('r.equipments', 'e')
             ->leftJoin('r.options', 'o')
-            ->where('LOWER(r.name) LIKE LOWER(:q)')
-            ->orWhere('LOWER(r.description) LIKE LOWER(:q)')
-            ->orWhere('LOWER(l.city) LIKE LOWER(:q)')
-            ->orWhere('LOWER(e.name) LIKE LOWER(:q)')
-            ->orWhere('LOWER(o.name) LIKE LOWER(:q)')
-            ->andWhere('r.isAvailable = true')
-            ->setParameter('q', '%' . strtolower($query) . '%')
-            ->orderBy('r.name', 'ASC')
-            ->getQuery()
-            ->getResult();
-=======
-        $qb = $this
-            ->createQueryBuilder('r') //définition du query builder
-            ->leftJoin('r.options', 'o') // on fait une jointure avec la table des options
-            ->leftJoin('r.equipments', 'e') // on fait une jointure avec la table des équipements
-            ->leftJoin('r.location', 'l'); // on fait une jointure avec la table des locations
+            ->where('r.isAvailable = true');
 
         if ($query) {
-            $qb->andWhere('r.name LIKE :val OR r.description LIKE :val') // on cherche le titre ou la description
-                ->setParameter('val', '%' . strtolower($query) . '%'); // on met en minuscule et on ajoute les % pour la recherche
+            $qb->andWhere('LOWER(r.name) LIKE LOWER(:query) OR LOWER(r.description) LIKE LOWER(:query) OR LOWER(l.city) LIKE LOWER(:query)')
+               ->setParameter('query', '%' . $query . '%');
         }
 
         if ($option) {
-            $qb->andWhere('o.name LIKE :option') // on cherche l'option
-                ->setParameter('option', '%' . strtolower($option) . '%'); // on met en minuscule et on ajoute les % pour la recherche 
+            $qb->andWhere('LOWER(o.name) LIKE LOWER(:option)')
+               ->setParameter('option', '%' . $option . '%');
         }
 
         if ($equipment) {
-            $qb->andWhere('e.name LIKE :equipment') // on cherche l'équipement
-                ->setParameter('equipment', '%' . strtolower($equipment) . '%'); // on met en minuscule et on ajoute les % pour la recherche
+            $qb->andWhere('LOWER(e.name) LIKE LOWER(:equipment)')
+               ->setParameter('equipment', '%' . $equipment . '%');
         }
 
         if ($location) {
-            $qb->andWhere('l.department LIKE :location') // on cherche la localisation
-                ->setParameter('location', '%' . strtolower($location) . '%'); // on met en minuscule et on ajoute les % pour la recherche
+            $qb->andWhere('LOWER(l.department) LIKE LOWER(:location) OR LOWER(l.city) LIKE LOWER(:location)')
+               ->setParameter('location', '%' . $location . '%');
         }
 
-        $qb->distinct() // on utilise distinct pour ne pas avoir de doublons
-            ->orderBy('r.name', 'ASC'); // on trie par nom de la salle
-        return $qb->getQuery()->getResult(); // on retourne le résultat de la requête
-
-
-        ;
->>>>>>> origin/yasmina
+        return $qb->orderBy('r.name', 'ASC')
+                  ->distinct()
+                  ->getQuery()
+                  ->getResult();
     }
-
-    /**
-     * RECHERCHE AVANCÉE - Méthode principale pour la page de recherche dédiée
-     * 
-     * AMÉLIORATIONS MAJEURES (Lawrence + Assistant) :
-     * - Ajout de TOUS les attributs de Room et ses relations
-     * - Recherche dans les adresses (Location et Client)
-     * - Recherche par capacité, département, état, numéro
-     * - Recherche par type d'équipement
-     * 
-     * CRITÈRES DE RECHERCHE COMPLETS :
-     * 
-     * CHAMBRE (Room) :
-     * - r.name → Nom de la chambre
-     * - r.description → Description
-     * - r.capacity → Capacité
-     * 
-     * LOCALISATION (Location) :
-     * - l.city → Ville
-     * - l.department → Département
-     * - l.state → État/Région
-     * - l.number → Numéro
-     * - l.address → Adresse (AJOUTÉ)
-     * 
-     * ÉQUIPEMENTS (Equipment) :
-     * - e.name → Nom de l'équipement
-     * - e.type → Type d'équipement (AJOUTÉ)
-     * 
-     * OPTIONS (Option) :
-     * - o.name → Nom de l'option
-     * 
-     * CLIENTS (Client) :
-     * - c.address → Adresse du client (AJOUTÉ)
-     * 
-     * FILTRES APPLIQUÉS :
-     * - Seulement les chambres disponibles
-     * - Tri par nom de chambre
-     * - Limite de 10 résultats pour les performances
-     * 
-     * @param string $query Terme de recherche
-     * @return array Liste des chambres correspondantes
-     */
-    public function searchRooms(string $query): array
-    {
-        return $this->createQueryBuilder('r')
-            ->leftJoin('r.location', 'l')
-            ->leftJoin('r.equipments', 'e')
-            ->leftJoin('r.options', 'o')
-            ->leftJoin('r.bookings', 'b')
-            ->leftJoin('b.client', 'c')
-            ->where('r.name LIKE :q')
-            ->orWhere('r.description LIKE :q')
-            ->orWhere('r.capacity LIKE :q')
-            ->orWhere('l.city LIKE :q')
-            ->orWhere('l.department LIKE :q')
-            ->orWhere('l.state LIKE :q')
-            ->orWhere('l.number LIKE :q')
-            ->orWhere('l.address LIKE :q')
-            ->orWhere('e.name LIKE :q')
-            ->orWhere('e.type LIKE :q')
-            ->orWhere('o.name LIKE :q')
-            ->orWhere('c.address LIKE :q')
-            ->andWhere('r.isAvailable = true')
-            ->setParameter('q', '%' . $query . '%')
-            ->orderBy('r.name', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult();
-    }
-
-
 
     //    /**
     //     * @return Room[] Returns an array of Room objects
