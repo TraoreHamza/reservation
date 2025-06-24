@@ -42,6 +42,7 @@ class RoomRepository extends ServiceEntityRepository
      * @param bool|null $pmrAccess Filtre par accessibilité PMR
      * @return array Résultats de la recherche
      */
+<<<<<<< HEAD
     public function searchRooms(
         ?string $query = null,
         ?string $option = null,
@@ -50,6 +51,10 @@ class RoomRepository extends ServiceEntityRepository
         ?bool $luminosity = null,
         ?bool $pmrAccess = null
     ): array {
+=======
+    public function searchRooms(?string $query, ?string $option, ?string $equipment, ?string $location): array
+    {
+>>>>>>> origin/hamza
         $qb = $this
             ->createQueryBuilder('r')
             ->leftJoin('r.location', 'l')
@@ -87,11 +92,17 @@ class RoomRepository extends ServiceEntityRepository
                 ->setParameter('pmrAccess', $pmrAccess);
         }
 
+<<<<<<< HEAD
         return $qb->orderBy('r.name', 'ASC')
             ->distinct()
             ->getQuery()
             ->getResult();
     }
+=======
+        ;
+    }
+
+>>>>>>> origin/hamza
 
     //    /**
     //     * @return Room[] Returns an array of Room objects

@@ -77,7 +77,7 @@ class Booking
      * La mise à jour des dates de création et de modification de l'entité
      */
     #[ORM\PrePersist] // Premier enregistrement d'un objet de l'entité
-    public function setCreatedAtValue(): void
+    public function setcreated_atValue(): void
     {
         $this->created_at = new \DateTimeImmutable();
     }
@@ -123,12 +123,12 @@ class Booking
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getcreated_at(): ?\DateTimeImmutable
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    public function setcreated_at(\DateTimeImmutable $created_at): static
     {
         $this->created_at = $created_at;
 
