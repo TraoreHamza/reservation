@@ -135,6 +135,10 @@ class RoomFixtures extends Fixture implements DependentFixtureInterface
             'espace-de-conferences-iris-10.jpg',
             'espace-de-conferences-iris-10.jpg',
             'mega-cgr-blagnac-16.jpg',
+            'casino-de-la-roche-posay.jpg',
+            'docks-de-paris-7.jpg',
+            'euro-meeting-center-8.jpg',
+            'mas-saint-gabriel-17.jpg',
         ];
 
         $locations = [];
