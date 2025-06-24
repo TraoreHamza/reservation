@@ -3,37 +3,53 @@
 {% block title %}Mes Réservations{% endblock %}
 
 {% block body %}
-    <h1>Mes Réservations</h1>
-
+<div class="max-w-4xl mx-auto py-10 px-4">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Mes Réservations</h1>
+        <a href="{{ path('booking_new') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow">Nouvelle réservation</a>
+    </div>
     {% for booking in bookings %}
-        <div class="booking">
-            <h2>Réservation de la salle : {{ booking.room.name }}</h2>
-            <ul>
-                <li>Statut : {{ booking.status }}</li>
-                <li>Date de début : {{ booking.startDate|date('d/m/Y H:i') }}</li>
-                <li>Date de fin : {{ booking.endDate|date('d/m/Y H:i') }}</li>
-                <li>Client : {{ booking.client.nom }}</li>
-                <li>Équipements :
-                    <ul>
-                        {% for equipment in booking.equipment %}
-                            <li>{{ equipment.name }}</li>
-                        {% else %}
-                            <li>Aucun</li>
-                        {% endfor %}
-                    </ul>
+        <div class="bg-white shadow-lg rounded-lg mb-8 p-6 border border-gray-100 hover:shadow-2xl transition-shadow">
+            <h2 class="text-xl font-semibold text-blue-700 mb-4">
+                Salle : <span class="text-gray-900">{{ booking.room.name }}</span>
+            </h2>
+            <ul class="space-y-2 text-gray-700">
+                <li>
+                    <span class="font-medium text-gray-600">Statut :</span>
+                    <span class="px-2 py-1 rounded text-white {% if booking.status == 'confirmée' %}bg-green-500{% elseif booking.status == 'en attente' %}bg-yellow-500{% else %}bg-gray-400{% endif %}">
+                        {{ booking.status|capitalize }}
+                    </span>
                 </li>
-                <li>Options :
-                    <ul>
+                <li>
+                    <span class="font-medium text-gray-600">Début :</span>
+                    {{ booking.startDate|date('d/m/Y H:i') }}
+                </li>
+                <li>
+                    <span class="font-medium text-gray-600">Fin :</span>
+                    {{ booking.endDate|date('d/m/Y H:i') }}
+                </li>
+                <li>
+                    <span class="font-medium text-gray-600">Options :</span>
+                    <ul class="ml-4 list-disc">
                         {% for option in booking.options %}
                             <li>{{ option.name }}</li>
                         {% else %}
-                            <li>Aucune</li>
+                            <li class="italic text-gray-400">Aucune</li>
                         {% endfor %}
                     </ul>
                 </li>
             </ul>
+            <div class="mt-6 flex gap-4">
+                <a href="{{ path('booking_edit', {id: booking.id}) }}" class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded">Modifier</a>
+                <form method="post" action="{{ path('booking_cancel', {id: booking.id}) }}" onsubmit="return confirm('Annuler cette réservation ?');">
+                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded">Annuler</button>
+                </form>
+            </div>
         </div>
     {% else %}
-        <p>Aucune réservation trouvée.</p>
+        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-lg text-center">
+            <p class="font-medium">Aucune réservation trouvée.</p>
+        </div>
     {% endfor %}
+</div>
 {% endblock %}
