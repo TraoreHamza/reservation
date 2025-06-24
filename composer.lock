@@ -4,11 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
     "content-hash": "2947467602c54ea354f92d8857d9aa06",
-=======
-    "content-hash": "ed57779c4db3b7d01f7c2fcd7acc7d7c",
->>>>>>> origin/hamza
     "packages": [
         {
             "name": "cocur/slugify",

@@ -1,7 +1,6 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 
 {% block content %}
-<<<<<<< HEAD
 <div class="container-fluid">
     <!-- Titre et description -->
     <div class="row mb-4">
@@ -10,17 +9,6 @@
             <p class="mb-4">Centre de gestion des réservations et des salles</p>
         </div>
     </div>
-=======
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<h1>Bienvenue sur le tableau de bord d'administration</h1>
-				<p>Il s'agit de votre plateforme centrale pour la gestion de l'application.</p>
-			</div>
-		</div>
-        <div id="calendar"></div>
-	</div>
->>>>>>> origin/hamza
 
     <!-- Statistiques -->
     {% if stats is defined %}
@@ -100,25 +88,11 @@
     {% endif %}
 
     <!-- Notifications urgentes -->
-    {% if urgentNotifications is defined and urgentNotifications|length > 0 %}
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card shadow">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Notifications Urgentes</h6>
-                </div>
-                <div class="card-body">
-                    {% for notification in urgentNotifications %}
-                    <div class="alert alert-{{ notification.type == 'danger' ? 'danger' : 'warning' }} alert-dismissible fade show" role="alert">
-                        {{ notification.message|raw }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
 
     <!-- Calendrier -->
     <div class="row">
@@ -175,6 +149,9 @@ document.addEventListener("DOMContentLoaded", function () {
 }
 .border-left-success {
     border-left: 0.25rem solid #1cc88a !important;
+}
+.border-left-info {
+    border-left: 0.25rem solid #36b9cc !important;
 }
 .border-left-warning {
     border-left: 0.25rem solid #f6c23e !important;

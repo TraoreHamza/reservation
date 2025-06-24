@@ -18,11 +18,7 @@ class VerificationListener
 
     public function onKernelController(ControllerEvent $event): void
     {
-<<<<<<< HEAD
-        /** @var User|null $user */
-=======
         /** @var User $user */
->>>>>>> origin/hamza
         $user = $this->security->getUser();
 
         if (!$user) {
@@ -31,11 +27,7 @@ class VerificationListener
 
         $client = $user->getClient();
 
-<<<<<<< HEAD
-        if (!$client || !$client->getAddress()) {
-=======
         if (!$client) {
->>>>>>> origin/hamza
             /** @var \Symfony\Component\HttpFoundation\Session\Session $session */
             $session = $this->requestStack->getSession();
             if ($session) {

@@ -23,12 +23,7 @@ class EmailVerifier
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
             $verifyEmailRouteName,
             (string) $user->getId(),
-<<<<<<< HEAD
-            (string) $user->getEmail(),
-            ['id' => $user->getId()]
-=======
             (string) $user->getEmail()
->>>>>>> origin/hamza
         );
 
         $context = $email->getContext();
@@ -53,8 +48,4 @@ class EmailVerifier
         $this->entityManager->persist($user);
         $this->entityManager->flush();
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> origin/hamza
