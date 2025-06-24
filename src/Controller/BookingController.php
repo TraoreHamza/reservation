@@ -34,6 +34,26 @@ class BookingController extends AbstractController
         return $this->render('booking/index.html.twig', ['bookings' => $bookings]);
     }
 
+    #[Route('/booking/new', name: 'booking_new')]
+    public function new(Request $request): Response
+    {
+        $booking = new Booking();
+        $form = $this->createForm(BookingForm::class, $booking);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $booking->setClient($this->getUser());
+            $this->em->persist($booking);
+            $this->em->flush();
+            $this->addFlash('success', 'Réservation créée !');
+            return $this->redirectToRoute('bookings');
+        }
+
+        return $this->render('booking/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
 
     #[Route('/{id}/edit', name: 'booking_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Booking $booking): Response
