@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Documentation Technique - SalleVenue{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8">
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">📚 Documentation Technique</h1>
+        <p class="text-xl text-gray-600">Diagrammes UML et architecture du système de réservation</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Diagramme de classes -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">🏗️ Diagramme de Classes</h2>
+            <div class="bg-gray-50 rounded-md p-4 mb-4">
+                <p class="text-sm text-gray-600 mb-2">Ce diagramme représente l'architecture des entités du système :</p>
+                <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• <strong>User</strong> : Gestion des utilisateurs et authentification</li>
+                    <li>• <strong>Room</strong> : Salles disponibles à la réservation</li>
+                    <li>• <strong>Booking</strong> : Réservations des utilisateurs</li>
+                    <li>• <strong>Client</strong> : Informations des clients</li>
+                    <li>• <strong>Equipment</strong> : Équipements des salles</li>
+                    <li>• <strong>Option</strong> : Options disponibles</li>
+                    <li>• <strong>Location</strong> : Localisation géographique</li>
+                    <li>• <strong>Review</strong> : Avis et évaluations</li>
+                    <li>• <strong>Favorite</strong> : Favoris des utilisateurs</li>
+                    <li>• <strong>Quotation</strong> : Devis et tarification</li>
+                </ul>
+            </div>
+            <div class="text-center">
+                <a href="{{ path('admin_documentation') }}" class="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                    Voir le diagramme complet
+                </a>
+            </div>
+        </div>
+
+        <!-- Diagrammes de séquences -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">🔄 Diagrammes de Séquences</h2>
+            <div class="space-y-4">
+                <div class="bg-gray-50 rounded-md p-4">
+                    <h3 class="font-semibold text-gray-800 mb-2">📅 Réserver une salle</h3>
+                    <p class="text-sm text-gray-600">Processus complet de réservation d'une salle</p>
+                </div>
+                <div class="bg-gray-50 rounded-md p-4">
+                    <h3 class="font-semibold text-gray-800 mb-2">❌ Annuler une réservation</h3>
+                    <p class="text-sm text-gray-600">Processus d'annulation d'une réservation</p>
+                </div>
+                <div class="bg-gray-50 rounded-md p-4">
+                    <h3 class="font-semibold text-gray-800 mb-2">✏️ Modifier une réservation</h3>
+                    <p class="text-sm text-gray-600">Processus de modification d'une réservation</p>
+                </div>
+                <div class="bg-gray-50 rounded-md p-4">
+                    <h3 class="font-semibold text-gray-800 mb-2">❤️ Ajouter aux favoris</h3>
+                    <p class="text-sm text-gray-600">Gestion des favoris utilisateur</p>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="{{ path('admin_documentation') }}" class="inline-block bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors">
+                    Voir les séquences
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fonctionnalités principales -->
+    <div class="mt-8 bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-800">⚡ Fonctionnalités Principales</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="bg-blue-50 rounded-md p-4">
+                <h3 class="font-semibold text-blue-800 mb-2">🔍 Recherche Avancée</h3>
+                <p class="text-sm text-blue-700">Recherche multi-critères avec filtres géographiques</p>
+            </div>
+            <div class="bg-green-50 rounded-md p-4">
+                <h3 class="font-semibold text-green-800 mb-2">📅 Gestion des Réservations</h3>
+                <p class="text-sm text-green-700">Création, modification et annulation de réservations</p>
+            </div>
+            <div class="bg-purple-50 rounded-md p-4">
+                <h3 class="font-semibold text-purple-800 mb-2">👥 Gestion des Utilisateurs</h3>
+                <p class="text-sm text-purple-700">Authentification et profils utilisateurs</p>
+            </div>
+            <div class="bg-orange-50 rounded-md p-4">
+                <h3 class="font-semibold text-orange-800 mb-2">⚙️ Administration</h3>
+                <p class="text-sm text-orange-700">Interface d'administration complète</p>
+            </div>
+            <div class="bg-red-50 rounded-md p-4">
+                <h3 class="font-semibold text-red-800 mb-2">⭐ Système d'Avis</h3>
+                <p class="text-sm text-red-700">Évaluation et commentaires des salles</p>
+            </div>
+            <div class="bg-indigo-50 rounded-md p-4">
+                <h3 class="font-semibold text-indigo-800 mb-2">🗺️ Géolocalisation</h3>
+                <p class="text-sm text-indigo-700">Base de données des communes françaises</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Technologies utilisées -->
+    <div class="mt-8 bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-800">🛠️ Technologies Utilisées</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="text-center">
+                <div class="text-3xl mb-2">🐘</div>
+                <div class="font-semibold text-gray-800">PHP 8.2+</div>
+                <div class="text-sm text-gray-600">Backend</div>
+            </div>
+            <div class="text-center">
+                <div class="text-3xl mb-2">⚡</div>
+                <div class="font-semibold text-gray-800">Symfony 7.3</div>
+                <div class="text-sm text-gray-600">Framework</div>
+            </div>
+            <div class="text-center">
+                <div class="text-3xl mb-2">🎨</div>
+                <div class="font-semibold text-gray-800">Tailwind CSS</div>
+                <div class="text-sm text-gray-600">Frontend</div>
+            </div>
+            <div class="text-center">
+                <div class="text-3xl mb-2">🗄️</div>
+                <div class="font-semibold text-gray-800">Doctrine ORM</div>
+                <div class="text-sm text-gray-600">Base de données</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

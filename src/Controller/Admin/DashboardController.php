@@ -30,7 +30,7 @@ class DashboardController extends AbstractDashboardController
     {
         // Récupération des notifications urgentes
         $urgentNotifications = $this->notificationService->checkAndGetUrgentNotifications();
-        
+
         // Ajout des notifications flash
         foreach ($urgentNotifications as $notification) {
             $this->addFlash($notification['type'], $notification['message']);
@@ -43,7 +43,7 @@ class DashboardController extends AbstractDashboardController
         $datas = [];                                    // tableau de données pour le calendrier au format json
         foreach ($bookings as $booking) {
             // Code couleur selon le statut
-            $color = match($booking->getStatus()) {
+            $color = match ($booking->getStatus()) {
                 'pending' => '#f87171',    // Rouge pour en attente
                 'confirmed' => '#10b981',  // Vert pour confirmée
                 'cancelled' => '#a8a29e',  // Gris pour annulée
@@ -92,6 +92,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Client', 'fa fa-users', Client::class);
         yield MenuItem::linkToCrud('Booking', 'fas fa-list', Booking::class);
         yield MenuItem::linkToCrud('Quotation', 'fa-solid fa-euro-sign', Quotation::class);
+        yield MenuItem::linkToRoute('Documentation', 'fa-solid fa-book', 'admin_documentation');
         yield MenuItem::linkToRoute('Back to site', 'fa-solid fa-arrow-left', 'home');
     }
 }

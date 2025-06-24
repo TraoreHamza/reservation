@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+
+use App\Repository\RoomRepository;
 use App\Repository\LocationRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class PageController extends AbstractController
 {
@@ -18,11 +20,12 @@ final class PageController extends AbstractController
     }
 
     #[Route('/region/{region}', name: 'location', methods: ['GET'])]
-    public function location(string $region, LocationRepository $rr): Response
+    public function location(string $region, RoomRepository $rr, LocationRepository $lr): Response
     {
+        $location = $lr->findOneByState($region);
         return $this->render('page/region.html.twig', [
-        'rooms' => $rr->findOneBy(['state' => $region])->getRooms(),
-        'region' => $region,
+        'rooms' => $rr->serachByRegion($location->getId()),
+        'region' => 'TEST',
         ]);
     }
 }

@@ -10,6 +10,7 @@ import "@symfony/ux-live-component";
 
 console.log("This log comes from assets/app.js - welcome to AssetMapper! 🎉");
 
+<<<<<<< HEAD
 // FONCTIONNALITÉ AJOUTÉE PAR YASMINA : Carte interactive des régions
 document.addEventListener("turbo:load", () => {
     const region = document.querySelectorAll(".geo-map g path");
@@ -21,5 +22,16 @@ document.addEventListener("turbo:load", () => {
             location.href = `/region/${regionTitle}`;
             // Here you can add more logic to handle the click event
         });
+=======
+document.addEventListener('turbo:load', () => {
+
+const region = document.querySelectorAll('.geo-map g path');
+region.forEach((el) => {
+    el.addEventListener('click', () => {
+        const regionTitle = el.getAttribute('data-slug');
+        console.log(`Clicked on region: ${regionTitle}`);
+        location.href = `/region/${regionTitle}`;
+        // Here you can add more logic to handle the click event
+>>>>>>> origin/yasmina
     });
 });

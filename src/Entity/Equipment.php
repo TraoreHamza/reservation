@@ -24,14 +24,13 @@ class Equipment
     /**
      * @var Collection<int, Room>
      */
-    #[ORM\ManyToMany(targetEntity: Room::class, inversedBy: 'equipment')]
+    #[ORM\ManyToMany(targetEntity: Room::class, mappedBy: 'equipments')]
     private Collection $rooms;
 
     public function __construct()
     {
         $this->rooms = new ArrayCollection();
     }
-
 
     public function getId(): ?int
     {
@@ -65,7 +64,7 @@ class Equipment
     /**
      * @return Collection<int, Room>
      */
-    public function getRoom(): Collection
+    public function getRooms(): Collection
     {
         return $this->rooms;
     }
@@ -74,6 +73,7 @@ class Equipment
     {
         if (!$this->rooms->contains($room)) {
             $this->rooms->add($room);
+            $room->addEquipment($this);
         }
 
         return $this;
@@ -81,12 +81,18 @@ class Equipment
 
     public function removeRoom(Room $room): static
     {
-        $this->rooms->removeElement($room);
+        if ($this->rooms->removeElement($room)) {
+            $room->removeEquipment($this);
+        }
 
         return $this;
     }
+<<<<<<< HEAD
     public function __toString(): string
     {
         return $this->name;
     }
 }
+=======
+}
+>>>>>>> origin/yasmina

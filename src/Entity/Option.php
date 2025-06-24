@@ -44,7 +44,7 @@ class Option
      * 
      * @var Collection<int, Room>
      */
-    #[ORM\ManyToMany(targetEntity: Room::class, inversedBy: 'options')]
+    #[ORM\ManyToMany(targetEntity: Room::class, mappedBy: 'options')]
     private Collection $rooms;
 
     /**
@@ -87,6 +87,11 @@ class Option
         return $this;
     }
 
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
     /**
      * Récupère le prix de l'option
      * AJOUT : Méthode pour le système de devis
@@ -127,6 +132,7 @@ class Option
     {
         if (!$this->rooms->contains($room)) {
             $this->rooms->add($room);
+            $room->addOption($this);
         }
 
         return $this;
@@ -134,10 +140,13 @@ class Option
 
     public function removeRoom(Room $room): static
     {
-        $this->rooms->removeElement($room);
+        if ($this->rooms->removeElement($room)) {
+            $room->removeOption($this);
+        }
 
         return $this;
     }
+<<<<<<< HEAD
 
     /**
      * @return Collection<int, Booking>
@@ -170,4 +179,6 @@ class Option
     {
         return $this->name;
     }
+=======
+>>>>>>> origin/yasmina
 }

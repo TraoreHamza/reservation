@@ -40,6 +40,7 @@ class Room
     private ?bool $isAvailable = null;
 
     /**
+<<<<<<< HEAD
      * Prix de la chambre par jour
      * AJOUT : Champ prix pour le système de devis
      */
@@ -71,16 +72,12 @@ class Room
     private Collection $options;
 
     /**
+=======
+>>>>>>> origin/yasmina
      * @var Collection<int, Favorite>
      */
     #[ORM\OneToMany(targetEntity: Favorite::class, mappedBy: 'room')]
     private Collection $favorites;
-
-    /**
-     * @var Collection<int, Booking>
-     */
-    #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'room')]
-    private Collection $bookings;
 
     /**
      * @var Collection<int, Review>
@@ -89,6 +86,7 @@ class Room
     private Collection $reviews;
 
     /**
+<<<<<<< HEAD
      * Relation ManyToOne avec Location
      * Une chambre appartient à une localisation
      * 
@@ -100,6 +98,27 @@ class Room
      */
     #[ORM\ManyToOne(inversedBy: 'rooms')]
     #[ORM\JoinColumn(nullable: true)]
+=======
+     * @var Collection<int, Option>
+     */
+    #[ORM\ManyToMany(targetEntity: Option::class, inversedBy: 'rooms')]
+    private Collection $options;
+
+    /**
+     * @var Collection<int, Equipment>
+     */
+    #[ORM\ManyToMany(targetEntity: Equipment::class, inversedBy: 'rooms')]
+    private Collection $equipments;
+
+    /**
+     * @var Collection<int, Booking>
+     */
+    #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'room')]
+    private Collection $booking;
+
+    #[ORM\ManyToOne(inversedBy: 'rooms')]
+    #[ORM\JoinColumn(nullable: false)]
+>>>>>>> origin/yasmina
     private ?Location $location = null;
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
@@ -113,12 +132,12 @@ class Room
 
     public function __construct()
     {
-        $this->equipments = new ArrayCollection();
-        $this->options = new ArrayCollection();
         $this->favorites = new ArrayCollection();
-        $this->bookings = new ArrayCollection();
         $this->reviews = new ArrayCollection();
         $this->dailyRate = 100; // Valeur par défaut
+        $this->options = new ArrayCollection();
+        $this->equipments = new ArrayCollection();
+        $this->booking = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -234,53 +253,7 @@ class Room
     {
         return $this->equipments;
     }
-
-    public function addEquipment(Equipment $equipment): static
-    {
-        if (!$this->equipments->contains($equipment)) {
-            $this->equipments->add($equipment);
-            $equipment->addRoom($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEquipment(Equipment $equipment): static
-    {
-        if ($this->equipments->removeElement($equipment)) {
-            $equipment->removeRoom($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Option>
-     */
-    public function getOptions(): Collection
-    {
-        return $this->options;
-    }
-
-    public function addOption(Option $option): static
-    {
-        if (!$this->options->contains($option)) {
-            $this->options->add($option);
-            $option->addRoom($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOption(Option $option): static
-    {
-        if ($this->options->removeElement($option)) {
-            $option->removeRoom($this);
-        }
-
-        return $this;
-    }
-
+    
     /**
      * @return Collection<int, Favorite>
      */
@@ -305,36 +278,6 @@ class Room
             // set the owning side to null (unless already changed)
             if ($favorite->getRoom() === $this) {
                 $favorite->setRoom(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Booking>
-     */
-    public function getBookings(): Collection
-    {
-        return $this->bookings;
-    }
-
-    public function addBooking(Booking $booking): static
-    {
-        if (!$this->bookings->contains($booking)) {
-            $this->bookings->add($booking);
-            $booking->setRoom($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBooking(Booking $booking): static
-    {
-        if ($this->bookings->removeElement($booking)) {
-            // set the owning side to null (unless already changed)
-            if ($booking->getRoom() === $this) {
-                $booking->setRoom(null);
             }
         }
 
@@ -376,6 +319,76 @@ class Room
         return $this->name;
     }
 
+    /**
+     * @return Collection<int, Option>
+     */
+    public function getOptions(): Collection
+    {
+        return $this->options;
+    }
+
+    public function addOption(Option $option): static
+    {
+        if (!$this->options->contains($option)) {
+            $this->options->add($option);
+        }
+
+        return $this;
+    }
+
+    public function removeOption(Option $option): static
+    {
+        $this->options->removeElement($option);
+
+        return $this;
+    }
+
+    public function addEquipment(Equipment $equipment): static
+    {
+        if (!$this->equipments->contains($equipment)) {
+            $this->equipments->add($equipment);
+        }
+
+        return $this;
+    }
+
+    public function removeEquipment(Equipment $equipment): static
+    {
+        $this->equipments->removeElement($equipment);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Booking>
+     */
+    public function getBooking(): Collection
+    {
+        return $this->booking;
+    }
+
+    public function addBooking(Booking $booking): static
+    {
+        if (!$this->booking->contains($booking)) {
+            $this->booking->add($booking);
+            $booking->setRoom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBooking(Booking $booking): static
+    {
+        if ($this->booking->removeElement($booking)) {
+            // set the owning side to null (unless already changed)
+            if ($booking->getRoom() === $this) {
+                $booking->setRoom(null);
+            }
+        }
+
+        return $this;
+    }
+
     public function getLocation(): ?Location
     {
         return $this->location;
@@ -388,6 +401,7 @@ class Room
         return $this;
     }
 
+<<<<<<< HEAD
     public function hasLuminosity(): bool
     {
         return $this->luminosity;
@@ -420,4 +434,6 @@ class Room
         $this->ergonomics_notes = $notes;
         return $this;
     }
+=======
+>>>>>>> origin/yasmina
 }

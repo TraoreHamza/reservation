@@ -16,6 +16,21 @@ class LocationRepository extends ServiceEntityRepository
         parent::__construct($registry, Location::class);
     }
 
+    /**
+     * Retourne les départements
+     * @return Location[]
+     */
+    public function findDepartment(): array
+    {
+        return $this->createQueryBuilder('l')
+            ->select('l.department, l.number')
+            ->orderBy('l.department', 'ASC')
+            ->distinct()
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     //    /**
     //     * @return Location[] Returns an array of Location objects
     //     */

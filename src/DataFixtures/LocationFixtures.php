@@ -9,141 +9,53 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class LocationFixtures extends Fixture implements DependentFixtureInterface
+class LocationFixtures extends Fixture 
 {
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
-        $city = [
-            'Paris',
-            'Marseille',
-            'Lyon',
-            'Toulouse',
-            'Nice',
-            'Nantes',
-            'Strasbourg',
-            'Montpellier',
-            'Bordeaux',
-            'Lille',
-            'Rennes',
-            'Reims',
-            'Le Havre',
-            'Saint-Étienne',
-            'Toulon',
-            'Grenoble',
-            'Dijon',
-            'Angers',
-            'Nîmes',
-            'Villeurbanne',
-            'Saint-Denis',
-            'Aix-en-Provence',
-            'Clermont-Ferrand',
-            'Le Mans',
-            'Amiens',
-            'Tours',
-            'Limoges',
-            'Annecy',
-            'Perpignan',
-            'Boulogne-Billancourt',
-            'Metz',
-            'Besançon',
-            'Orléans',
-            'Saint-Denis (La Réunion)',
-            'Argenteuil',
-            'Rouen',
-            'Montreuil',
-            'Mulhouse',
-            'Caen',
-            'Nancy',
-            'Saint-Paul',
-            'Roubaix',
-            'Tourcoing',
-            'Nanterre',
-            'Avignon',
-            'Vitry-sur-Seine',
-            'Créteil',
-            'Poitiers',
-            'Aubervilliers',
-            'Versailles',
-        ];
 
-        $departements = [
-            'Ain',
-            'Aisne',
-            'Allier',
-            'Alpes-de-Haute-Provence',
-            'Hautes-Alpes',
-            'Alpes-Maritimes',
-            'Ardèche',
-            'Ardennes',
-            'Ariège',
-            'Aube',
-            'Aude',
-            'Aveyron',
-            'Bouches-du-Rhône',
-            'Calvados',
-            'Cantal',
-            'Charente',
-            'Charente-Maritime',
-            'Cher',
-            'Corrèze',
-            'Corse-du-Sud',
-            'Haute-Corse',
-            'Côte-d\'Or',
-            'Côtes-d\'Armor',
-            'Creuse',
-            'Dordogne',
-            'Doubs',
-            'Drôme',
-            'Eure',
-            'Eure-et-Loir',
-            'Finistère',
-            'Gard',
-            'Haute-Garonne',
-            'Gers',
-            'Gironde',
-            'Hérault',
-            'Ille-et-Vilaine',
-            'Indre',
-            'Indre-et-Loire',
-            'Isère',
-            'Jura',
-            'Landes',
-            'Loir-et-Cher',
-            'Loire',
-            'Haute-Loire',
-            'Loire-Atlantique',
-            'Loiret',
-            'Lot',
-            'Lot-et-Garonne',
-            'Lozère',
-            'Maine-et-Loire',
-        ];
 
-        //Recuperation des room nouvellement crées
-        $room = [];
-        for ($i = 0; $i < 10; $i++) {
-            $room[] = $this->getReference('ROOM_' . $i, Room::class);
-        }
 
-        foreach ($city as $index => $cityName) {
+        // Chargement des données du CSV
+        $csvFile = __DIR__ . '/communes-francaises-light.csv';
+        $csvData = array_map('str_getcsv', file($csvFile));
+        array_shift($csvData); // Enlève l'en-tête
+
+        // Boucle sur les données du CSV
+        $i = 0;
+        foreach ($csvData as $index => $row) {
             $location = new Location();
-            $location
-                ->setCity($cityName)
-                ->setDepartment($departements[$index]) // Pour éviter l'index hors limites
-                ->setNumber($faker->numberBetween())
-                ->setState($faker->region())
-                ->addRoom($faker->randomElement($room))
-            ;
+            $location->setCity($row[0]);          // Commune
+            $location->setNumber($row[1]);        // Département (numéro)
+            $location->setDepartment($row[2]);    // Département (nom)
+            $location->setState($this->slugify($row[3])); // Région
+
+
+
             $manager->persist($location);
+            $this->addReference('LOCATION_' . $i, $location);
+            $i++;
         }
 
         $manager->flush();
     }
-    public function getDependencies(): array
+
+    private function slugify(string $text): string
     {
-        return [
-            RoomFixtures::class,
-        ];
+        // Remplacer les caractères spéciaux
+        $text = iconv('UTF-8', 'ASCII//TRANSLIT', $text);
+        // Convertir en minuscules
+        $text = strtolower($text);
+        // Remplacer tout ce qui n'est pas lettre ou nombre par un tiret
+        $text = preg_replace('/[^a-z0-9]/', '-', $text);
+        // Supprimer les tirets multiples
+        $text = preg_replace('/-+/', '-', $text);
+        // Supprimer les tirets au début et à la fin
+        $text = trim($text, '-');
+
+        return $text;
     }
+
+
 }

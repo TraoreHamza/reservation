@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Documentation Admin - SalleVenue{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8">
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">📚 Documentation Technique - Admin</h1>
+        <p class="text-xl text-gray-600">Diagrammes UML complets et architecture détaillée</p>
+    </div>
+
+    <!-- Diagramme de classes -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-800">🏗️ Diagramme de Classes UML</h2>
+        <div class="bg-gray-50 rounded-md p-4 mb-4">
+            <p class="text-sm text-gray-600">Architecture complète des entités du système de réservation</p>
+        </div>
+        <div class="overflow-x-auto">
+            <pre class="text-xs bg-gray-900 text-green-400 p-4 rounded-md overflow-x-auto">
+{{ include('documentation/uml_class_diagram.txt') }}
+            </pre>
+        </div>
+    </div>
+
+    <!-- Diagrammes de séquences -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">📅 Réserver une salle</h3>
+            <div class="bg-gray-50 rounded-md p-4">
+                <pre class="text-xs bg-gray-900 text-blue-400 p-4 rounded-md overflow-x-auto">
+{{ include('documentation/sequence_booking.txt') }}
+                </pre>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">❌ Annuler une réservation</h3>
+            <div class="bg-gray-50 rounded-md p-4">
+                <pre class="text-xs bg-gray-900 text-red-400 p-4 rounded-md overflow-x-auto">
+{{ include('documentation/sequence_cancel.txt') }}
+                </pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

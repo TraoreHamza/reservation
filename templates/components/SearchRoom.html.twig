@@ -1,61 +1,261 @@
-<div{{attributes}}>
+<div{{attributes}} class="bg-white rounded-lg shadow-md p-6">
+	<h3 class="text-lg font-semibold mb-4 text-gray-800">🔍 Recherche avancée de salles</h3>
+	
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+		<!-- Terme de recherche principal -->
+		<div>
+			<label for="search-query" class="block text-sm font-medium text-gray-700 mb-2">
+				Terme de recherche
+			</label>
+			<input 
+				type="text" 
+				id="search-query"
+				data-model="query" 
+				placeholder="Nom, description, équipements..."
+				class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+			/>
+		</div>
 
-	<input type="text" data-model="query" class="grow" placeholder="Tapez un mot-clé..."/>
+		<!-- Recherche géographique -->
+		<div>
+			<label for="search-location" class="block text-sm font-medium text-gray-700 mb-2">
+				Localisation
+			</label>
+			<div class="relative">
+				<input 
+					type="text" 
+					id="search-location"
+					data-model="location" 
+					placeholder="Ville, département, région..."
+					class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+					autocomplete="off"
+				/>
+				<div id="location-suggestions" class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg hidden max-h-60 overflow-y-auto">
+					<!-- Les suggestions apparaîtront ici -->
+				</div>
+			</div>
+		</div>
 
-	<select data-model="option" id="">
+		<!-- Capacité -->
+		<div>
+			<label for="search-capacity" class="block text-sm font-medium text-gray-700 mb-2">
+				Capacité minimum
+			</label>
+			<input 
+				type="number" 
+				id="search-capacity"
+				data-model="capacity" 
+				min="1"
+				placeholder="Nombre de personnes"
+				class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+			/>
+		</div>
 
-        <option value="">Les options</option>
-		<option value="Vidéoprojecteur">Vidéoprojecteur</option>
-		<option value="Tableau blanc">Tableau blanc</option>
-		<option value="Paperboard">Paperboard</option>
-		<option value="Connexion Wi-Fi">Connexion Wi-Fi</option>
-		<option value="Climatisation">Climatisation</option>
-		
-	</select>
+		<!-- Prix maximum -->
+		<div>
+			<label for="search-price" class="block text-sm font-medium text-gray-700 mb-2">
+				Prix maximum par jour
+			</label>
+			<input 
+				type="number" 
+				id="search-price"
+				data-model="maxPrice" 
+				min="0"
+				step="0.01"
+				placeholder="Prix en euros"
+				class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+			/>
+		</div>
 
-	<select data-model="equipment" id="">
+		<!-- Options -->
+		<div>
+			<label for="search-option" class="block text-sm font-medium text-gray-700 mb-2">
+				Options
+			</label>
+			<select data-model="option" id="search-option" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+				<option value="">Toutes les options</option>
+				<option value="Vidéoprojecteur">Vidéoprojecteur</option>
+				<option value="Tableau blanc">Tableau blanc</option>
+				<option value="Paperboard">Paperboard</option>
+				<option value="Connexion Wi-Fi">Connexion Wi-Fi</option>
+				<option value="Climatisation">Climatisation</option>
+			</select>
+		</div>
 
-        <option value="">Les equipements</option>
-		<option value="Vidéoprojecteur">Vidéoprojecteur</option>
-		<option value="Tableau blanc">Tableau blanc</option>
-		<option value="Paperboard">Paperboard</option>
-		<option value="Connexion Wi-Fi">Connexion Wi-Fi</option>
-		<option value="Climatisation">Climatisation</option>
-		
-	</select>
-
-	<select data-model="location" id="">
-
-        <option value="">La location</option>
-		<option value="Vidéoprojecteur">Vidéoprojecteur</option>
-		<option value="Tableau blanc">Tableau blanc</option>
-		<option value="Paperboard">Paperboard</option>
-		<option value="Connexion Wi-Fi">Connexion Wi-Fi</option>
-		<option value="Climatisation">Climatisation</option>
-		
-	</select>
+		<!-- Équipements -->
+		<div>
+			<label for="search-equipment" class="block text-sm font-medium text-gray-700 mb-2">
+				Équipements
+			</label>
+			<select data-model="equipment" id="search-equipment" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+				<option value="">Tous les équipements</option>
+				<option value="Vidéoprojecteur">Vidéoprojecteur</option>
+				<option value="Tableau blanc">Tableau blanc</option>
+				<option value="Paperboard">Paperboard</option>
+				<option value="Connexion Wi-Fi">Connexion Wi-Fi</option>
+				<option value="Climatisation">Climatisation</option>
+			</select>
+		</div>
+	</div>
 
 	<!-- Filtres ergonomiques -->
-	<div class="flex gap-4 mt-4">
+	<div class="flex flex-wrap gap-4 mt-4 p-4 bg-gray-50 rounded-md">
 		<label class="flex items-center gap-2">
-			<input type="checkbox" data-model="luminosity" class="rounded">
-			<span class="text-sm">Luminosité naturelle</span>
+			<input type="checkbox" data-model="luminosity" class="rounded text-blue-600 focus:ring-blue-500">
+			<span class="text-sm font-medium text-gray-700">Luminosité naturelle</span>
 		</label>
 		
 		<label class="flex items-center gap-2">
-			<input type="checkbox" data-model="pmr_access" class="rounded">
-			<span class="text-sm">Accessibilité PMR</span>
+			<input type="checkbox" data-model="pmr_access" class="rounded text-blue-600 focus:ring-blue-500">
+			<span class="text-sm font-medium text-gray-700">Accessibilité PMR</span>
 		</label>
 	</div>
 
+	<!-- Bouton de recherche -->
+	<div class="mt-6">
+		<button type="button" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
+			🔍 Rechercher
+		</button>
+	</div>
+
+	<!-- Résultats -->
 	{% set rooms = this.rooms %}
 	{% if rooms|length > 0 %}
-
-		{% for item in rooms %}
-			{{ dump(item)}}
-		{% endfor %}
+		<div class="mt-6">
+			<h4 class="text-lg font-semibold mb-4 text-gray-800">📋 Résultats ({{ rooms|length }} salle(s) trouvée(s))</h4>
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+				{% for room in rooms %}
+					<div class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+						<h5 class="font-semibold text-gray-800 mb-2">{{ room.name }}</h5>
+						<p class="text-sm text-gray-600 mb-2">{{ room.description|length > 100 ? room.description|slice(0, 100) ~ '...' : room.description }}</p>
+						<div class="flex justify-between items-center text-sm">
+							<span class="text-gray-500">Capacité: {{ room.capacity }} pers.</span>
+							<span class="font-semibold text-blue-600">{{ room.price }}€/jour</span>
+						</div>
+						<div class="mt-2">
+							<span class="inline-block px-2 py-1 rounded-full text-xs font-semibold
+								{{ room.isAvailable ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+								{{ room.isAvailable ? 'Disponible' : 'Indisponible' }}
+							</span>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
 	{% else %}
-
-		<p>Pas de resultat</p>
+		<div class="mt-6 text-center py-8">
+			<p class="text-gray-500">🔍 Aucune salle trouvée avec ces critères</p>
+			<p class="text-sm text-gray-400 mt-2">Essayez de modifier vos filtres de recherche</p>
+		</div>
 	{% endif %}
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+	const locationInput = document.getElementById('search-location');
+	const suggestionsDiv = document.getElementById('location-suggestions');
+	let timeoutId;
+
+	if (locationInput && suggestionsDiv) {
+		locationInput.addEventListener('input', function() {
+			clearTimeout(timeoutId);
+			const query = this.value.trim();
+			
+			if (query.length < 2) {
+				suggestionsDiv.classList.add('hidden');
+				return;
+			}
+
+			timeoutId = setTimeout(() => {
+				fetch(`/api/geographic/search?q=${encodeURIComponent(query)}&type=all`)
+					.then(response => response.json())
+					.then(data => {
+						displaySuggestions(data, query);
+					})
+					.catch(error => {
+						console.error('Erreur lors de la recherche géographique:', error);
+					});
+			}, 300);
+		});
+
+		// Fermer les suggestions en cliquant ailleurs
+		document.addEventListener('click', function(e) {
+			if (!locationInput.contains(e.target) && !suggestionsDiv.contains(e.target)) {
+				suggestionsDiv.classList.add('hidden');
+			}
+		});
+	}
+
+	function displaySuggestions(data, query) {
+		suggestionsDiv.innerHTML = '';
+		
+		let hasResults = false;
+
+		// Afficher les communes
+		if (data.communes && data.communes.length > 0) {
+			hasResults = true;
+			const communeSection = document.createElement('div');
+			communeSection.className = 'p-2 border-b border-gray-100';
+			communeSection.innerHTML = '<div class="text-xs font-semibold text-gray-500 mb-1">🏘️ Communes</div>';
+			
+			data.communes.slice(0, 5).forEach(commune => {
+				const item = document.createElement('div');
+				item.className = 'px-2 py-1 hover:bg-gray-100 cursor-pointer text-sm';
+				item.textContent = `${commune.name} (${commune.department_name})`;
+				item.onclick = () => {
+					locationInput.value = commune.name;
+					suggestionsDiv.classList.add('hidden');
+				};
+				communeSection.appendChild(item);
+			});
+			suggestionsDiv.appendChild(communeSection);
+		}
+
+		// Afficher les départements
+		if (data.departments && data.departments.length > 0) {
+			hasResults = true;
+			const deptSection = document.createElement('div');
+			deptSection.className = 'p-2 border-b border-gray-100';
+			deptSection.innerHTML = '<div class="text-xs font-semibold text-gray-500 mb-1">🗺️ Départements</div>';
+			
+			data.departments.slice(0, 3).forEach(dept => {
+				const item = document.createElement('div');
+				item.className = 'px-2 py-1 hover:bg-gray-100 cursor-pointer text-sm';
+				item.textContent = `${dept.name} (${dept.code})`;
+				item.onclick = () => {
+					locationInput.value = dept.name;
+					suggestionsDiv.classList.add('hidden');
+				};
+				deptSection.appendChild(item);
+			});
+			suggestionsDiv.appendChild(deptSection);
+		}
+
+		// Afficher les régions
+		if (data.regions && data.regions.length > 0) {
+			hasResults = true;
+			const regionSection = document.createElement('div');
+			regionSection.className = 'p-2';
+			regionSection.innerHTML = '<div class="text-xs font-semibold text-gray-500 mb-1">🌍 Régions</div>';
+			
+			data.regions.slice(0, 3).forEach(region => {
+				const item = document.createElement('div');
+				item.className = 'px-2 py-1 hover:bg-gray-100 cursor-pointer text-sm';
+				item.textContent = region;
+				item.onclick = () => {
+					locationInput.value = region;
+					suggestionsDiv.classList.add('hidden');
+				};
+				regionSection.appendChild(item);
+			});
+			suggestionsDiv.appendChild(regionSection);
+		}
+
+		if (hasResults) {
+			suggestionsDiv.classList.remove('hidden');
+		} else {
+			suggestionsDiv.classList.add('hidden');
+		}
+	}
+});
+</script>
