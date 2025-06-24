@@ -9,7 +9,39 @@
 
 {{ dump(room)}}
 
-{{ form(bookingForm) }}
+<div class="max-w-xl mx-auto py-10 px-4">
+    <h1 class="text-2xl font-bold text-center mb-8">Nouvelle Réservation</h1>
+    {{ form_start(form) }}
+        <div class="space-y-6 bg-white p-8 rounded-lg shadow">
+            <div>
+                {{ form_label(form.startDate, null, {'label_attr': {'class': 'block text-gray-700 font-medium mb-1'}}) }}
+                {{ form_widget(form.startDate, {'attr': {'class': 'w-full border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
+                {{ form_errors(form.startDate) }}
+            </div>
+            <div>
+                {{ form_label(form.endDate, null, {'label_attr': {'class': 'block text-gray-700 font-medium mb-1'}}) }}
+                {{ form_widget(form.endDate, {'attr': {'class': 'w-full border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
+                {{ form_errors(form.endDate) }}
+            </div>
+            <div>
+                {{ form_label(form.equipments, null, {'label_attr': {'class': 'block text-gray-700 font-medium mb-1'}}) }}
+                {{ form_widget(form.equipments, {'attr': {'class': 'w-full border-gray-300 rounded px-3 py-2'}}) }}
+                {{ form_errors(form.equipments) }}
+            </div>
+            <div>
+                {{ form_label(form.options, null, {'label_attr': {'class': 'block text-gray-700 font-medium mb-1'}}) }}
+                {{ form_widget(form.options, {'attr': {'class': 'w-full border-gray-300 rounded px-3 py-2'}}) }}
+                {{ form_errors(form.options) }}
+            </div>
+            <div>
+                {{ form_widget(form.submit, {'attr': {'class': 'bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full'}}) }}
+            </div>
+        </div>
+    {{ form_end(form) }}
+    <div class="text-center mt-6">
+        <a href="{{ path('bookings') }}" class="text-blue-500 hover:underline">Retour à mes réservations</a>
+    </div>
+</div>
 
 <a href="{{path('rooms')}}">retour</a>
 

@@ -28,6 +28,7 @@ class Option
     {
         $this->rooms = new ArrayCollection();
     }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,14 +76,5 @@ class Option
         }
 
         return $this;
-    }
-
-    /**
-     * @return Collection<int, Booking>
-     */
-
-    public function __toString(): string
-    {
-        return $this->name;
     }
 }
