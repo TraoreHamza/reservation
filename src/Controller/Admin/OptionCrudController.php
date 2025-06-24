@@ -39,12 +39,9 @@ class OptionCrudController extends AbstractCrudController
         return [
             TextField::new('name')
                 ->setHelp('Nom de l\'option.'),
-<<<<<<< HEAD
             AssociationField::new('rooms')
                 ->setHelp('Salles pour lesquelles cette option est applicable.')
                 ->setFormTypeOption('multiple', true),
-=======
->>>>>>> origin/hamza
         ];
     }
 }
