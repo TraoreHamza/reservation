@@ -8,6 +8,7 @@ use App\Entity\Option;
 use App\Entity\Booking;
 use App\Entity\Equipment;
 use App\Entity\Quotation;
+use App\Service\NotificationService;
 use App\Controller\RoomController;
 use App\Repository\BookingRepository;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,43 +21,63 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 class DashboardController extends AbstractDashboardController
 {
-
-
     public function __construct(
-        private BookingRepository $br
+        private BookingRepository $br,
+        private NotificationService $notificationService
     ) {}
 
     public function index(): Response
     {
+        // Récupération des notifications urgentes
+        $urgentNotifications = $this->notificationService->checkAndGetUrgentNotifications();
+        
+        // Ajout des notifications flash
+        foreach ($urgentNotifications as $notification) {
+            $this->addFlash($notification['type'], $notification['message']);
+        }
+
+        // Récupération des statistiques
+        $stats = $this->notificationService->getDashboardStats();
+
         $bookings = $this->br->findAll();
-        $datas = [];                                    // / tableau de données pour le calendrier au forma json
+        $datas = [];                                    // tableau de données pour le calendrier au format json
         foreach ($bookings as $booking) {
+            // Code couleur selon le statut
+            $color = match($booking->getStatus()) {
+                'pending' => '#f87171',    // Rouge pour en attente
+                'confirmed' => '#10b981',  // Vert pour confirmée
+                'cancelled' => '#a8a29e',  // Gris pour annulée
+                default => '#6b7280'       // Gris par défaut
+            };
 
             $datas[] = [
-                'title' => $booking->getRoom()->getName() . " " . $booking->getStatus() . " " . $booking->getClient()->getName(),
+                'title' => $booking->getRoom()->getName() . " - " . $booking->getStatus() . " - " . ($booking->getClient()?->getName() ?? 'Client inconnu'),
                 'start' => $booking->getStartDate()->format('Y-m-d H:i:s'),
                 'end' => $booking->getEndDate()->format('Y-m-d H:i:s'),
-                "color" => ($booking->getStatus() === 'En attente' ? '#f87171' : "") .
-                    ($booking->getStatus() === 'Validée' ? '#10b981' : "") .
-                    ($booking->getStatus() === 'Annulée' ? '#a8a29e' : ""),
-
+                'color' => $color,
+                'extendedProps' => [
+                    'status' => $booking->getStatus(),
+                    'room' => $booking->getRoom()->getName(),
+                    'client' => $booking->getClient()?->getName() ?? 'Client inconnu'
+                ]
             ];
         }
         $bookings = json_encode($datas);
-        //dd($bookings);
 
         return $this->render('admin/dashboard.html.twig', [
             'bookings' => $bookings,
+            'stats' => $stats,
+            'urgentNotifications' => $urgentNotifications
         ]);
     }
 
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('sallevenue');
+            ->setTitle('SalleVenue - Administration');
     }
 
-    public function configureAssets(): Assets                                     // integration calendar fullcalendar ou n importe quelle autre librairie JS
+    public function configureAssets(): Assets
     {
         return parent::configureAssets()
             ->addJsFile('https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js');

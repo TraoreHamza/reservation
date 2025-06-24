@@ -1,37 +1,180 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 
-
 {% block content %}
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<h1>Welcome to the Admin Dashboard</h1>
-				<p>This is your central hub for managing the application.</p>
-			</div>
-		</div>
-        <div id="calendar"></div>
-	</div>
+<div class="container-fluid">
+    <!-- Titre et description -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3 mb-2 text-gray-800">Tableau de bord - SalleVenue</h1>
+            <p class="mb-4">Centre de gestion des réservations et des salles</p>
+        </div>
+    </div>
 
-	<script>
-		document.addEventListener("DOMContentLoaded", function () {
-const calendarEl = document.getElementById("calendar");
-if (calendarEl) {
-const calendar = new FullCalendar.Calendar(calendarEl, {
-locale: 'fr',
-headerToolbar: {
-left: "prev,next today",
-center: "title",
-right: "dayGridMonth,listWeek"
-},
-events: {{ bookings|raw }}
+    <!-- Statistiques -->
+    {% if stats is defined %}
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Réservations
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats.total }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                En Attente
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats.pending }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clock fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Confirmées
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats.confirmed }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                Urgentes (>5 jours)
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats.urgent }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Notifications urgentes -->
+    {% if urgentNotifications is defined and urgentNotifications|length > 0 %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Notifications Urgentes</h6>
+                </div>
+                <div class="card-body">
+                    {% for notification in urgentNotifications %}
+                    <div class="alert alert-{{ notification.type == 'danger' ? 'danger' : 'warning' }} alert-dismissible fade show" role="alert">
+                        {{ notification.message|raw }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Calendrier -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Calendrier des Réservations</h6>
+                </div>
+                <div class="card-body">
+                    <div id="calendar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const calendarEl = document.getElementById("calendar");
+    if (calendarEl) {
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            locale: 'fr',
+            headerToolbar: {
+                left: "prev,next today",
+                center: "title",
+                right: "dayGridMonth,timeGridWeek,listWeek"
+            },
+            initialView: 'dayGridMonth',
+            height: 'auto',
+            events: {{ bookings|raw }},
+            eventClick: function(info) {
+                // Afficher les détails de la réservation
+                const event = info.event;
+                const props = event.extendedProps;
+                alert(`Réservation: ${props.room}\nClient: ${props.client}\nStatut: ${props.status}`);
+            },
+            eventDidMount: function(info) {
+                // Ajouter des tooltips avec les informations
+                const event = info.event;
+                const props = event.extendedProps;
+                info.el.title = `${props.room} - ${props.client} (${props.status})`;
+            }
+        });
+        calendar.render();
+    } else {
+        console.error("Element with ID 'calendar' not found.");
+    }
 });
+</script>
 
-
-calendar.render();
-
-} else {
-console.error("Element with ID 'calendar' not found.");
+<style>
+.border-left-primary {
+    border-left: 0.25rem solid #4e73df !important;
 }
-});
-	</script>
+.border-left-success {
+    border-left: 0.25rem solid #1cc88a !important;
+}
+.border-left-warning {
+    border-left: 0.25rem solid #f6c23e !important;
+}
+.border-left-danger {
+    border-left: 0.25rem solid #e74a3b !important;
+}
+.text-gray-300 {
+    color: #dddfeb !important;
+}
+.text-gray-800 {
+    color: #5a5c69 !important;
+}
+</style>
 {% endblock %}

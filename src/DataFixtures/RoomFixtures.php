@@ -88,15 +88,15 @@ class RoomFixtures extends Fixture
             "Salle spacieuse avec coin détente.",
             "Salle adaptée aux ateliers créatifs et artistiques.",
             "Espace de réunion avec lumière naturelle abondante.",
-            "Salle équipée d’un écran interactif tactile.",
+            "Salle équipée d'un écran interactif tactile.",
             "Salle de formation avec 20 postes informatiques.",
             "Espace réservé aux réunions de direction.",
             "Salle confortable avec fauteuils ergonomiques.",
             "Salle équipée pour projections vidéo HD.",
             "Salle accessible aux personnes à mobilité réduite.",
             "Espace modulable pour réunions et banquets.",
-            "Salle équipée d’un système de climatisation.",
-            "Salle à l’acoustique optimisée pour la musique.",
+            "Salle équipée d'un système de climatisation.",
+            "Salle à l'acoustique optimisée pour la musique.",
             "Salle de réunion avec kitchenette attenante.",
             "Salle décorée dans un style contemporain.",
             "Espace chaleureux pour réunions informelles.",
@@ -107,7 +107,7 @@ class RoomFixtures extends Fixture
             "Salle avec vue panoramique sur la ville.",
             "Espace de travail collaboratif et flexible.",
             "Salle adaptée aux visioconférences et webinaires.",
-            "Salle dotée d’un système de sonorisation performant.",
+            "Salle dotée d'un système de sonorisation performant.",
             "Salle de réunion avec mobilier modulable.",
             "Espace sécurisé pour réunions confidentielles.",
             "Salle équipée de stores occultants.",
@@ -128,7 +128,7 @@ class RoomFixtures extends Fixture
         $imageFilenames = [
             'default.png',
         ];
-    
+
         $i = 0;
         foreach ($rooms as $index => $roomName) {
             $room = new Room();
@@ -139,7 +139,11 @@ class RoomFixtures extends Fixture
                 ->setImage($imageFilename) // On stocke juste le nom du fichier !
                 ->setDescription($descriptions[$index])
                 ->setIsAvailable($faker->boolean())
-                ->setDailyRate($faker->numberBetween(100,2500)) // Prix journalier entre 100 et 2500 euros
+                ->setDailyRate($faker->numberBetween(100, 2500)) // Prix journalier entre 100 et 2500 euros
+                ->setPrice($faker->randomFloat(2, 50, 2000)) // Prix en euros avec 2 décimales
+                ->setLuminosity($faker->boolean(70)) // 70% de chance d'avoir de la luminosité naturelle
+                ->setPmrAccess($faker->boolean(60)) // 60% de chance d'être accessible PMR
+                ->setErgonomicsNotes($faker->optional(0.3)->sentence()) // 30% de chance d'avoir des notes ergonomiques
             ;
             $manager->persist($room);
             $this->addReference('ROOM_' . $i, $room);

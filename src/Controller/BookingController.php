@@ -30,7 +30,7 @@ class BookingController extends AbstractController
     #[Route('s', name: 'bookings', methods: ['GET'])]
     public function index(): Response
     {
-        $bookings = $this->br->findBy(['client' => $this->getUser()]);
+        $bookings = $this->br->findBy(['user' => $this->getUser()]);
         return $this->render('booking/index.html.twig', ['bookings' => $bookings]);
     }
 

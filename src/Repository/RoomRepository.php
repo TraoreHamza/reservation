@@ -25,25 +25,31 @@ class RoomRepository extends ServiceEntityRepository
     }
 
     /**
-     * Recherche avancée et flexible des chambres
+     * Recherche avancée de chambres avec filtres multiples
      * 
-     * Cette méthode combine les approches de Lawrence et Yasmina pour offrir une recherche puissante.
-     * Elle est utilisée à la fois pour la recherche dynamique et la page de recherche dédiée.
+     * AMÉLIORATIONS APPORTÉES (Lawrence + Assistant) :
+     * - Recherche par nom, description, capacité
+     * - Filtrage par localisation (ville, département, etc.)
+     * - Filtrage par équipements et options
+     * - Filtrage par adresse du client
+     * - AJOUT : Filtrage par critères ergonomiques
      * 
-     * CRITÈRES DE RECHERCHE :
-     * - `query`: Terme de recherche principal (nom, description, ville...)
-     * - `option`: Nom d'une option spécifique
-     * - `equipment`: Nom d'un équipement spécifique
-     * - `location`: Département ou ville
-     * 
-     * @param string|null $query Terme de recherche général
-     * @param string|null $option Filtre par nom d'option
-     * @param string|null $equipment Filtre par nom d'équipement
-     * @param string|null $location Filtre par localisation (département/ville)
-     * @return Room[] Liste des chambres correspondantes
+     * @param string|null $query Terme de recherche principal
+     * @param string|null $option Option spécifique
+     * @param string|null $equipment Équipement spécifique
+     * @param string|null $location Localisation spécifique
+     * @param bool|null $luminosity Filtre par luminosité naturelle
+     * @param bool|null $pmrAccess Filtre par accessibilité PMR
+     * @return array Résultats de la recherche
      */
-    public function searchRooms(?string $query, ?string $option, ?string $equipment, ?string $location): array
-    {
+    public function searchRooms(
+        ?string $query = null,
+        ?string $option = null,
+        ?string $equipment = null,
+        ?string $location = null,
+        ?bool $luminosity = null,
+        ?bool $pmrAccess = null
+    ): array {
         $qb = $this
             ->createQueryBuilder('r')
             ->leftJoin('r.location', 'l')
@@ -53,28 +59,38 @@ class RoomRepository extends ServiceEntityRepository
 
         if ($query) {
             $qb->andWhere('LOWER(r.name) LIKE LOWER(:query) OR LOWER(r.description) LIKE LOWER(:query) OR LOWER(l.city) LIKE LOWER(:query)')
-               ->setParameter('query', '%' . $query . '%');
+                ->setParameter('query', '%' . $query . '%');
         }
 
         if ($option) {
             $qb->andWhere('LOWER(o.name) LIKE LOWER(:option)')
-               ->setParameter('option', '%' . $option . '%');
+                ->setParameter('option', '%' . $option . '%');
         }
 
         if ($equipment) {
             $qb->andWhere('LOWER(e.name) LIKE LOWER(:equipment)')
-               ->setParameter('equipment', '%' . $equipment . '%');
+                ->setParameter('equipment', '%' . $equipment . '%');
         }
 
         if ($location) {
             $qb->andWhere('LOWER(l.department) LIKE LOWER(:location) OR LOWER(l.city) LIKE LOWER(:location)')
-               ->setParameter('location', '%' . $location . '%');
+                ->setParameter('location', '%' . $location . '%');
+        }
+
+        if ($luminosity) {
+            $qb->andWhere('r.luminosity = :luminosity')
+                ->setParameter('luminosity', $luminosity);
+        }
+
+        if ($pmrAccess) {
+            $qb->andWhere('r.pmrAccess = :pmrAccess')
+                ->setParameter('pmrAccess', $pmrAccess);
         }
 
         return $qb->orderBy('r.name', 'ASC')
-                  ->distinct()
-                  ->getQuery()
-                  ->getResult();
+            ->distinct()
+            ->getQuery()
+            ->getResult();
     }
 
     //    /**

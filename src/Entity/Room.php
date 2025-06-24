@@ -102,6 +102,15 @@ class Room
     #[ORM\JoinColumn(nullable: true)]
     private ?Location $location = null;
 
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $luminosity = false;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $pmr_access = false;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $ergonomics_notes = null;
+
     public function __construct()
     {
         $this->equipments = new ArrayCollection();
@@ -376,6 +385,39 @@ class Room
     {
         $this->location = $location;
 
+        return $this;
+    }
+
+    public function hasLuminosity(): bool
+    {
+        return $this->luminosity;
+    }
+
+    public function setLuminosity(bool $luminosity): static
+    {
+        $this->luminosity = $luminosity;
+        return $this;
+    }
+
+    public function hasPmrAccess(): bool
+    {
+        return $this->pmr_access;
+    }
+
+    public function setPmrAccess(bool $pmr_access): static
+    {
+        $this->pmr_access = $pmr_access;
+        return $this;
+    }
+
+    public function getErgonomicsNotes(): ?string
+    {
+        return $this->ergonomics_notes;
+    }
+
+    public function setErgonomicsNotes(?string $notes): static
+    {
+        $this->ergonomics_notes = $notes;
         return $this;
     }
 }

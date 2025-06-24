@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Booking;
+use App\Entity\User;
 use App\Form\BookingForm;
 use App\Repository\RoomRepository;
 use App\Service\QuotationService;
@@ -53,10 +54,11 @@ class RoomController extends AbstractController
             $this->em->persist($booking);
             $this->em->flush();
 
-            $qs->create($booking);
+            // Créer le devis avec l'utilisateur connecté comme créateur
+            $qs->createFromBooking($booking, $user);
 
             $this->addFlash('success', 'Votre demande de réservation a bien été enregistrée');
-            $this->redirectToRoute('bookings');
+            return $this->redirectToRoute('bookings');
         }
 
         return $this->render('room/view.html.twig', [

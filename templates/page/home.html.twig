@@ -82,6 +82,7 @@
                     </a>
 
                     <!-- Administration -->
+                    {% if is_granted('ROLE_ADMIN') %}
                     <a href="{{ path('admin') }}" class="block px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors border-b border-gray-100">
                         <div class="flex items-center">
                             <span class="text-orange-500 mr-3">⚙️</span>
@@ -91,6 +92,7 @@
                             </div>
                         </div>
                     </a>
+                    {% endif %}
 
                     <!-- Compte -->
                     <div class="px-4 py-3 border-b border-gray-100">

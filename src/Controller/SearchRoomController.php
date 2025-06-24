@@ -90,12 +90,17 @@ class SearchRoomController extends AbstractController
     public function search(Request $request, RoomRepository $roomRepository): JsonResponse
     {
         $query = $request->query->get('q');
+        $option = $request->query->get('option');
+        $equipment = $request->query->get('equipment');
+        $location = $request->query->get('location');
+        $luminosity = $request->query->get('luminosity') === 'true';
+        $pmrAccess = $request->query->get('pmr_access') === 'true';
 
-        if (!$query) {
+        if (!$query && !$option && !$equipment && !$location && !$luminosity && !$pmrAccess) {
             return new JsonResponse([]);
         }
 
-        $results = $roomRepository->searchRooms($query);
+        $results = $roomRepository->searchRooms($query, $option, $equipment, $location, $luminosity, $pmrAccess);
 
         return new JsonResponse($results);
     }

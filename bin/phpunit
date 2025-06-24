@@ -5,19 +5,18 @@ if (!ini_get('date.timezone')) {
     ini_set('date.timezone', 'UTC');
 }
 
-if (is_file(dirname(__DIR__).'/vendor/phpunit/phpunit/phpunit')) {
-    if (PHP_VERSION_ID >= 80000) {
-        require dirname(__DIR__).'/vendor/phpunit/phpunit/phpunit';
-    } else {
-        define('PHPUNIT_COMPOSER_INSTALL', dirname(__DIR__).'/vendor/autoload.php');
-        require PHPUNIT_COMPOSER_INSTALL;
-        PHPUnit\TextUI\Command::main();
-    }
+// Utilisation directe du binaire PHPUnit moderne
+$phpunitPath = dirname(__DIR__) . '/vendor/bin/phpunit';
+
+if (is_file($phpunitPath)) {
+    require $phpunitPath;
 } else {
-    if (!is_file(dirname(__DIR__).'/vendor/symfony/phpunit-bridge/bin/simple-phpunit.php')) {
-        echo "Unable to find the `simple-phpunit.php` script in `vendor/symfony/phpunit-bridge/bin/`.\n";
+    // Fallback vers simple-phpunit si disponible
+    $simplePhpunitPath = dirname(__DIR__) . '/vendor/symfony/phpunit-bridge/bin/simple-phpunit.php';
+    if (is_file($simplePhpunitPath)) {
+        require $simplePhpunitPath;
+    } else {
+        echo "PHPUnit n'est pas installé. Exécutez : composer require --dev phpunit/phpunit\n";
         exit(1);
     }
-
-    require dirname(__DIR__).'/vendor/symfony/phpunit-bridge/bin/simple-phpunit.php';
 }

@@ -35,6 +35,18 @@
 		
 	</select>
 
+	<!-- Filtres ergonomiques -->
+	<div class="flex gap-4 mt-4">
+		<label class="flex items-center gap-2">
+			<input type="checkbox" data-model="luminosity" class="rounded">
+			<span class="text-sm">Luminosité naturelle</span>
+		</label>
+		
+		<label class="flex items-center gap-2">
+			<input type="checkbox" data-model="pmr_access" class="rounded">
+			<span class="text-sm">Accessibilité PMR</span>
+		</label>
+	</div>
 
 	{% set rooms = this.rooms %}
 	{% if rooms|length > 0 %}
