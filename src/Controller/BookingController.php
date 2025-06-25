@@ -27,10 +27,18 @@ class BookingController extends AbstractController
     ) {}
 
     // Route pour touts les booking (réservations)
-    #[Route('s', name: 'bookings', methods: ['GET'])]
+    #[Route('/s', name: 'bookings', methods: ['GET'])]
     public function index(): Response
     {
-        $bookings = $this->br->findBy(['client' => $this->getUser()]);
+        $user = $this->getUser();
+        $client = $user->getClient();
+
+        if (!$client) {
+            $this->addFlash('warning', 'Aucun client associé à votre compte.');
+            return $this->render('booking/index.html.twig', ['bookings' => []]);
+        }
+
+        $bookings = $this->br->findBy(['client' => $client]);
         return $this->render('booking/index.html.twig', ['bookings' => $bookings]);
     }
 
@@ -42,7 +50,24 @@ class BookingController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $booking->setClient($this->getUser());
+            // Vérifier que la salle est sélectionnée
+            if (!$booking->getRoom()) {
+                $this->addFlash('error', 'Veuillez sélectionner une salle.');
+                return $this->render('booking/new.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
+
+            // Récupérer le client associé à l'utilisateur connecté
+            $user = $this->getUser();
+            $client = $user->getClient();
+
+            if (!$client) {
+                $this->addFlash('error', 'Aucun client associé à votre compte.');
+                return $this->redirectToRoute('bookings');
+            }
+
+            $booking->setClient($client);
             $this->em->persist($booking);
             $this->em->flush();
             $this->addFlash('success', 'Réservation créée !');

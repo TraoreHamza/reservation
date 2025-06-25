@@ -1,4 +1,4 @@
-<div{{attributes}} class="bg-white rounded-lg shadow-md p-6">
+{# <div{{attributes}} class="bg-white rounded-lg shadow-md p-6">
 	<h3 class="text-lg font-semibold mb-4 text-gray-800">🔍 Recherche avancée de salles</h3>
 	
 	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -258,4 +258,42 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	}
 });
-</script>
+</script> #}
+
+<div{{attributes}} class="flex gap-4">
+		<input type="text" data-model="query" class="grow" placeholder="Tapez un mot-clé..."/>
+	<select data-model="option" id="">
+
+		<option value="">Les options</option>
+		{% set options = this.options %}
+
+		{% for item in options %}
+			<option value={{item.name}}>{{item.name}}</option>
+		{% endfor %}
+	</select>
+
+	<select data-model="equipment" id="">
+
+		<option value="">Les equipements</option>
+		{% set equipments = this.equipments %}
+
+		{% for item in equipments %}
+			<option value={{item.name}}>{{item.name}}</option>
+		{% endfor %}
+	</select>
+	<select data-model="location" id="">
+		<option value="">La location</option>
+		{% set locations = this.locations %}
+
+		{% for item in locations %}
+			<option value={{item.department}}>{{item.department}}</option>
+		{% endfor %}
+	</select>
+	{% set rooms = this.rooms %}
+	{% if rooms|length > 0 %}
+
+		{% else %}
+
+			<p>Pas de resultat</p>
+	{% endif %}
+</div>

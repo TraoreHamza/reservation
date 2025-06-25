@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Recherche de chambres{% endblock %}
+{% block title %}Recherche de salles{% endblock %}
 
 {% block body %}
 <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold text-gray-800 mb-8">Recherche avancée de chambres</h1>
+    <h1 class="text-3xl font-bold text-gray-800 mb-8">Recherche avancée de salles</h1>
     
     <div class="bg-white rounded-lg shadow-md p-6">
-        <form method="GET" action="{{ path('search_room') }}" class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Terme de recherche -->
+        <form id="search-form" class="space-y-6">
+            <!-- Recherche principale -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label for="q" class="block text-sm font-medium text-gray-700 mb-2">
                         Terme de recherche
@@ -19,45 +19,145 @@
                         id="q" 
                         name="q" 
                         value="{{ query }}"
-                        placeholder="Nom, description, équipements..."
+                        placeholder="Nom de salle, description..."
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                 </div>
                 
-                <!-- Capacité -->
                 <div>
-                    <label for="capacity" class="block text-sm font-medium text-gray-700 mb-2">
-                        Capacité minimum
+                    <label for="location" class="block text-sm font-medium text-gray-700 mb-2">
+                        Localisation
                     </label>
                     <input 
-                        type="number" 
-                        id="capacity" 
-                        name="capacity" 
-                        min="1"
-                        placeholder="Nombre de personnes"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                </div>
-                
-                <!-- Prix maximum -->
-                <div>
-                    <label for="maxPrice" class="block text-sm font-medium text-gray-700 mb-2">
-                        Prix maximum par jour
-                    </label>
-                    <input 
-                        type="number" 
-                        id="maxPrice" 
-                        name="maxPrice" 
-                        min="0"
-                        step="0.01"
-                        placeholder="Prix en euros"
+                        type="text" 
+                        id="location" 
+                        name="location" 
+                        placeholder="Ville, département..."
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                 </div>
             </div>
+
+            <!-- Filtres de capacité -->
+            <div class="border-t pt-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Capacité</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="min_capacity" class="block text-sm font-medium text-gray-700 mb-2">
+                            Capacité minimale
+                        </label>
+                        <input 
+                            type="number" 
+                            id="min_capacity" 
+                            name="min_capacity" 
+                            min="1"
+                            placeholder="Nombre minimum de personnes"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                    </div>
+                    
+                    <div>
+                        <label for="max_capacity" class="block text-sm font-medium text-gray-700 mb-2">
+                            Capacité maximale
+                        </label>
+                        <input 
+                            type="number" 
+                            id="max_capacity" 
+                            name="max_capacity" 
+                            min="1"
+                            placeholder="Nombre maximum de personnes"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtres d'équipements -->
+            <div class="border-t pt-6 ">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Équipements</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Équipements disponibles
+                        </label>
+                        <div class="space-y-2 max-h-40 overflow-y-auto border border-gray-300 rounded-md p-3">
+                            {% for equipment in equipments %}
+                                <div class="flex items-center">
+                                    <input 
+                                        type="checkbox" 
+                                        id="equipment_{{ equipment.id }}" 
+                                        name="equipment[]" 
+                                        value="{{ equipment.name }}"
+                                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                    >
+                                    <label for="equipment_{{ equipment.id }}" class="ml-2 block text-sm text-gray-700">
+                                        {{ equipment.name }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div>
+                       {# <h3 class="text-lg font-semibold text-gray-800 mb-4">Options</h3> #}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Options disponibles
+                        </label>
+                        <div class="space-y-2 max-h-40 overflow-y-auto border border-gray-300 rounded-md p-3">
+                            {% for option in options %}
+                                <div class="flex items-center">
+                                    <input 
+                                        type="checkbox" 
+                                        id="option_{{ option.id }}" 
+                                        name="option[]" 
+                                        value="{{ option.name }}"
+                                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                    >
+                                    <label for="option_{{ option.id }}" class="ml-2 block text-sm text-gray-700">
+                                        {{ option.name }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtres d'ergonomie -->
+            <div class="border-t pt-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Critères ergonomiques</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="flex items-center">
+                        <input 
+                            type="checkbox" 
+                            id="luminosity" 
+                            name="luminosity" 
+                            value="true"
+                            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                        >
+                        <label for="luminosity" class="ml-2 block text-sm text-gray-700">
+                            Luminosité naturelle
+                        </label>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <input 
+                            type="checkbox" 
+                            id="pmr_access" 
+                            name="pmr_access" 
+                            value="true"
+                            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                        >
+                        <label for="pmr_access" class="ml-2 block text-sm text-gray-700">
+                            Accessibilité PMR
+                        </label>
+                    </div>
+                </div>
+            </div>
             
             <!-- Boutons -->
-            <div class="flex justify-between items-center pt-4">
+            <div class="flex justify-between items-center pt-6 border-t">
                 <button 
                     type="submit"
                     class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition duration-200"
@@ -65,11 +165,19 @@
                     Rechercher
                 </button>
                 
+                <button 
+                    type="button"
+                    id="reset-filters"
+                    class="text-gray-600 hover:text-gray-800 font-medium"
+                >
+                    Réinitialiser les filtres
+                </button>
+                
                 <a 
                     href="{{ path('test_search') }}"
                     class="text-blue-600 hover:text-blue-800 font-medium"
                 >
-                    Voir toutes les chambres
+                    Voir toutes les salles
                 </a>
             </div>
         </form>
@@ -77,46 +185,96 @@
     
     <!-- Zone de résultats -->
     <div id="search-results" class="mt-8">
-        <!-- Les résultats de recherche seront affichés ici via JavaScript -->
+        <div class="text-center text-gray-500 py-8">
+            Utilisez les filtres ci-dessus pour rechercher des salles
+        </div>
     </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('q');
+    const searchForm = document.getElementById('search-form');
     const resultsContainer = document.getElementById('search-results');
+    const resetButton = document.getElementById('reset-filters');
     
-    // Recherche en temps réel
-    searchInput.addEventListener('input', function() {
-        const query = this.value.trim();
-        
-        if (query.length >= 2) {
-            fetch(`/api/search-room?q=${encodeURIComponent(query)}`)
-                .then(response => response.json())
-                .then(data => {
-                    displayResults(data);
-                })
-                .catch(error => {
-                    console.error('Erreur lors de la recherche:', error);
-                });
-        } else {
-            resultsContainer.innerHTML = '';
-        }
+    // Recherche lors de la soumission du formulaire
+    searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        performSearch();
     });
+    
+    // Réinitialiser les filtres
+    resetButton.addEventListener('click', function() {
+        searchForm.reset();
+        resultsContainer.innerHTML = '<div class="text-center text-gray-500 py-8">Utilisez les filtres ci-dessus pour rechercher des salles</div>';
+    });
+    
+    function performSearch() {
+        const formData = new FormData(searchForm);
+        const params = new URLSearchParams();
+        
+        // Ajouter tous les paramètres non vides
+        for (let [key, value] of formData.entries()) {
+            if (key === 'equipment[]') {
+                // Ajout multiple pour chaque équipement sélectionné
+                params.append('equipment', value);
+            } else if (value && value.trim() !== '') {
+                params.append(key, value);
+            }
+        }
+        
+        // Afficher un indicateur de chargement
+        resultsContainer.innerHTML = '<div class="text-center text-gray-500 py-8">Recherche en cours...</div>';
+        
+        fetch(`/api/search-room?${params.toString()}`)
+            .then(response => response.json())
+            .then(data => {
+                displayResults(data);
+            })
+            .catch(error => {
+                console.error('Erreur lors de la recherche:', error);
+                resultsContainer.innerHTML = '<div class="text-center text-red-500 py-8">Erreur lors de la recherche</div>';
+            });
+    }
     
     function displayResults(rooms) {
         if (rooms.length === 0) {
-            resultsContainer.innerHTML = '<p class="text-gray-500 text-center py-8">Aucune chambre trouvée.</p>';
+            resultsContainer.innerHTML = '<div class="text-center text-gray-500 py-8">Aucune salle trouvée avec ces critères.</div>';
             return;
         }
         
         const html = rooms.map(room => `
-            <div class="bg-white rounded-lg shadow-md p-6 mb-4">
-                <h3 class="text-xl font-semibold text-gray-800 mb-2">${room.name}</h3>
-                <p class="text-gray-600 mb-4">${room.description || 'Aucune description disponible'}</p>
-                <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-500">Capacité: ${room.capacity} personnes</span>
+            <div class="bg-white rounded-lg shadow-md p-6 mb-4 hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800">${room.name}</h3>
                     <span class="text-lg font-bold text-blue-600">${room.price} €/jour</span>
+                </div>
+                
+                <p class="text-gray-600 mb-4">${room.description || 'Aucune description disponible'}</p>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div>
+                        <span class="font-medium text-gray-700">Capacité:</span>
+                        <span class="text-gray-600">${room.capacity} personnes</span>
+                    </div>
+                    <div>
+                        <span class="font-medium text-gray-700">Localisation:</span>
+                        <span class="text-gray-600">${room.location ? room.location.city : 'Non spécifiée'}</span>
+                    </div>
+                    <div>
+                        <span class="font-medium text-gray-700">Luminosité:</span>
+                        <span class="text-gray-600">${room.luminosity ? 'Oui' : 'Non'}</span>
+                    </div>
+                    <div>
+                        <span class="font-medium text-gray-700">PMR:</span>
+                        <span class="text-gray-600">${room.pmrAccess ? 'Oui' : 'Non'}</span>
+                    </div>
+                </div>
+                
+                <div class="mt-4 pt-4 border-t">
+                    <a href="/room/${parseInt(room.id)}" class="text-blue-600 hover:text-blue-800 font-medium">
+                        Voir les détails →
+                    </a>
                 </div>
             </div>
         `).join('');

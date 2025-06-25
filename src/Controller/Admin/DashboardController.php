@@ -8,6 +8,7 @@ use App\Entity\Option;
 use App\Entity\Booking;
 use App\Entity\Equipment;
 use App\Entity\Quotation;
+use App\Entity\User;
 use App\Service\NotificationService;
 use App\Controller\RoomController;
 use App\Repository\BookingRepository;
@@ -86,6 +87,7 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::linkToCrud('Utilisateurs', 'fa fa-user', User::class);
         yield MenuItem::linkToCrud('Room', 'fa-solid fa-people-roof', Room::class);
         yield MenuItem::linkToCrud('Option', 'fa-solid fa-filter', Option::class);
         yield MenuItem::linkToCrud('Equipment', 'fa fa-cog', Equipment::class);

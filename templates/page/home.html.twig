@@ -1,166 +1,48 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil - Réservation de Chambres{% endblock %}
+{% block title %}{% endblock %}
 
 {% block body %}
-{# 
-    PAGE D'ACCUEIL - SYSTÈME DE RÉSERVATION
-    ======================================
-    
-    AMÉLIORATIONS APPORTÉES (Lawrence + Assistant) :
-    - Remplacement du composant SearchRoom par un menu déroulant
-    - Interface plus ergonomique et compacte
-    - Navigation claire vers toutes les fonctionnalités
-    - Design responsive avec Tailwind CSS
-    
-    FONCTIONNALITÉS DISPONIBLES :
-    - Recherche avancée (page dédiée)
-    - Consultation des chambres
-    - Gestion des réservations
-    - Administration
-    - Connexion/Inscription
-#}
+	<twig:SearchRoom/>
+	<div class="mx-4">
+		<div class="relative w-full h-24 sm:h-32 md:h-40 lg:h-48 overflow-hidden rounded my-10">
+			<img src="{{ asset('medias/images/conference.webp') }}" alt="Bannière salles" class=" brightness-50 absolute inset-0 w-full h-full object-cover opacity-60"/>
+			<div class="absolute inset-0 flex items-center justify-center">
+				<h1 class="text-white text-lg sm:text-xl md:text-2xl font-bold text-center drop-shadow">
+					Liste des salles
+				</h1>
+			</div>
+		</div>
+	</div>
+</div></div><div class="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-4">
+{% for room in rooms %}
 
-<div class="container mx-auto px-4 py-8">
-    <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-gray-800 mb-4">🏨 Système de Réservation</h1>
-        <p class="text-xl text-gray-600">Bienvenue dans votre plateforme de réservation de chambres</p>
-    </div>
-
-    <!-- Barre de recherche avancée visible pour tous -->
-    <div class="mb-8">
-        {{ component('SearchRoom') }}
-    </div>
-
-    {# 
-        MENU DÉROULANT PRINCIPAL
-        ========================
-        
-        CARACTÉRISTIQUES :
-        - Bouton compact avec icône rotative
-        - Menu déroulant avec toutes les options
-        - Fermeture automatique en cliquant ailleurs
-        - Design responsive et moderne
-    #}
-    <div class="max-w-md mx-auto">
-        <div class="relative">
-            <!-- Bouton du menu -->
-            <button id="menuButton" class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-between">
-                <span class="text-lg font-medium">📋 Menu Principal</span>
-                <span id="menuIcon" class="text-xl transform transition-transform">▼</span>
-            </button>
-
-            <!-- Menu déroulant -->
-            <div id="dropdownMenu" class="absolute w-full mt-2 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-50">
-                <div class="py-2">
-                    <!-- Recherche avancée -->
-                    <a href="{{ path('search_room') }}" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors border-b border-gray-100">
-                        <div class="flex items-center">
-                            <span class="text-blue-500 mr-3">🔍</span>
-                            <div>
-                                <div class="font-medium">Recherche avancée</div>
-                                <div class="text-sm text-gray-500">Filtrer par tous les critères</div>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Chambres -->
-                    <a href="{{ path('admin_room_index') }}" class="block px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors border-b border-gray-100">
-                        <div class="flex items-center">
-                            <span class="text-green-500 mr-3">🏠</span>
-                            <div>
-                                <div class="font-medium">Toutes les chambres</div>
-                                <div class="text-sm text-gray-500">Consulter le catalogue</div>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Réservations -->
-                    <a href="{{ path('bookings') }}" class="block px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition-colors border-b border-gray-100">
-                        <div class="flex items-center">
-                            <span class="text-purple-500 mr-3">📅</span>
-                            <div>
-                                <div class="font-medium">Mes réservations</div>
-                                <div class="text-sm text-gray-500">Gérer mes réservations</div>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Administration -->
-                    {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('admin') }}" class="block px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors border-b border-gray-100">
-                        <div class="flex items-center">
-                            <span class="text-orange-500 mr-3">⚙️</span>
-                            <div>
-                                <div class="font-medium">Administration</div>
-                                <div class="text-sm text-gray-500">Panneau d'administration</div>
-                            </div>
-                        </div>
-                    </a>
-                    {% endif %}
-
-                    <!-- Compte -->
-                    <div class="px-4 py-3 border-b border-gray-100">
-                        <div class="flex items-center mb-2">
-                            <span class="text-gray-500 mr-3">👤</span>
-                            <div class="font-medium text-gray-700">Compte</div>
-                        </div>
-                        <div class="flex space-x-2">
-                            <a href="{{ path('app_login') }}" class="flex-1 bg-gray-600 text-white px-3 py-1 rounded text-sm hover:bg-gray-700 transition-colors text-center">
-                                Connexion
-                            </a>
-                            <a href="{{ path('app_register') }}" class="flex-1 bg-indigo-600 text-white px-3 py-1 rounded text-sm hover:bg-indigo-700 transition-colors text-center">
-                                Inscription
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Carte -->
-    <div class="mt-8">
-        <twig:Map/>
-    </div>
-</div>
-
-{# 
-    JAVASCRIPT POUR LE MENU DÉROULANT
-    =================================
-    
-    FONCTIONNALITÉS :
-    - Ouverture/fermeture du menu au clic
-    - Rotation de l'icône de flèche
-    - Fermeture automatique en cliquant ailleurs
-    - Transitions fluides
-#}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const menuButton = document.getElementById('menuButton');
-    const dropdownMenu = document.getElementById('dropdownMenu');
-    const menuIcon = document.getElementById('menuIcon');
-    
-    // Gestion du clic sur le bouton du menu
-    menuButton.addEventListener('click', function() {
-        const isHidden = dropdownMenu.classList.contains('hidden');
-        
-        if (isHidden) {
-            dropdownMenu.classList.remove('hidden');
-            menuIcon.style.transform = 'rotate(180deg)';
-        } else {
-            dropdownMenu.classList.add('hidden');
-            menuIcon.style.transform = 'rotate(0deg)';
-        }
-    });
-    
-    // Fermer le menu en cliquant ailleurs
-    document.addEventListener('click', function(event) {
-        if (!menuButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
-            dropdownMenu.classList.add('hidden');
-            menuIcon.style.transform = 'rotate(0deg)';
-        }
-    });
-});
-</script>
-{% endblock %}
+	<div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-200 flex flex-col overflow-hidden">
+		<a href="{{path('room_view',{'id': room.id})}}" class="no-underline">
+			<img src="{{ asset('medias/images/' ~ room.image) }}" alt="Image de la salle {{ room.name }}" class="h-44 w-full object-cover bg-gray-100 border-b"/>
+		</a>
+		<div class="p-5 flex flex-col flex-1">
+			<div class="flex items-center justify-between mb-3">
+				<h2 class="text-xl font-semibold text-blue-800 mb-2 ">{{ room.name }}</h2>
+				<span>
+					<twig:ux:icon name="line-md:heart" class="h-6 w-6"/>
+				</span>
+			</div>
+			<p class="text-gray-600 mb-1 ">
+				<span class="font-bold text-blue-600">Capacité :</span>
+				{{ room.capacity }}</p>
+			<p class="text-gray-700 mb-2 ">
+				<span class="font-bold text-blue-600">Description :</span>
+				{{ room.description|length > 90 ? room.description|slice(0,87) ~ '…' : room.description }}
+			</p>
+			<div class="mt-auto flex justify-center">
+				<span class="inline-block px-3 py-1 rounded-full text-sm font-semibold
+													{{ room.isAvailable ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+					{{ room.isAvailable ? 'Disponible' : 'Indisponible' }}
+				</span>
+			</div>
+		</div>
+	</div>
+{% else %}
+	<p class="col-span-full text-center text-gray-500">Aucune salle trouvée.</p>
+{% endfor %}</div><twig:Map/>{% endblock %}

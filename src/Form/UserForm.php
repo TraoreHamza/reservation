@@ -20,7 +20,23 @@ class UserForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email', EmailType::class)
+            ->add('email', EmailType::class, [
+                'label' => 'Email'
+            ])
+            ->add('clientName', TextType::class, [
+                'mapped' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer votre nom',
+                    ]),
+                ],
+                'label' => 'Nom complet'
+            ])
+            ->add('clientAddress', TextType::class, [
+                'mapped' => false,
+                'required' => false,
+                'label' => 'Adresse (optionnel)'
+            ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [

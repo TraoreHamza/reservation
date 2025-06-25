@@ -33,6 +33,7 @@ class RoomRepository extends ServiceEntityRepository
      * - Filtrage par équipements et options
      * - Filtrage par adresse du client
      * - AJOUT : Filtrage par critères ergonomiques
+     * - AJOUT : Filtrage par capacité (min/max)
      * 
      * @param string|null $query Terme de recherche principal
      * @param string|null $option Option spécifique
@@ -40,6 +41,8 @@ class RoomRepository extends ServiceEntityRepository
      * @param string|null $location Localisation spécifique
      * @param bool|null $luminosity Filtre par luminosité naturelle
      * @param bool|null $pmrAccess Filtre par accessibilité PMR
+     * @param int|null $minCapacity Capacité minimale
+     * @param int|null $maxCapacity Capacité maximale
      * @return array Résultats de la recherche
      */
     public function searchRooms(
@@ -48,7 +51,9 @@ class RoomRepository extends ServiceEntityRepository
         ?string $equipment = null,
         ?string $location = null,
         ?bool $luminosity = null,
-        ?bool $pmrAccess = null
+        ?bool $pmrAccess = null,
+        ?int $minCapacity = null,
+        ?int $maxCapacity = null
     ): array {
         $qb = $this
             ->createQueryBuilder('r')
@@ -77,14 +82,24 @@ class RoomRepository extends ServiceEntityRepository
                 ->setParameter('location', '%' . $location . '%');
         }
 
-        if ($luminosity) {
+        if ($luminosity !== null) {
             $qb->andWhere('r.luminosity = :luminosity')
                 ->setParameter('luminosity', $luminosity);
         }
 
-        if ($pmrAccess) {
-            $qb->andWhere('r.pmrAccess = :pmrAccess')
+        if ($pmrAccess !== null) {
+            $qb->andWhere('r.pmr_access = :pmrAccess')
                 ->setParameter('pmrAccess', $pmrAccess);
+        }
+
+        if ($minCapacity !== null) {
+            $qb->andWhere('r.capacity >= :minCapacity')
+                ->setParameter('minCapacity', $minCapacity);
+        }
+
+        if ($maxCapacity !== null) {
+            $qb->andWhere('r.capacity <= :maxCapacity')
+                ->setParameter('maxCapacity', $maxCapacity);
         }
 
         return $qb->orderBy('r.name', 'ASC')

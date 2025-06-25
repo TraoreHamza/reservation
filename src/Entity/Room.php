@@ -38,7 +38,7 @@ class Room
      * Prix de la chambre par jour
      * AJOUT : Champ prix pour le système de devis
      */
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
+    #[ORM\Column(type: 'float')]
     private ?float $price = null;
 
     /**
@@ -75,7 +75,7 @@ class Room
      * @var Collection<int, Booking>
      */
     #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'room')]
-    private Collection $booking;
+    private Collection $bookings;
 
     /**
      * Relation ManyToOne avec Location
@@ -106,7 +106,7 @@ class Room
         $this->reviews = new ArrayCollection();
         $this->options = new ArrayCollection();
         $this->equipments = new ArrayCollection();
-        $this->booking = new ArrayCollection();
+        $this->bookings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -310,15 +310,15 @@ class Room
         return $this;
     }
 
-    public function getBooking(): Collection
+    public function getBookings(): Collection
     {
-        return $this->booking;
+        return $this->bookings;
     }
 
     public function addBooking(Booking $booking): static
     {
-        if (!$this->booking->contains($booking)) {
-            $this->booking->add($booking);
+        if (!$this->bookings->contains($booking)) {
+            $this->bookings->add($booking);
             $booking->setRoom($this);
         }
 
@@ -327,7 +327,7 @@ class Room
 
     public function removeBooking(Booking $booking): static
     {
-        if ($this->booking->removeElement($booking)) {
+        if ($this->bookings->removeElement($booking)) {
             // set the owning side to null (unless already changed)
             if ($booking->getRoom() === $this) {
                 $booking->setRoom(null);

@@ -5,23 +5,41 @@ namespace App\Form;
 use App\Entity\Option;
 use App\Entity\Booking;
 use App\Entity\Equipment;
+use App\Entity\Room;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class BookingForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+           
             ->add('startDate', DateType::class, [
                 'widget' => 'single_text',
+                'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez sélectionner une date de début.',
+                    ]),
+                ],
+                'label' => 'Date de début'
             ])
             ->add('endDate', DateType::class, [
                 'widget' => 'single_text',
+                'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez sélectionner une date de fin.',
+                    ]),
+                ],
+                'label' => 'Date de fin'
             ])
             ->add('equipments', EntityType::class, [
                 'class' => Equipment::class,
@@ -32,7 +50,9 @@ class BookingForm extends AbstractType
             ])
             ->add('options', EntityType::class, [
                 'class' => Option::class,
-                'choice_label' => 'name',
+                'choice_label' => function ($option) {
+                    return $option->getName() . ' (+' . number_format($option->getPrice(), 2) . '€)';
+                },
                 'multiple' => true,
                 'expanded' => true,
                 'required' => false,

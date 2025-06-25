@@ -31,10 +31,12 @@ class RoomController extends AbstractController
 
     // Route pour une room (salle)
     #[Route('/{id}', name: 'room_view', methods: ['GET', 'POST'])]
-    public function view(int $id, Request $request, QuotationService $qs): Response
+    public function view(string $id, Request $request, QuotationService $qs): Response
     {
-
-        $room = $this->roomRepo->find($id);
+        // Convertir l'ID en entier
+        $roomId = (int) $id;
+        
+        $room = $this->roomRepo->find($roomId);
         if (!$room) {
             $this->addFlash('danger', 'Salle non trouvée');
             return $this->redirectToRoute('rooms');
@@ -63,7 +65,7 @@ class RoomController extends AbstractController
 
         return $this->render('room/view.html.twig', [
             'room' => $room,
-            'bookingForm' => $form
+            'form' => $form->createView(),
         ]);
     }
 }

@@ -22,13 +22,20 @@ class Equipment
     private ?string $type = null;
 
     /**
+     * @var Collection<int, Booking>
+     */
+    #[ORM\ManyToMany(targetEntity: Booking::class, mappedBy: 'equipments')]
+    private Collection $bookings;
+
+    /**
      * @var Collection<int, Room>
      */
-    #[ORM\ManyToMany(targetEntity: Room::class, inversedBy: 'equipments')]
+    #[ORM\ManyToMany(targetEntity: Room::class, mappedBy: 'equipments')]
     private Collection $rooms;
 
     public function __construct()
     {
+        $this->bookings = new ArrayCollection();
         $this->rooms = new ArrayCollection();
     }
 

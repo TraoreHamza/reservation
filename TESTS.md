@@ -2,9 +2,9 @@
 
 ## Utilisateur (Visiteur)
 
-- [ ] Je peux m'inscrire et me connecter.
-- [ ] Je peux voir la liste des salles et leurs disponibilités.
-- [ ] Je peux réserver une salle.
+- [X] Je peux m'inscrire et me connecter.
+- [X] Je peux voir la liste des salles et leurs disponibilités.
+- [X] Je peux réserver une salle.
 - [ ] Je peux modifier ou annuler ma réservation.
 - [ ] Je peux filtrer les salles par capacité, équipements, ergonomie.
 - [ ] Je peux voir mes réservations et leur statut (en attente, validée).

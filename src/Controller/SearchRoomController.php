@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Repository\RoomRepository;
+use App\Repository\EquipmentRepository;
+use App\Repository\OptionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,15 +36,20 @@ class SearchRoomController extends AbstractController
      * - Méthode searchRooms() du RoomRepository
      * 
      * @param Request $request
+     * @param EquipmentRepository $equipmentRepository
+     * @param OptionRepository $optionRepository
      * @return Response
      */
     #[Route('/search-room', name: 'search_room', methods: ['GET'])]
-    public function index(Request $request): Response
+    public function index(Request $request, EquipmentRepository $equipmentRepository, OptionRepository $optionRepository): Response
     {
         $query = $request->query->get('q', '');
-
+        $equipments = $equipmentRepository->findAll();
+        $options = $optionRepository->findAll();
         return $this->render('search_room/index.html.twig', [
-            'query' => $query
+            'query' => $query,
+            'equipments' => $equipments,
+            'options' => $options,
         ]);
     }
 
@@ -95,13 +102,32 @@ class SearchRoomController extends AbstractController
         $location = $request->query->get('location');
         $luminosity = $request->query->get('luminosity') === 'true';
         $pmrAccess = $request->query->get('pmr_access') === 'true';
+        $minCapacity = $request->query->get('min_capacity') ? (int) $request->query->get('min_capacity') : null;
+        $maxCapacity = $request->query->get('max_capacity') ? (int) $request->query->get('max_capacity') : null;
 
-        if (!$query && !$option && !$equipment && !$location && !$luminosity && !$pmrAccess) {
+        if (!$query && !$option && !$equipment && !$location && $luminosity === false && $pmrAccess === false && $minCapacity === null && $maxCapacity === null) {
             return new JsonResponse([]);
         }
 
-        $results = $roomRepository->searchRooms($query, $option, $equipment, $location, $luminosity, $pmrAccess);
+        $results = $roomRepository->searchRooms($query, $option, $equipment, $location, $luminosity, $pmrAccess, $minCapacity, $maxCapacity);
 
-        return new JsonResponse($results);
+        // Structurer les données pour l'API
+        $structuredResults = array_map(function ($room) {
+            return [
+                'id' => (int) $room->getId(),
+                'name' => $room->getName(),
+                'description' => $room->getDescription(),
+                'capacity' => (int) $room->getCapacity(),
+                'price' => (float) $room->getPrice(),
+                'luminosity' => $room->hasLuminosity(),
+                'pmrAccess' => $room->hasPmrAccess(),
+                'location' => $room->getLocation() ? [
+                    'city' => $room->getLocation()->getCity(),
+                    'department' => $room->getLocation()->getDepartment()
+                ] : null
+            ];
+        }, $results);
+
+        return new JsonResponse($structuredResults);
     }
 }

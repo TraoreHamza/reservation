@@ -39,20 +39,6 @@
 
 			<!-- Barre de recherche et menu utilisateur -->
 			<div class="flex items-center space-x-4">
-				<!-- Barre de recherche -->
-				<div class="relative">
-					<form action="{{ path('search_room') }}" method="GET" class="flex">
-						<input type="text" name="q" placeholder="Rechercher une salle..." 
-							   class="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-						<button type="submit" class="ml-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-							<twig:ux:icon name="lucide:search" class="h-4 w-4"/>
-						</button>
-					</form>
-					<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-						<twig:ux:icon name="lucide:search" class="h-5 w-5 text-gray-400"/>
-					</div>
-				</div>
-
 				<!-- Menu utilisateur -->
 				<div class="relative">
 					{% if app.user %}

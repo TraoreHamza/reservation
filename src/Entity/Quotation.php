@@ -20,16 +20,16 @@ class Quotation
     #[ORM\Column(length: 50)]
     private ?string $reference = null;
 
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
+    #[ORM\Column(type: 'float')]
     private ?float $price = null;
 
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
+    #[ORM\Column(type: 'float')]
     private ?float $taxRate = null;
 
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
+    #[ORM\Column(type: 'float')]
     private ?float $taxAmount = null;
 
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
+    #[ORM\Column(type: 'float')]
     private ?float $totalPrice = null;
 
     #[ORM\Column(length: 255)]

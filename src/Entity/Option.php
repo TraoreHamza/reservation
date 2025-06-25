@@ -18,6 +18,9 @@ class Option
     #[ORM\Column(length: 60)]
     private ?string $name = null;
 
+    #[ORM\Column(type: 'float')]
+    private ?float $price = null;
+
     /**
      * @var Collection<int, Room>
      */
@@ -42,6 +45,18 @@ class Option
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(?float $price): static
+    {
+        $this->price = $price;
 
         return $this;
     }

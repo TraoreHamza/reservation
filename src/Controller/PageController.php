@@ -12,9 +12,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 final class PageController extends AbstractController
 {
     #[Route('/', name: 'home', methods: ['GET'])]
-    public function index(): Response
+    public function index(RoomRepository $roomRepository): Response
     {
+        $rooms = $roomRepository->findAll();
         return $this->render('page/home.html.twig', [
+            'rooms' => $rooms
         
         ]);
     }
