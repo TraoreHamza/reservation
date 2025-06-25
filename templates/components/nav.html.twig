@@ -1,0 +1,40 @@
+<nav class="navbar border-b">
+	<div class="navbar-start">
+		<div class="dropdown">
+			<div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+				<twig:ux:icon name="lucide:menu" class="h-6 w-6"/>
+			</div>
+			<ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+				<li><a href="/">Accueil</a></li>
+				<li><a href="{{ path('rooms') }}">Nos salles</a></li>
+				<li><a href="#">Notre offre</a></li>
+				<li><a href="#">Nous contacter</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="navbar-center">
+		<a href="/" class="flex items-center gap-2 cursor-pointer">
+			<twig:ux:icon name="fluent-mdl2:room" class="h-6 w-6"/>
+			sallevenue
+		</a>
+	</div>
+	<div class="navbar-end">
+		<a href="{{ path('search')}}" class="btn btn-ghost btn-circle">
+			<twig:ux:icon name="lucide:search" class="h-6 w-6"/>
+		</a>
+		<div class="dropdown">
+			<div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+				<twig:ux:icon name="lucide:user-circle" class="h-6 w-6"/>
+			</div>
+			<ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 -right-0 p-2 shadow">
+				{% if app.user %}
+					<li><a href="{{ path('user_profile') }}">Mon profil</a></li>
+					<li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
+				{% else %}
+					<li><a href="{{ path('app_login') }}">Connexion</a></li>
+					<li><a href="{{ path('app_register') }}">Inscription</a></li>
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+</nav>

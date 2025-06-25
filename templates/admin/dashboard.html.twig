@@ -4,12 +4,18 @@
 {% block content %}
 	<div class="container">
 		<div class="row">
-			<div class="col-md-12">
+			<div class="col-md-12 text-center my-4">
 				<h1>Welcome to the Admin Dashboard</h1>
-				<p>This is your central hub for managing the application.</p>
+			
 			</div>
+			<section class="border rounded-3 p-3 mb-4 col-10 mx-auto">
+
+            <twig:BookingAlert />
+
+	
+			</section>
 		</div>
-        <div id="calendar"></div>
+        <div id="calendar" class="col-10 mx-auto"></div>
 	</div>
 
 	<script>

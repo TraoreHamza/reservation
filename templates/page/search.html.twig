@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+Récherche avancée
+{% endblock %}
+
+{% block body %}
+
+<ul class="flex gap-2 mb-4">
+    <li class="">
+        <a href="{{ path('home') }}">Accueil</a> &rarr;
+    </li>
+    <li class="">
+        <a href="{{ path('rooms') }}">Nos salles</a> &rarr;
+    </li>
+    <li class="text-slate-400">Recherche avancé</li>
+</ul>
+
+<h1 class="text-4xl mt-4">Recherche</h1>
+<div class="flex justify-between align-center">
+    <h5 class="">Trouvez la salle qui vous convient</h5>
+</div>
+
+<div class="bg-slate-50 p-4 mt-8 rounded-xl">
+    <twig:SearchRoom />
+</div>
+
+{% endblock %}

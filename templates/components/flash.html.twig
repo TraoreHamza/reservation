@@ -1,0 +1,24 @@
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div id="flash-card" class="flash flash-{{ label }} fixed z-10 bottom-8 right-4 bg-cyan-950 text-white rounded-lg cursor-pointer shadow hover:shadow-lg transition duration-300 ease-in-out">
+            <span class="relative flex size-3 -m-1">
+                {% if label == 'error' %}
+                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
+                    <span class="relative inline-flex size-3 rounded-full bg-red-500"></span>
+                {% elseif label == 'success' %}
+                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
+                    <span class="relative inline-flex size-3 rounded-full bg-green-500"></span>
+                {% elseif label == 'warning' %}
+                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75"></span>
+                    <span class="relative inline-flex size-3 rounded-full bg-amber-500"></span>
+                {% else %}
+                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-700 opacity-75"></span>
+                    <span class="relative inline-flex size-3 rounded-full bg-sky-500"></span>
+                {% endif %}
+            </span>
+            <div class="py-3 px-6 text-sm border border-slate-50 p-2 m-2 rounded-lg">
+                {{ message }}
+            </div>
+        </div>
+    {% endfor %}
+{% endfor %}

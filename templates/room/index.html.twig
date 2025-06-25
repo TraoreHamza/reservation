@@ -3,14 +3,34 @@
 {% block title %}Recherche de salle{% endblock %}
 
 {% block body %}
-    <h1>🔍les salles</h1>
+  <ul class="flex gap-2 mb-4">
+    <li class="">
+        <a href="{{ path('home') }}">Accueil</a> &rarr;
+    </li>
+    <li class="">
+        
+    </li>
+    <li class="text-slate-400"></a>Nos salles</li>
+</ul>
 
-    {% for item in rooms %}
-    <h3>{{ item.name }}</h3>
-    <a href="{{path('room_view',{'id': item.id})}}">voir la salle</a>
+<h1 class="text-4xl mt-4">Nos salles</h1>
+<div class="flex justify-between align-center mb-8">
+    <h5 class="">Trouvez la salle qui vous convient</h5>
+</div>
 
-<hr>
-{% endfor %}
+   <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                {% for room in rooms %}
+                    <div class="relative min-h-40 bg-white rounded-xl shadow hover:scale-95 transition-all duration-200 flex flex-col overflow-hidden" style="background-image: url('{{ room.imagePath }}'); background-position: center; background-size: cover; background-repeat: no-repeat;">
+					<div class="bg-gradient-to-b from-transparent to-slate-900 h-full flex flex-col justify-end">
+                        <a href="{{ path('room_view', {'id': room.id}) }}" class="text-slate-50 pl-2">{{ room.name }} &rarr;</a>
+						<p class="text-cyan-100 text-sm pl-2 pb-2">{{ room.location.department }} ({{ room.location.number }})</p>
+					</div>
+                    </div>
+                {% endfor %}
+            </div>
+
+
 
 
 {% endblock %}
+

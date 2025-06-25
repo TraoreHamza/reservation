@@ -5,13 +5,102 @@
 {% endblock %}
 
 {% block body %}
-<h1>{{ room.name }}</h1>
 
-{{ dump(room)}}
+<ul class="flex gap-2 mb-4">
+    <li class="">
+        <a href="{{ path('home') }}">Accueil</a> &rarr;
+    </li>
+    <li class="">
+        <a href="{{ path('rooms') }}">Nos salles</a> &rarr;
+    </li>
+    <li class="text-slate-400">{{ room.name }}</li>
+</ul>
 
-{{ form(bookingForm) }}
+<h1 class="text-4xl mt-4">{{ room.name }}</h1>
+<div class="flex justify-between align-center mb-4">
+    <h5 class="">
+        Situé à {{ room.location.city }}, {{ room.location.department }} ({{ room.location.number }})
+    </h5>
+    <form action="{{ path('user_favorite_toggle', { roomId: room.id} )}}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token('user_favorite_toggle') }}">
+        
+        <button type="submit" class="flex items-center gap-2 text-sm bg-transparent text-cyan-900">
+            <twig:ux:icon name="lucide:heart" class="h-4 w-4" />
+            Ajouter aux favoris
+        </button>
+    </form>
+</div>
 
-<a href="{{path('rooms')}}">retour</a>
+<div class="relative">
+    <img src="{{ room.imagePath }}" alt="{{ room.name }}" class="rounded-xl">
+    <div class="shadow rounded-lg bg-slate-50 bg-opacity-50 py-2 px-4 w-fit absolute bottom-2 left-2">
+        Cette salle est actuellement {{ room.isAvailable ? 'disponible' : 'indisponible' }}
+    </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 mt-8">
+    <div class="col-span-2">
+
+        <div class="flex items-center gap-4">
+            <p class="flex items-center gap-4 text-xl">
+                <twig:ux:icon name="tabler:users-group" class="h-8 w-8" />
+                {{ room.capacity }} personnes
+            </p>
+            <p>|</p>
+            <p class="flex items-center gap-4 text-xl">
+                <twig:ux:icon name="lucide:euro" class="h-8 w-8" />
+                {{ room.dailyRate }} / jour
+            </p>
+        </div>
+        <div class="p-2 mt-8">
+            {{ room.description|raw }}
+        </div>
+    </div>
+
+    <div class="col-span-1">
+        <form action="{{ path('booking_new')}}" method="post" class="bg-white shadow p-4 rounded-xl">
+            {% if app.user %}
+                <input type="hidden" name="csrf_token" value="{{ csrf_token('room_view') }}">
+                <input type="hidden" name="room_id" value="{{ room.id }}">
+
+                <div class="flex gap-2 mb-3">
+                    <input type="date" name="startDate" class="p-2 border w-full">
+                    <input type="date" name="endDate" class="p-2 border w-full">
+                </div>
+
+                <div class="">
+                    <select  name="equipments">
+                        {% for item in room.equipments %}
+                            <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <select  name="options">
+                        {% for item in room.options %}
+                            <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button type="submit">Réserver</button>
+            {% else %}
+                <p class="text-center py-10 text-xl">
+                <a href="{{ path('app_login')}}">Connectez-vous</a> pour réserver une salle.
+                </p>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+{# EQUIPMENT #}
+<div class="">
+
+
+</div>
+
+{# OPTION #}
 
 
 {% endblock %}
