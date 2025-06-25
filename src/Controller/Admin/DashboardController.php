@@ -95,5 +95,4 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToRoute('Documentation', 'fa-solid fa-book', 'admin_documentation');
         yield MenuItem::linkToRoute('Back to site', 'fa-solid fa-arrow-left', 'home');
     }
-
 }
