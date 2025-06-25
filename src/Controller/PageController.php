@@ -15,7 +15,6 @@ final class PageController extends AbstractController
     #[Route('/', name: 'home', methods: ['GET'])]
     public function index(RoomRepository $rr): Response
     {
-        $rooms = $roomRepository->findAll();
         return $this->render('page/home.html.twig', [
             'rooms' => $rr->findBy([], [], 4)
         ]);
