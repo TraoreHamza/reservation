@@ -1,51 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mon profil{% endblock %}
+{% block title %}
+    Mon profil
+{% endblock %}
 
 {% block body %}
-<div class="max-w-2xl mx-auto mt-8 p-6 bg-white rounded shadow">
-    <h1 class="text-2xl font-bold mb-6">Mon profil</h1>
 
-    {# Affichage des messages flash #}
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="mb-4 p-3 rounded bg-green-100 text-green-700">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
+<main class="">
 
-    {# Formulaire de profil utilisateur #}
-    {{ form_start(profileForm) }}
-        <div class="mb-4">
-            {{ form_row(profileForm.email, {'attr': {'class': 'input input-bordered w-full'}}) }}
-        </div>
-        {# Ajoute d'autres champs ici selon ta définition UserForm #}
-        <div class="mb-4">
-            <button type="submit" class="btn btn-primary">Mettre à jour</button>
-        </div>
-    {{ form_end(profileForm) }}
 
-    <hr class="my-8">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-    <h2 class="text-xl font-semibold mb-4">Mes salles favorites</h2>
-    {% if favorites is not empty %}
-        <ul class="space-y-2">
-            {% for favorite in favorites %}
-                <li class="flex items-center justify-between p-3 bg-gray-50 rounded">
-                    <a href="{{ path('room_view', {'id': favorite.room.id}) }}" class="text-blue-600 font-medium no-underline hover:underline">
-                        {{ favorite.room.name }}
-                    </a>
-                    <form method="post" action="{{ path('user_favorite_toggle', {'roomId': favorite.room.id}) }}">
-                        <button type="submit" class="btn btn-sm btn-error" title="Retirer des favoris">
-                            Retirer
-                        </button>
-                    </form>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p class="text-gray-500">Vous n'avez pas encore de salles favorites.</p>
-    {% endif %}
+{# Infos user #}
+<div class="col-span-1  border">
+    NOM
+    EMAIL
+    DATE DE CREATION
 </div>
+
+{# Mes réservations #}
+<div class="col-span-1 md:col-span-2  border">
+{% for item in app.user.client.bookings %}
+    {{ dump(item) }}
+{% endfor %}
+</div>
+
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+</div>
+
+{#  #}
+{#  #}
+{#  #}
+
+</main>
+
 {% endblock %}

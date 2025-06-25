@@ -1,52 +1,68 @@
 <div{{attributes}}>
 
-	<input type="text" data-model="query" class="grow" placeholder="Tapez un mot-clé..."/>
+	<div class="">
+		<div class="flex flex-col md:flex-row justifiy-center items-center w-full gap-4 rounded-xl p-2 bg-white shadow flex">
 
-	<select data-model="option" id="">
+			{# Mot clé #}
+			<div class="border-r pr-4 pl-2">
+				<label for="query" class="block text-sm font-medium text-slate-400 text-center">Mot-clé</label>
+				<input type="text" id="query" data-model="query" class="reset bg-white border-0 text-center" placeholder="Tapez un mot-clé...">
+			</div>
 
-		<option value="">Les options</option>
-		{% set options = this.options %}
+			{# Les équipements #}
+			<div class="border-r pr-4 pl-2">
+				<label for="equipment" class="block text-sm font-medium text-slate-400 text-center">Équipements</label>
+				<select id="equipment" data-model="equipment" class="reset bg-white border-0 text-center">
+					<option value="">Tous les équipements</option>
+					{% set equipments = this.equipments %}
+					{% for item in equipments %}
+						<option value="{{ item.name }}">{{ item.name }}</option>
+					{% endfor %}
+				</select>
+			</div>
 
-		{% for item in options %}
-			<option value={{item.name}}>{{item.name}}</option>
-		{% endfor %}
+			{# Les options #}
+			<di class="border-r pr-4 pl-2">
+				<label for="option" class="block text-sm font-medium text-slate-400 text-center">Options</label>
+				<select id="option" data-model="option" class="reset border-0 text-center">
+					<option value="">Toutes les options</option>
+					{% set options = this.options %}
+					{% for item in options %}
+						<option value="{{ item.name }}">{{ item.name }}</option>
+					{% endfor %}
+				</select>
+			</di>
 
-
-	</select>
-
-	<select data-model="equipment" id="">
-
-		<option value="">Les equipements</option>
-		{% set equipments = this.equipments %}
-
-		{% for item in equipments %}
-			<option value={{item.name}}>{{item.name}}</option>
-		{% endfor %}
-
-
-	</select>
-
-	<select data-model="location" id="">
-
-		<option value="">La location</option>
-		{% set locations = this.locations %}
-
-		{% for item in locations %}
-			<option value={{item.department}}>{{item.department}}</option>
-		{% endfor %}
-
-
-	</select>
-
-
-	{% set rooms = this.rooms %}
-	{% if rooms|length > 0 %}
-
-		{% for item in rooms %}
-			{{ dump(item) }}
-		{% endfor %}
-	{% else %}
-
-		<p>Pas de resultat</p>
-	{% endif %}
+			{# Localisation #}
+			<div>
+				<label for="location" class="block text-sm font-medium text-slate-400 text-center">Localisation</label>
+				<select id="location" data-model="location" class="reset border-0 text-center">
+					<option value="">Toutes les localisations</option>
+					{% set locations = this.locations %}
+					{% for item in locations %}
+						<option value="{{ item.department }}">{{ item.department }}</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+	</div>
+    <div class="mt-8">
+        {% set rooms = this.rooms %}
+        {% if rooms|length > 0 %}
+            <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                {% for room in rooms %}
+                    <div class="relative min-h-40 bg-white rounded-xl shadow hover:scale-95 transition-all duration-200 flex flex-col overflow-hidden" style="background-image: url('{{ room.imagePath }}'); background-position: center; background-size: cover; background-repeat: no-repeat;">
+					<div class="bg-gradient-to-b from-transparent to-slate-900 h-full flex flex-col justify-end">
+                        <a href="{{ path('room_view', {'id': room.id}) }}" class="text-slate-50 pl-2">{{ room.name }} &rarr;</a>
+						<p class="text-cyan-100 text-sm pl-2 pb-2">{{ room.location.department }} ({{ room.location.number }})</p>
+					</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-center text-gray-500">Aucune salle ne correspond à votre recherche.</p>
+        {% endif %}
+    </div>
+	</div>
+</div>
 </div>

@@ -34,25 +34,71 @@ class BookingController extends AbstractController
         return $this->render('booking/index.html.twig', ['bookings' => $bookings]);
     }
 
-    #[Route('/booking/new', name: 'booking_new')]
+    #[Route('/new', name: 'booking_new', methods: ['POST'])]
     public function new(Request $request): Response
     {
+        $data = $request->request->all();
         $booking = new Booking();
-        $form = $this->createForm(BookingForm::class, $booking);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $booking->setClient($this->getUser());
-            $this->em->persist($booking);
-            $this->em->flush();
-            $this->addFlash('success', 'Réservation créée !');
-            return $this->redirectToRoute('bookings');
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if (isset($data['room_id'])) {
+            $room = $this->rr->find($data['room_id']);
+            if (!$room) {
+                $this->addFlash('error', 'salle non trouvée');
+                return $this->redirectToRoute('room_view', ['id' => $data['room_id']]);
+            }
+            $booking->setRoom($room);
         }
 
-        return $this->render('booking/new.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        if (isset($data['startDate']) && isset($data['endDate'])) {
+            $startDate = new \DateTimeImmutable($data['startDate']);
+            $endDate = new \DateTimeImmutable($data['endDate']);
+
+            if ($startDate >= $endDate) {
+                $this->addFlash('error', 'La date de début doit être antérieure à la date de fin');
+                return $this->redirectToRoute('room_view', ['id' => $data['room_id']]);
+            }
+            if ($startDate < new \DateTimeImmutable()) {
+                $this->addFlash('error', 'La date de début ne peut pas être dans le passé');
+                return $this->redirectToRoute('room_view', ['id' => $data['room_id']]);
+            }
+
+            $booking->setStartDate($startDate);
+            $booking->setEndDate($endDate);
+        }
+
+        if (isset($data['options'])) {
+            $options = explode(',', $data['options']); // Convertir la chaîne en tableau
+            foreach ($options as $item) {
+                $option = $this->or->find($item);
+                if ($option) {
+                    $booking->addOption($option);
+                }
+            }
+        }
+
+        if (isset($data['equipments'])) {
+            $equipments = explode(',', $data['equipments']); // Convertir la chaîne en tableau
+            foreach ($equipments as $item) {
+                $equipment = $this->er->find($item);
+                if ($equipment) {
+                    $booking->addEquipment($equipment);
+                }
+            }
+        }
+
+        $booking->setClient($user->getClient());
+
+        $this->em->persist($booking);
+        $this->em->flush();
+
+
+        $this->addFlash('success', 'Votre demande de réservation a bien été prise en compte.');
+        return $this->redirectToRoute('room_view', ['id' => $data['room_id']]);
     }
+
 
 
     #[Route('/{id}/edit', name: 'booking_edit', methods: ['GET', 'POST'])]

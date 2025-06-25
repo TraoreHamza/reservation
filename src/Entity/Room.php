@@ -122,6 +122,15 @@ class Room
         return $this->image;
     }
 
+    public function getImagePath(): ?string
+    {
+        $path = '/medias/uploads/images/';
+        if ($this->image !== 'default.png') {
+            return $path . $this->image;
+        }
+        return $path = '/medias/images/' . 'default.png';
+    }
+
     public function setImage(?string $image): static
     {
         $this->image = $image;
@@ -168,7 +177,7 @@ class Room
     {
         return $this->equipments;
     }
-    
+
     /**
      * @return Collection<int, Favorite>
      */
@@ -315,5 +324,4 @@ class Room
 
         return $this;
     }
-
 }

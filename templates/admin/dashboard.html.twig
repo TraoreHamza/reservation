@@ -2,12 +2,18 @@
 {% block content %}
 	<div class="container">
 		<div class="row">
-			<div class="col-md-12">
-				<h1>Bienvenue sur le tableau de bord d'administration</h1>
-				<p>Il s'agit de votre plateforme centrale pour la gestion de l'application.</p>
+			<div class="col-md-12 text-center my-4">
+				<h1>Welcome to the Admin Dashboard</h1>
+			
 			</div>
+			<section class="border rounded-3 p-3 mb-4 col-10 mx-auto">
+
+            <twig:BookingAlert />
+
+	
+			</section>
 		</div>
-        <div id="calendar"></div>
+        <div id="calendar" class="col-10 mx-auto"></div>
 	</div>
 
 	<script>

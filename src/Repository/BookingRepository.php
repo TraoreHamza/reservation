@@ -16,6 +16,21 @@ class BookingRepository extends ServiceEntityRepository
         parent::__construct($registry, Booking::class);
     }
 
+
+
+
+    public function findBookingsNotProcessedBefore(\DateTimeInterface $date): array
+{
+    return $this->createQueryBuilder('b')
+        ->where('b.processed = false')
+        ->andWhere('b.startDate <= :date')
+        ->setParameter('date', $date)
+        ->getQuery()
+        ->getResult()
+        ;
+}
+
+
 //    /**
 //     * @return Booking[] Returns an array of Booking objects
 //     */

@@ -11,16 +11,24 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class PageController extends AbstractController
 {
+    // Page d'accueil
     #[Route('/', name: 'home', methods: ['GET'])]
-    public function index(RoomRepository $roomRepository): Response
+    public function index(RoomRepository $rr): Response
     {
         $rooms = $roomRepository->findAll();
         return $this->render('page/home.html.twig', [
-            'rooms' => $rooms
-        
+            'rooms' => $rr->findBy([], [], 4)
         ]);
     }
 
+    // Page de recherche avec filtres avancés
+    #[Route('/search', name: 'search', methods: ['GET'])]
+    public function search(): Response
+    {
+        return $this->render('page/search.html.twig');
+    }
+
+    // Page de filtre par région
     #[Route('/region/{region}', name: 'location', methods: ['GET'])]
     public function location(string $region, RoomRepository $rr, LocationRepository $lr): Response
     {

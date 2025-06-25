@@ -17,6 +17,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use Symfony\Contracts\Cache\CacheInterface;
+
 
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 class DashboardController extends AbstractDashboardController
@@ -54,12 +56,10 @@ class DashboardController extends AbstractDashboardController
                 'title' => $booking->getRoom()->getName() . " - " . $booking->getStatus() . " - " . ($booking->getClient()?->getName() ?? 'Client inconnu'),
                 'start' => $booking->getStartDate()->format('Y-m-d H:i:s'),
                 'end' => $booking->getEndDate()->format('Y-m-d H:i:s'),
-                'color' => $color,
-                'extendedProps' => [
-                    'status' => $booking->getStatus(),
-                    'room' => $booking->getRoom()->getName(),
-                    'client' => $booking->getClient()?->getName() ?? 'Client inconnu'
-                ]
+                "color" => ($booking->getStatus() === 'pending' ? '#f87171' : "") .
+                    ($booking->getStatus() === 'confirmed' ? '#10b981' : "") .
+                    ($booking->getStatus() === 'cancelled' ? '#a8a29e' : ""),
+
             ];
         }
         $bookings = json_encode($datas);
@@ -95,4 +95,5 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToRoute('Documentation', 'fa-solid fa-book', 'admin_documentation');
         yield MenuItem::linkToRoute('Back to site', 'fa-solid fa-arrow-left', 'home');
     }
+
 }

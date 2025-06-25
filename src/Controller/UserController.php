@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('/user')]
+
 class UserController extends AbstractController
 {
     public function __construct(
@@ -70,19 +70,29 @@ class UserController extends AbstractController
     #[Route('/favorite/{roomId}', name: 'user_favorite_toggle', methods: ['POST'])]
     public function favorite(int $roomId): Response
     {
+        /** @var User $user */
         $user = $this->getUser();
-        $favorite = $this->fr->findOneBy(['user' => $user, 'room' => $roomId]);
 
-        if ($favorite) {
-            $this->em->remove($favorite);
-        } else {
-            $newFav = new Favorite();
-            $newFav->setUser($user);
-            $newFav->setRoom($this->rr->find($roomId));
-            $this->em->persist($newFav);
+        if($this->getUser()) {
+            
+            $favorite = $this->fr->findOneBy(['user' => $user, 'room' => $roomId]);
+
+            if($favorite) {
+                $this->em->remove($favorite);
+                $this->addFlash('success', 'Retirée des favoris' );
+            } else {
+                $newFav = new Favorite();
+                $newFav->setUser($user);
+                $newFav->setRoom($this->rr->find($roomId));
+                $this->em->persist($newFav);
+                $this->addFlash('success', 'Ajoutée des favoris' );
+            }
+            
+            $this->em->flush();
+            return $this->redirectToRoute('room_view', ['id' => $roomId]);
         }
 
-        $this->em->flush();
-        return $this->redirectToRoute('room_view', ['id' => $roomId]);
+        $this->addFlash('error', 'Vous devez être connecté !' );
+        return $this->redirectToRoute('app_login');
     }
 }
