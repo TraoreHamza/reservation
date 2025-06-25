@@ -7,10 +7,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 
 class QuotationCrudController extends AbstractCrudController
 {
@@ -54,10 +55,7 @@ class QuotationCrudController extends AbstractCrudController
             TextField::new('date')
                 ->setLabel('Date(s) de réservation')
                 ->setHelp('Date de validité du devis.'),
-            TextField::new('created_at')
-                ->setLabel('Créé-le')
-                ->setHelp('Date de création du devis.')
-                ->onlyOnDetail(),
+        
         ];
     }
 }

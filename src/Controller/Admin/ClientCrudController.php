@@ -39,7 +39,7 @@ class ClientCrudController extends AbstractCrudController
         return [
             TextField::new('name')
                 ->setHelp('Nom du client.'),
-            TextField::new('addresse')
+            TextField::new('address')
                 ->setHelp('Adresse du client.'),
         ];
     }

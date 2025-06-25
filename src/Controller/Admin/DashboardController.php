@@ -16,6 +16,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use Symfony\Contracts\Cache\CacheInterface;
+
 
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 class DashboardController extends AbstractDashboardController
@@ -36,9 +38,9 @@ class DashboardController extends AbstractDashboardController
                 'title' => $booking->getRoom()->getName() . " " . $booking->getStatus() . " " . $booking->getClient()->getName(),
                 'start' => $booking->getStartDate()->format('Y-m-d H:i:s'),
                 'end' => $booking->getEndDate()->format('Y-m-d H:i:s'),
-                "color" => ($booking->getStatus() === 'En attente' ? '#f87171' : "") .
-                    ($booking->getStatus() === 'Validée' ? '#10b981' : "") .
-                    ($booking->getStatus() === 'Annulée' ? '#a8a29e' : ""),
+                "color" => ($booking->getStatus() === 'pending' ? '#f87171' : "") .
+                    ($booking->getStatus() === 'confirmed' ? '#10b981' : "") .
+                    ($booking->getStatus() === 'cancelled' ? '#a8a29e' : ""),
 
             ];
         }
@@ -73,4 +75,5 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Quotation', 'fa-solid fa-euro-sign', Quotation::class);
         yield MenuItem::linkToRoute('Back to site', 'fa-solid fa-arrow-left', 'home');
     }
+
 }
