@@ -42,10 +42,24 @@ class Booking
     #[ORM\JoinColumn(nullable: false)]
     private ?Room $room = null;
 
+    /**
+     * @var Collection<int, Option>
+     */
+    #[ORM\ManyToMany(targetEntity: Option::class, mappedBy: 'booking')]
+    private Collection $options;
+
+    /**
+     * @var Collection<int, Equipment>
+     */
+    #[ORM\ManyToMany(targetEntity: Equipment::class, mappedBy: 'booking')]
+    private Collection $equipments;
+
     public function __construct()
     {
         $this->quotations = new ArrayCollection();
         $this->status = "pending";
+        $this->options = new ArrayCollection();
+        $this->equipments = new ArrayCollection();
     }
 
     /**
@@ -169,4 +183,59 @@ class Booking
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Option>
+     */
+    public function getOptions(): Collection
+    {
+        return $this->options;
+    }
+
+    public function addOption(Option $option): static
+    {
+        if (!$this->options->contains($option)) {
+            $this->options->add($option);
+            $option->addBooking($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOption(Option $option): static
+    {
+        if ($this->options->removeElement($option)) {
+            $option->removeBooking($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Equipment>
+     */
+    public function getEquipments(): Collection
+    {
+        return $this->equipments;
+    }
+
+    public function addEquipment(Equipment $equipment): static
+    {
+        if (!$this->equipments->contains($equipment)) {
+            $this->equipments->add($equipment);
+            $equipment->addBooking($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEquipment(Equipment $equipment): static
+    {
+        if ($this->equipments->removeElement($equipment)) {
+            $equipment->removeBooking($this);
+        }
+
+        return $this;
+    }
+
 }
