@@ -127,25 +127,14 @@ class RoomFixtures extends Fixture implements DependentFixtureInterface
             "Salle avec coin vestiaire pour les participants.",
         ];
         $imageFilenames = [
-            'salle_victor_hugo.png',
-            'brit-hotel-saint-meen-le-grand-adresse.jpeg',
-            'urban-soccer-rennes-vern-seiche.jpg',
-            'cap-events-la-reposee-3.jpg',
-            'cgr-vry-17.jpg',
-            'espace-de-conferences-iris-10.jpg',
-            'espace-de-conferences-iris-10.jpg',
-            'mega-cgr-blagnac-16.jpg',
-            'casino-de-la-roche-posay.jpg',
-            'docks-de-paris-7.jpg',
-            'euro-meeting-center-8.jpg',
-            'mas-saint-gabriel-17.jpg',
+            'default.png',
         ];
 
         $locations = [];
         for ($i = 0; $i < 10; $i++) {
             $locations[] = $this->getReference('LOCATION_' . $i, Location::class);
         }
-
+    
         $i = 0;
         foreach ($rooms as $index => $roomName) {
             $room = new Room();
@@ -156,7 +145,7 @@ class RoomFixtures extends Fixture implements DependentFixtureInterface
                 ->setImage($imageFilename) // On stocke juste le nom du fichier !
                 ->setDescription($descriptions[$index])
                 ->setIsAvailable($faker->boolean(80))
-                ->setDailyRate($faker->numberBetween(100, 2500)) // Prix journalier entre 100 et 2500 euros
+                ->setDailyRate($faker->numberBetween(100,2500)) // Prix journalier entre 100 et 2500 euros
                 ->setLocation($faker->randomElement($locations)) // Associer une location aléatoire
             ;
             $manager->persist($room);
@@ -169,6 +158,7 @@ class RoomFixtures extends Fixture implements DependentFixtureInterface
         }
         $manager->flush();
     }
+
     public function getDependencies(): array
     {
         return [
