@@ -1,39 +1,75 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-    Mon profil
+{% block title %}Mon profil
 {% endblock %}
 
 {% block body %}
+	<main class="max-w-4xl mx-auto py-8 px-4">
 
-<main class="">
+		<h1 class="text-2xl font-bold mb-6">Mon profil</h1>
 
+		{# Affichage des messages flash #}
+		{% for label, messages in app.flashes %}
+			{% for message in messages %}
+				<div class="mb-4 p-4 rounded bg-green-100 text-green-800">
+					{{ message }}
+				</div>
+			{% endfor %}
+		{% endfor %}
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+		<div
+			class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 
-{# Infos user #}
-<div class="col-span-1  border">
-    NOM
-    EMAIL
-    DATE DE CREATION
-</div>
+			{# Infos utilisateur #}
+			<div class="col-span-1 border rounded-lg p-6 bg-white shadow">
+				<h2 class="text-lg font-semibold mb-4">Mes informations</h2>
+				<ul class="space-y-2">
+					<li>
+						<span class="font-semibold">Nom :</span>
+						{{ app.user.client.nom ?? 'Non renseigné' }}
+					</li>
+					<li>
+						<span class="font-semibold">Email :</span>
+						{{ app.user.email }}
+					</li>
+					<li>
+						<span class="font-semibold">Date de création :</span>
+						{{ app.user.createdAt ? app.user.createdAt|date('d/m/Y H:i') : 'Non disponible' }}
+					</li>
+				</ul>
+			</div>
 
-{# Mes réservations #}
-<div class="col-span-1 md:col-span-2  border">
-{% for item in app.user.client.bookings %}
-    {{ dump(item) }}
-{% endfor %}
-</div>
+			{# Formulaire d'édition du profil #}
+			<div class="col-span-1 md:col-span-2 border rounded-lg p-6 bg-white shadow">
+				<h2 class="text-lg font-semibold mb-4">Modifier mon profil</h2>
+				{{ form_start(profileForm) }}
+				<div
+					class="grid grid-cols-1 md:grid-cols-2 gap-4">{# Ajoute d'autres champs du formulaire UserForm si besoin #}
+				</div>
+				<div class="mt-4">
+					<button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+						Enregistrer
+					</button>
+				</div>
+				{{ form_end(profileForm) }}
+			</div>
+		</div>
 
-</div>
+		{# Favoris de l'utilisateur #}
+		<div class="border rounded-lg p-6 bg-white shadow mb-8">
+			<h2 class="text-lg font-semibold mb-4">Mes favoris</h2>
+			{% if favorites|length > 0 %}
+				<ul class="space-y-2">
+					{% for fav in favorites %}
+						<li>
+							<a href="{{ path('room_view', {id: fav.room.id}) }}" class="text-blue-600 hover:underline">{{ fav.room.name }}</a>
+						</li>
+					{% endfor %}
+				</ul>
+			{% else %}
+				<p class="text-gray-500">Aucune salle en favori.</p>
+			{% endif %}
+		</div>
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-</div>
-
-{#  #}
-{#  #}
-{#  #}
-
-</main>
-
+	</main>
 {% endblock %}
