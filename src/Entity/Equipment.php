@@ -27,9 +27,16 @@ class Equipment
     #[ORM\ManyToMany(targetEntity: Room::class, mappedBy: 'equipments')]
     private Collection $rooms;
 
+    /**
+     * @var Collection<int, Booking>
+     */
+    #[ORM\ManyToMany(targetEntity: Booking::class, inversedBy: 'equipments')]
+    private Collection $booking;
+
     public function __construct()
     {
         $this->rooms = new ArrayCollection();
+        $this->booking = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -87,4 +94,34 @@ class Equipment
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return Collection<int, Booking>
+     */
+    public function getBooking(): Collection
+    {
+        return $this->booking;
+    }
+
+    public function addBooking(Booking $booking): static
+    {
+        if (!$this->booking->contains($booking)) {
+            $this->booking->add($booking);
+        }
+
+        return $this;
+    }
+
+    public function removeBooking(Booking $booking): static
+    {
+        $this->booking->removeElement($booking);
+
+        return $this;
+    }
+
 }
