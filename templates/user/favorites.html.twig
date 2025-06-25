@@ -1,0 +1,130 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Favoris - SalleVenue{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-6xl mx-auto">
+        <!-- En-tête -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">
+                <twig:ux:icon name="line-md:heart" class="h-8 w-8 inline-block mr-2 text-red-500"/>
+                Mes Favoris
+            </h1>
+            <p class="text-gray-600">Vos salles préférées pour des réservations rapides</p>
+        </div>
+
+        {% if favorites is empty %}
+            <!-- État vide -->
+            <div class="text-center py-12">
+                <twig:ux:icon name="line-md:heart" class="h-16 w-16 mx-auto text-gray-300 mb-4"/>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Aucun favori pour le moment</h3>
+                <p class="text-gray-600 mb-6">Vous n'avez pas encore ajouté de salles à vos favoris.</p>
+                <a href="{{ path('rooms') }}" class="btn btn-primary">
+                    <twig:ux:icon name="lucide:search" class="h-4 w-4 mr-2"/>
+                    Découvrir des salles
+                </a>
+            </div>
+        {% else %}
+            <!-- Liste des favoris -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for favorite in favorites %}
+                    {% set room = favorite.room %}
+                    <div class="card bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <!-- Image de la salle -->
+                        <figure class="relative">
+                            {% if room.image %}
+                                <img src="{{ asset('medias/images/' ~ room.image) }}" 
+                                     alt="{{ room.name }}" 
+                                     class="w-full h-48 object-cover">
+                            {% else %}
+                                <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                                    <twig:ux:icon name="fluent-mdl2:room" class="h-12 w-12 text-gray-400"/>
+                                </div>
+                            {% endif %}
+                            
+                            <!-- Badge favori -->
+                            <div class="absolute top-2 right-2">
+                                <div class="badge badge-error">
+                                    <twig:ux:icon name="line-md:heart" class="h-4 w-4"/>
+                                    Favori
+                                </div>
+                            </div>
+                        </figure>
+
+                        <!-- Contenu de la carte -->
+                        <div class="card-body">
+                            <h3 class="card-title text-lg font-semibold">{{ room.name }}</h3>
+                            
+                            <!-- Informations de la salle -->
+                            <div class="space-y-2 text-sm text-gray-600">
+                                <div class="flex items-center">
+                                    <twig:ux:icon name="lucide:users" class="h-4 w-4 mr-2"/>
+                                    <span>{{ room.capacity }} personnes</span>
+                                </div>
+                                
+                                {% if room.price %}
+                                    <div class="flex items-center">
+                                        <twig:ux:icon name="lucide:euro" class="h-4 w-4 mr-2"/>
+                                        <span>{{ room.price|number_format(2, ',', ' ') }} €</span>
+                                    </div>
+                                {% endif %}
+
+                                {% if room.luminosity %}
+                                    <div class="flex items-center">
+                                        <twig:ux:icon name="lucide:sun" class="h-4 w-4 mr-2"/>
+                                        <span>Lumineuse</span>
+                                    </div>
+                                {% endif %}
+
+                                {% if room.pmrAccess %}
+                                    <div class="flex items-center">
+                                        <twig:ux:icon name="lucide:wheelchair" class="h-4 w-4 mr-2"/>
+                                        <span>Accessible PMR</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Description -->
+                            {% if room.description %}
+                                <p class="text-gray-600 text-sm mt-3 line-clamp-2">
+                                    {{ room.description }}
+                                </p>
+                            {% endif %}
+
+                            <!-- Actions -->
+                            <div class="card-actions justify-end mt-4">
+                                <a href="{{ path('room_view', {'id': room.id}) }}" 
+                                   class="btn btn-primary btn-sm">
+                                    <twig:ux:icon name="lucide:eye" class="h-4 w-4 mr-1"/>
+                                    Voir détails
+                                </a>
+                                
+                                <a href="{{ path('booking_new', {'roomId': room.id}) }}" 
+                                   class="btn btn-secondary btn-sm">
+                                    <twig:ux:icon name="lucide:calendar-plus" class="h-4 w-4 mr-1"/>
+                                    Réserver
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Statistiques -->
+            <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h4 class="font-semibold text-blue-900">{{ favorites|length }} salle(s) en favori</h4>
+                        <p class="text-blue-700 text-sm">Vous pouvez réserver rapidement vos salles préférées</p>
+                    </div>
+                    <a href="{{ path('rooms') }}" class="btn btn-outline btn-primary">
+                        <twig:ux:icon name="lucide:plus" class="h-4 w-4 mr-1"/>
+                        Ajouter des favoris
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

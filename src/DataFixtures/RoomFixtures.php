@@ -141,7 +141,7 @@ class RoomFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < 10; $i++) {
             $locations[] = $this->getReference('LOCATION_' . $i, Location::class);
         }
-    
+
         $i = 0;
         foreach ($rooms as $index => $roomName) {
             $room = new Room();
@@ -152,7 +152,6 @@ class RoomFixtures extends Fixture implements DependentFixtureInterface
                 ->setImage($imageFilename) // On stocke juste le nom du fichier !
                 ->setDescription($descriptions[$index])
                 ->setIsAvailable($faker->boolean(80))
-                ->setDailyRate($faker->numberBetween(100, 2500)) // Prix journalier entre 100 et 2500 euros
                 ->setPrice($faker->randomFloat(2, 50, 2000)) // Prix en euros avec 2 décimales
                 ->setLuminosity($faker->boolean(70)) // 70% de chance d'avoir de la luminosité naturelle
                 ->setPmrAccess($faker->boolean(60)) // 60% de chance d'être accessible PMR

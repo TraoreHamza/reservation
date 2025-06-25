@@ -27,13 +27,15 @@ class BookingForm extends AbstractType
                 'class' => Equipment::class,
                 'choice_label' => 'name',
                 'multiple' => true,
-                'required' => false
+                'expanded' => true,
+                'required' => false,
             ])
             ->add('options', EntityType::class, [
                 'class' => Option::class,
                 'choice_label' => 'name',
                 'multiple' => true,
-                'required' => false
+                'expanded' => true,
+                'required' => false,
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Réserver',

@@ -30,42 +30,25 @@ class BookingFixtures extends Fixture implements DependentFixtureInterface
             $users[] = $this->getReference('USER_' . $i, User::class);
         }
 
-        // Création de réservations avec des dates variées pour tester les notifications
-        for ($i = 0; $i < 15; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $user = $faker->randomElement($users);
             $booking = new Booking();
-
-            // Dates variées pour tester les notifications
-            $dateRange = match ($i) {
-                0, 1, 2 => ['-10 days', '-8 days'], // Réservations anciennes en attente (urgentes)
-                3, 4, 5 => ['-2 days', '+1 day'],  // Réservations récentes en attente
-                6, 7, 8 => ['+2 days', '+5 days'], // Réservations à venir
-                9, 10 => ['+1 week', '+2 weeks'],  // Réservations futures
-                default => ['-1 week', '+1 week']  // Réservations normales
-            };
-
-            $startDate = $faker->dateTimeBetween($dateRange[0], $dateRange[1]);
-            // S'assurer que la date de fin est après la date de début
-            $endDate = $faker->dateTimeBetween($startDate, (clone $startDate)->modify('+3 days'));
-
-            // Statuts variés pour tester le code couleur
-            $status = match ($i) {
-                0, 1, 2, 3, 4, 5 => 'pending',    // En attente (pour tester les notifications)
-                6, 7, 8 => 'confirmed',           // Confirmées
-                9, 10 => 'cancelled',             // Annulées
-                default => $faker->randomElement(['confirmed', 'pending', 'cancelled'])
-            };
+            $startDate = $faker->dateTimeBetween('-1 week', '+1 week'); // Date de début aléatoire
+            $endDate = $faker->dateTimeBetween($startDate, '+1 week'); // Date de fin après la date de début
 
             $booking
-                ->setStatus($status)
-                ->setStartDate(\DateTimeImmutable::createFromMutable($startDate))
-                ->setEndDate(\DateTimeImmutable::createFromMutable($endDate))
-                ->setRoom($faker->randomElement($room))
-                ->setClient($user->getClient())
-                ->setUser($user);
+                ->setStatus($faker->randomElement([
+                    "confirmed",
+                    "pending",
+                    "cancelled",
+                ]))
+                ->setStartDate(\DateTimeImmutable::createFromMutable($startDate)) // Conversion en DateTimeImmutable
+                ->setEndDate(\DateTimeImmutable::createFromMutable($endDate)) // Conversion en DateTimeImmutable
+                ->setRoom($faker->randomElement($room)) // Associe une room aléatoire
+                ->setClient($user->getClient());
 
             $manager->persist($booking);
-            $this->addReference('BOOKING_' . $i, $booking);
+            $this->addReference('BOOKING_' . $i, $booking); // Ajout de la référence pour les autres fixtures
         }
 
         $manager->flush();

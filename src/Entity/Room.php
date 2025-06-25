@@ -19,19 +19,14 @@ class Room
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(type: Types::BIGINT)]
-    private ?int $dailyRate = null; // Tarif journalier
-
-    #[ORM\Column(length: 255)]
-    #[Assert\Length(max: 255, maxMessage: '{{ max}} caractères maximum.')]
-    #[Assert\Regex(Pattern: '/\.(jpg|jpeg|png|webp)$/')]
-    private ?string $image = 'default.png';
-
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column]
     private ?int $capacity = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
@@ -40,7 +35,6 @@ class Room
     private ?bool $isAvailable = null;
 
     /**
-<<<<<<< HEAD
      * Prix de la chambre par jour
      * AJOUT : Champ prix pour le système de devis
      */
@@ -51,29 +45,21 @@ class Room
      * Relation ManyToMany avec Equipment
      * Une chambre peut avoir plusieurs équipements
      * 
-     * CORRECTION : mappedBy corrigé de 'room' vers 'rooms' (pluriel)
-     * pour correspondre à la relation dans Equipment
-     * 
      * @var Collection<int, Equipment>
      */
-    #[ORM\ManyToMany(targetEntity: Equipment::class, mappedBy: 'rooms')]
+    #[ORM\ManyToMany(targetEntity: Equipment::class, inversedBy: 'rooms')]
     private Collection $equipments;
 
     /**
      * Relation ManyToMany avec Option
      * Une chambre peut avoir plusieurs options
      * 
-     * CORRECTION : mappedBy corrigé de 'room' vers 'rooms' (pluriel)
-     * pour correspondre à la relation dans Option
-     * 
      * @var Collection<int, Option>
      */
-    #[ORM\ManyToMany(targetEntity: Option::class, mappedBy: 'rooms')]
+    #[ORM\ManyToMany(targetEntity: Option::class, inversedBy: 'rooms')]
     private Collection $options;
 
     /**
-=======
->>>>>>> origin/yasmina
      * @var Collection<int, Favorite>
      */
     #[ORM\OneToMany(targetEntity: Favorite::class, mappedBy: 'room')]
@@ -86,7 +72,12 @@ class Room
     private Collection $reviews;
 
     /**
-<<<<<<< HEAD
+     * @var Collection<int, Booking>
+     */
+    #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'room')]
+    private Collection $booking;
+
+    /**
      * Relation ManyToOne avec Location
      * Une chambre appartient à une localisation
      * 
@@ -98,27 +89,6 @@ class Room
      */
     #[ORM\ManyToOne(inversedBy: 'rooms')]
     #[ORM\JoinColumn(nullable: true)]
-=======
-     * @var Collection<int, Option>
-     */
-    #[ORM\ManyToMany(targetEntity: Option::class, inversedBy: 'rooms')]
-    private Collection $options;
-
-    /**
-     * @var Collection<int, Equipment>
-     */
-    #[ORM\ManyToMany(targetEntity: Equipment::class, inversedBy: 'rooms')]
-    private Collection $equipments;
-
-    /**
-     * @var Collection<int, Booking>
-     */
-    #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'room')]
-    private Collection $booking;
-
-    #[ORM\ManyToOne(inversedBy: 'rooms')]
-    #[ORM\JoinColumn(nullable: false)]
->>>>>>> origin/yasmina
     private ?Location $location = null;
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
@@ -134,7 +104,6 @@ class Room
     {
         $this->favorites = new ArrayCollection();
         $this->reviews = new ArrayCollection();
-        $this->dailyRate = 100; // Valeur par défaut
         $this->options = new ArrayCollection();
         $this->equipments = new ArrayCollection();
         $this->booking = new ArrayCollection();
@@ -205,19 +174,6 @@ class Room
         return $this;
     }
 
-
-    public function getDailyRate(): ?int
-    {
-        return $this->dailyRate;
-    }
-
-    public function setDailyRate(int $dailyRate): static
-    {
-        $this->dailyRate = $dailyRate;
-
-        return $this;
-    }
-
     /**
      * Récupère le prix de la chambre par jour
      * AJOUT : Méthode pour le système de devis
@@ -234,29 +190,24 @@ class Room
     public function setPrice(float $price): static
     {
         $this->price = $price;
+
         return $this;
     }
 
     /**
-     * Récupère le prix formaté avec le symbole euro
-     * AJOUT : Méthode pour l'affichage dans les templates
+     * Retourne le prix formaté avec le symbole euro
+     * AJOUT : Méthode pour l'affichage formaté
      */
     public function getFormattedPrice(): string
     {
         return number_format($this->price ?? 0, 2, ',', ' ') . ' €';
     }
 
-    /**
-     * @return Collection<int, Equipment>
-     */
     public function getEquipments(): Collection
     {
         return $this->equipments;
     }
-    
-    /**
-     * @return Collection<int, Favorite>
-     */
+
     public function getFavorites(): Collection
     {
         return $this->favorites;
@@ -284,9 +235,6 @@ class Room
         return $this;
     }
 
-    /**
-     * @return Collection<int, Review>
-     */
     public function getReviews(): Collection
     {
         return $this->reviews;
@@ -316,12 +264,9 @@ class Room
 
     public function __toString(): string
     {
-        return $this->name;
+        return $this->name ?? '';
     }
 
-    /**
-     * @return Collection<int, Option>
-     */
     public function getOptions(): Collection
     {
         return $this->options;
@@ -331,6 +276,7 @@ class Room
     {
         if (!$this->options->contains($option)) {
             $this->options->add($option);
+            $option->addRoom($this);
         }
 
         return $this;
@@ -338,7 +284,9 @@ class Room
 
     public function removeOption(Option $option): static
     {
-        $this->options->removeElement($option);
+        if ($this->options->removeElement($option)) {
+            $option->removeRoom($this);
+        }
 
         return $this;
     }
@@ -347,6 +295,7 @@ class Room
     {
         if (!$this->equipments->contains($equipment)) {
             $this->equipments->add($equipment);
+            $equipment->addRoom($this);
         }
 
         return $this;
@@ -354,14 +303,13 @@ class Room
 
     public function removeEquipment(Equipment $equipment): static
     {
-        $this->equipments->removeElement($equipment);
+        if ($this->equipments->removeElement($equipment)) {
+            $equipment->removeRoom($this);
+        }
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Booking>
-     */
     public function getBooking(): Collection
     {
         return $this->booking;
@@ -401,7 +349,6 @@ class Room
         return $this;
     }
 
-<<<<<<< HEAD
     public function hasLuminosity(): bool
     {
         return $this->luminosity;
@@ -410,6 +357,7 @@ class Room
     public function setLuminosity(bool $luminosity): static
     {
         $this->luminosity = $luminosity;
+
         return $this;
     }
 
@@ -421,6 +369,7 @@ class Room
     public function setPmrAccess(bool $pmr_access): static
     {
         $this->pmr_access = $pmr_access;
+
         return $this;
     }
 
@@ -432,8 +381,7 @@ class Room
     public function setErgonomicsNotes(?string $notes): static
     {
         $this->ergonomics_notes = $notes;
+
         return $this;
     }
-=======
->>>>>>> origin/yasmina
 }

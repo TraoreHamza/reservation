@@ -31,30 +31,21 @@ final class SearchRoom
     #[LiveProp(writable: true, url: true)]
     public ?string $option = null;
 
-
     #[LiveProp(writable: true, url: true)]
     public ?string $location = null;
 
-<<<<<<< HEAD
     #[LiveProp(writable: true, url: true)]
     public ?bool $luminosity = null;
 
     #[LiveProp(writable: true, url: true)]
     public ?bool $pmrAccess = null;
 
-    public function __construct(private RoomRepository $rr) {}
-=======
     public function __construct(
-        private RoomRepository $rr, 
+        private RoomRepository $rr,
         private OptionRepository $or,
         private EquipmentRepository $er,
-        private LocationRepository $lr,
-        
-        
-        ) {}
->>>>>>> origin/yasmina
-
-
+        private LocationRepository $lr
+    ) {}
 
     public function getRooms(): array
     {
@@ -72,24 +63,18 @@ final class SearchRoom
         return $this->rr->findBy([], ['name' => 'ASC'], 4) ?? [];
     }
 
-
     public function getOptions(): array
     {
         return  $this->or->findAll() ?? [];
     }
-
 
     public function getEquipments(): array
     {
         return $this->er->findAll() ?? [];
     }
 
-
     public function getLocations(): array
     {
         return $this->lr->findDepartment() ??  [];
     }
-
-
-
 }

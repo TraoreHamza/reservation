@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use Symfony\Component\HttpFoundation\Response;
 
 class BookingCrudController extends AbstractCrudController
 {
@@ -35,9 +36,21 @@ class BookingCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            ->add(Crud::PAGE_INDEX, Action::DETAIL);
+            ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ->add(
+                Crud::PAGE_INDEX,
+                Action::new('validate', 'Valider')
+                    ->linkToCrudAction('edit')
+                    ->displayIf(static function ($entity) {
+                        return $entity->getStatus() === 'pending';
+                    })
+                    ->addCssClass('btn btn-success')
+                    ->setIcon('fa fa-check')
+            )
+            ->update(Crud::PAGE_INDEX, Action::EDIT, function (Action $action) {
+                return $action->setLabel('Modifier')->setIcon('fa fa-edit');
+            });
     }
-
 
     public function configureFields(string $pageName): iterable
     {
@@ -61,16 +74,16 @@ class BookingCrudController extends AbstractCrudController
                     'Annulé' => 'cancelled',
                 ])
                 ->setHelp('Statut actuel de la réservation (par exemple, validé, en attente, annulé).'),
-            CollectionField::new('equipments')
-                ->setLabel('Équipement')
+            AssociationField::new('options')
+                ->setLabel('Options')
                 ->hideOnIndex()
-                ->renderExpanded()
-                ->setHelp('Nom de l\'équipement associé à la réservation.'),
-            CollectionField::new('options')
-                ->setLabel('Option')
+                ->renderAsNativeWidget()
+                ->setHelp('Options associées à la réservation.'),
+            AssociationField::new('equipments')
+                ->setLabel('Équipements')
                 ->hideOnIndex()
-                ->renderExpanded()
-                ->setHelp('Nom de l\'option associée à la réservation.'),
+                ->renderAsNativeWidget()
+                ->setHelp('Équipements associés à la réservation.'),
 
             FormField::addFieldset('Informations sur la salle et le client'),
             AssociationField::new('room')

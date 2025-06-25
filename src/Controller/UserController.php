@@ -30,9 +30,14 @@ class UserController extends AbstractController
     public function profile(Request $request): Response
     {
         $user = $this->getUser();
+
+        if (!$user) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page.');
+        }
+
         $form = $this->createForm(UserForm::class, $user);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
             $this->addFlash('success', 'Profil mis à jour');
@@ -49,8 +54,12 @@ class UserController extends AbstractController
     #[Route('/fiche', name: 'user_fiche', methods: ['GET', 'POST'])]
     public function fiche(Request $request): Response
     {
-        /** @var User $user */
         $user = $this->getUser();
+
+        if (!$user) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page.');
+        }
+
         $client = $user->getClient() ?? new Client();
         $form = $this->createForm(ClientForm::class, $client);
         $form->handleRequest($request);
@@ -71,6 +80,11 @@ class UserController extends AbstractController
     public function favorite(int $roomId): Response
     {
         $user = $this->getUser();
+
+        if (!$user) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page.');
+        }
+
         $favorite = $this->fr->findOneBy(['user' => $user, 'room' => $roomId]);
 
         if ($favorite) {
@@ -84,5 +98,21 @@ class UserController extends AbstractController
 
         $this->em->flush();
         return $this->redirectToRoute('room_view', ['id' => $roomId]);
+    }
+
+    /**
+     * Affiche les favoris de l'utilisateur connecté
+     */
+    #[Route('/favorites', name: 'user_favorites')]
+    public function favorites(Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $user = $this->getUser();
+        $favorites = $this->fr->findBy(['user' => $user]);
+
+        return $this->render('user/favorites.html.twig', [
+            'favorites' => $favorites,
+        ]);
     }
 }

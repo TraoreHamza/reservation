@@ -29,7 +29,7 @@ class GeographicService
      */
     private function loadCommunesData(): void
     {
-        $csvPath = $this->parameterBag->get('kernel.projectDir') . '/communes-francaises.csv';
+        $csvPath = $this->parameterBag->get('kernel.project_dir') . '/communes-francaises.csv';
 
         if (!file_exists($csvPath)) {
             return;
@@ -41,9 +41,9 @@ class GeographicService
         }
 
         // Ignorer l'en-tête
-        fgetcsv($handle);
+        fgetcsv($handle, 0, ',', '"', '\\');
 
-        while (($data = fgetcsv($handle)) !== false) {
+        while (($data = fgetcsv($handle, 0, ',', '"', '\\')) !== false) {
             if (count($data) >= 4) {
                 $commune = [
                     'name' => $data[0],

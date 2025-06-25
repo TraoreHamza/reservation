@@ -1,64 +1,156 @@
-{# 
-    COMPOSANT DE NAVIGATION GLOBAL
-    ==============================
-    
-    CARACTÉRISTIQUES :
-    - Navigation responsive
-    - Menu d'administration conditionnel (ROLE_ADMIN uniquement)
-    - Liens vers les principales fonctionnalités
-    - Design moderne avec Tailwind CSS
-#}
-
-<nav class="navbar border-b">
-	<div class="navbar-start">
-		<div class="dropdown">
-			<div tabindex="0" role="button" class="btn btn-ghost btn-circle">
-				<twig:ux:icon name="lucide:menu" class="h-6 w-6"/>
+<nav class="bg-white shadow-lg border-b">
+	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+		<div class="flex justify-between h-16">
+			<!-- Logo et navigation principale -->
+			<div class="flex">
+				<div class="flex-shrink-0 flex items-center">
+					<a href="{{ path('home') }}" class="flex items-center space-x-2">
+						<twig:ux:icon name="fluent-mdl2:room" class="h-8 w-8 text-blue-600"/>
+						<span class="text-xl font-bold text-gray-900">SalleVenue</span>
+					</a>
+				</div>
+				
+				<!-- Navigation desktop -->
+				<div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+					<a href="{{ path('home') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+						Accueil
+					</a>
+					<a href="{{ path('rooms') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+						Les salles
+					</a>
+					<a href="{{ path('search_room') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+						Rechercher
+					</a>
+					{% if app.user and not is_granted('ROLE_ADMIN') %}
+						<a href="{{ path('booking_new') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+							Réservation
+						</a>
+						<a href="{{ path('bookings') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+							Mes réservations
+						</a>
+					{% endif %}
+					{% if is_granted('ROLE_ADMIN') %}
+						<a href="{{ path('admin') }}" class="border-blue-500 text-blue-600 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+							Administration
+						</a>
+					{% endif %}
+				</div>
 			</div>
-			<ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-				<li>
-					<a>Homepage</a>
-				</li>
-				<li>
-					<a>About</a>
-				</li>
-			</ul>
+
+			<!-- Barre de recherche et menu utilisateur -->
+			<div class="flex items-center space-x-4">
+				<!-- Barre de recherche -->
+				<div class="relative">
+					<form action="{{ path('search_room') }}" method="GET" class="flex">
+						<input type="text" name="q" placeholder="Rechercher une salle..." 
+							   class="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+						<button type="submit" class="ml-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+							<twig:ux:icon name="lucide:search" class="h-4 w-4"/>
+						</button>
+					</form>
+					<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+						<twig:ux:icon name="lucide:search" class="h-5 w-5 text-gray-400"/>
+					</div>
+				</div>
+
+				<!-- Menu utilisateur -->
+				<div class="relative">
+					{% if app.user %}
+						<div class="flex items-center space-x-3">
+							<!-- Notifications -->
+							<button class="p-2 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md">
+								<twig:ux:icon name="lucide:bell" class="h-6 w-6"/>
+							</button>
+							
+							<!-- Menu dropdown -->
+							<div class="relative" x-data="{ open: false }" id="user-menu">
+								<button @click="open = !open" onclick="toggleUserMenu()" class="flex items-center space-x-2 text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+									<div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center">
+										<span class="text-white text-sm font-medium">{{ app.user.email|first|upper }}</span>
+									</div>
+									<twig:ux:icon name="lucide:chevron-down" class="h-4 w-4 text-gray-400"/>
+								</button>
+								
+								<div x-show="open" @click.away="open = false" 
+									 class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden" id="user-menu-dropdown">
+									<div class="px-4 py-2 text-xs text-gray-500 border-b">
+										{{ app.user.email }}
+									</div>
+									
+									{% if not is_granted('ROLE_ADMIN') %}
+										<a href="{{ path('user_profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+											<twig:ux:icon name="lucide:user" class="h-4 w-4 inline mr-2"/>
+											Mon profil
+										</a>
+										<a href="{{ path('user_favorites') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+											<twig:ux:icon name="line-md:heart" class="h-4 w-4 inline mr-2"/>
+											Mes favoris
+										</a>
+										<a href="{{ path('bookings') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+											<twig:ux:icon name="lucide:calendar" class="h-4 w-4 inline mr-2"/>
+											Mes réservations
+										</a>
+									{% endif %}
+									
+									{% if is_granted('ROLE_ADMIN') %}
+										<a href="{{ path('admin') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+											<twig:ux:icon name="lucide:shield" class="h-4 w-4 inline mr-2"/>
+											Administration
+										</a>
+										<a href="{{ path('documentation') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+											<twig:ux:icon name="lucide:file-text" class="h-4 w-4 inline mr-2"/>
+											Documentation
+										</a>
+									{% endif %}
+									
+									<div class="border-t border-gray-100"></div>
+									<a href="{{ path('app_logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+										<twig:ux:icon name="lucide:log-out" class="h-4 w-4 inline mr-2"/>
+										Déconnexion
+									</a>
+								</div>
+							</div>
+						</div>
+					{% else %}
+						<div class="flex items-center space-x-4">
+							<a href="{{ path('app_login') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+								Connexion
+							</a>
+							<a href="{{ path('app_register') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+								Inscription
+							</a>
+						</div>
+					{% endif %}
+				</div>
+			</div>
 		</div>
 	</div>
-	<div class="navbar-center">
-		<a href="/" class="flex items-center gap-2 cursor-pointer">
-			<twig:ux:icon name="fluent-mdl2:room" class="h-6 w-6"/>
-			Réservation Salle
-		</a>
-	</div>
-	<div class="navbar-end">
-		<a href="{{ path('search_room' ) }}" class="btn btn-ghost btn-circle">
-			<twig:ux:icon name="lucide:search" class="h-6 w-6"/>
-		</a>
-		<div class="dropdown">
-			<div tabindex="0" role="button" class="btn btn-ghost btn-circle">
-				<twig:ux:icon name="lucide:user-circle" class="h-6 w-6"/>
-			</div>
-			<ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 -right-0 p-2 shadow">
-				{% if app.user %}
-					<li>
-						<a href="#"><twig:ux:icon name="line-md:heart" class="h-6 w-6"/></a>
-					</li>
-					<li>
-						<a href="{{ path('user_profile') }}">Mon profil</a>
-					</li>
-					<li>
-						<a href="{{ path('app_logout') }}">Déconnexion</a>
-					</li>
-				{% else %}
-					<li>
-						<a href="{{ path('app_login') }}">Connexion</a>
-					</li>
-					<li>
-						<a href="{{ path('app_register') }}">Inscription</a>
-					</li>
-				{% endif %}
-			</ul>
+
+	<!-- Menu mobile -->
+	<div class="sm:hidden">
+		<div class="pt-2 pb-3 space-y-1">
+			<a href="{{ path('home') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300">
+				Accueil
+			</a>
+			<a href="{{ path('rooms') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300">
+				Les salles
+			</a>
+			<a href="{{ path('search_room') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300">
+				Rechercher
+			</a>
+			{% if app.user and not is_granted('ROLE_ADMIN') %}
+				<a href="{{ path('booking_new') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300">
+					Réservation
+				</a>
+				<a href="{{ path('bookings') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300">
+					Mes réservations
+				</a>
+			{% endif %}
+			{% if is_granted('ROLE_ADMIN') %}
+				<a href="{{ path('admin') }}" class="block pl-3 pr-4 py-2 border-l-4 border-blue-500 text-base font-medium text-blue-700 bg-blue-50">
+					Administration
+				</a>
+			{% endif %}
 		</div>
 	</div>
 </nav>

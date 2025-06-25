@@ -28,19 +28,25 @@ class Booking
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
+    /**
+     * @var Collection<int, Equipment>
+     */
+    #[ORM\ManyToMany(targetEntity: Equipment::class, inversedBy: 'bookings')]
+    private Collection $equipments;
+
+    /**
+     * @var Collection<int, Option>
+     */
+    #[ORM\ManyToMany(targetEntity: Option::class)]
+    private Collection $options;
+
+    #[ORM\ManyToOne(inversedBy: 'bookings')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Room $room = null;
+
     #[ORM\ManyToOne(inversedBy: 'bookings')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $client = null;
-
-    /**
-     * Relation ManyToOne avec User
-     * Une réservation appartient à un utilisateur
-     * AJOUT : Relation pour le système de devis et d'authentification
-     * TEMPORAIRE : Rendu nullable pour éviter les erreurs de migration
-     */
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?User $user = null;
 
     /**
      * @var Collection<int, Quotation>
@@ -48,12 +54,10 @@ class Booking
     #[ORM\OneToMany(targetEntity: Quotation::class, mappedBy: 'booking')]
     private Collection $quotations;
 
-    #[ORM\ManyToOne(inversedBy: 'booking')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Room $room = null;
-
     public function __construct()
     {
+        $this->equipments = new ArrayCollection();
+        $this->options = new ArrayCollection();
         $this->quotations = new ArrayCollection();
         $this->status = "pending";
     }
@@ -121,6 +125,66 @@ class Booking
         return $this;
     }
 
+    /**
+     * @return Collection<int, Equipment>
+     */
+    public function getEquipments(): Collection
+    {
+        return $this->equipments;
+    }
+
+    public function addEquipment(Equipment $equipment): static
+    {
+        if (!$this->equipments->contains($equipment)) {
+            $this->equipments->add($equipment);
+        }
+
+        return $this;
+    }
+
+    public function removeEquipment(Equipment $equipment): static
+    {
+        $this->equipments->removeElement($equipment);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Option>
+     */
+    public function getOptions(): Collection
+    {
+        return $this->options;
+    }
+
+    public function addOption(Option $option): static
+    {
+        if (!$this->options->contains($option)) {
+            $this->options->add($option);
+        }
+
+        return $this;
+    }
+
+    public function removeOption(Option $option): static
+    {
+        $this->options->removeElement($option);
+
+        return $this;
+    }
+
+    public function getRoom(): ?Room
+    {
+        return $this->room;
+    }
+
+    public function setRoom(?Room $room): static
+    {
+        $this->room = $room;
+
+        return $this;
+    }
+
     public function getClient(): ?Client
     {
         return $this->client;
@@ -130,25 +194,6 @@ class Booking
     {
         $this->client = $client;
 
-        return $this;
-    }
-
-    /**
-     * Récupère l'utilisateur qui a créé la réservation
-     * AJOUT : Méthode pour le système de devis
-     */
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    /**
-     * Définit l'utilisateur qui a créé la réservation
-     * AJOUT : Méthode pour le système de devis
-     */
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
         return $this;
     }
 
@@ -182,21 +227,8 @@ class Booking
         return $this;
     }
 
-<<<<<<< HEAD
     public function __toString(): string
     {
         return $this->room->getName() . ' - ' . $this->startDate->format('d/m/Y');
-=======
-    public function getRoom(): ?Room
-    {
-        return $this->room;
-    }
-
-    public function setRoom(?Room $room): static
-    {
-        $this->room = $room;
-
-        return $this;
->>>>>>> origin/yasmina
     }
 }

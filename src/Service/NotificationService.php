@@ -6,6 +6,8 @@ use App\Entity\Booking;
 use App\Repository\BookingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 /**
  * Service de gestion des notifications administrateur
@@ -14,14 +16,102 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * - Alerte 5 jours avant réservation non validée
  * - Notifications sur le dashboard
  * - Gestion des statuts de réservation
+ * - Notifications de rappel pour les réservations à venir
  */
 class NotificationService
 {
     public function __construct(
         private BookingRepository $bookingRepository,
         private EntityManagerInterface $entityManager,
-        private RequestStack $requestStack
+        private RequestStack $requestStack,
+        private MailerInterface $mailer
     ) {}
+
+    /**
+     * Envoie une notification de rappel pour une réservation
+     * 
+     * @param Booking $booking La réservation concernée
+     * @param int $minutesBefore Minutes avant le début de la réservation
+     */
+    public function sendBookingReminder(Booking $booking, int $minutesBefore = 10): void
+    {
+        $client = $booking->getClient();
+        $room = $booking->getRoom();
+
+        if (!$client || !$room) {
+            return; // Impossible d'envoyer la notification sans client ou salle
+        }
+
+        // Récupérer l'email via l'utilisateur associé au client
+        $user = $client->getUser();
+        $emailAddress = $user?->getEmail() ?? 'admin@reservation.com';
+
+        // Créer l'email de rappel
+        $email = (new Email())
+            ->from('noreply@reservation.com')
+            ->to($emailAddress)
+            ->subject('Rappel : Votre réservation dans ' . $minutesBefore . ' minutes')
+            ->html($this->generateReminderEmailContent($booking, $minutesBefore));
+
+        // Envoyer l'email
+        $this->mailer->send($email);
+
+        // Log de la notification
+        error_log(sprintf(
+            'Rappel envoyé pour la réservation %d (client: %s, salle: %s) dans %d minutes',
+            $booking->getId(),
+            $client->getName(),
+            $room->getName(),
+            $minutesBefore
+        ));
+    }
+
+    /**
+     * Génère le contenu de l'email de rappel
+     * 
+     * @param Booking $booking La réservation
+     * @param int $minutesBefore Minutes avant le début
+     * @return string Contenu HTML de l'email
+     */
+    private function generateReminderEmailContent(Booking $booking, int $minutesBefore): string
+    {
+        $client = $booking->getClient();
+        $room = $booking->getRoom();
+        $startDate = $booking->getStartDate();
+        $endDate = $booking->getEndDate();
+
+        // Adapter le message selon le délai
+        if ($minutesBefore >= 1440) { // Plus de 24h (1 jour)
+            $timeMessage = "dans " . round($minutesBefore / 1440) . " jour(s)";
+            $urgencyMessage = "Rappel avancé";
+        } elseif ($minutesBefore >= 60) { // Plus d'1h
+            $timeMessage = "dans " . round($minutesBefore / 60) . " heure(s)";
+            $urgencyMessage = "Rappel";
+        } else { // Moins d'1h
+            $timeMessage = "dans {$minutesBefore} minute(s)";
+            $urgencyMessage = "Rappel urgent";
+        }
+
+        return "
+        <html>
+        <body>
+            <h2>{$urgencyMessage} de réservation</h2>
+            <p>Bonjour {$client->getName()},</p>
+            <p>Ceci est un rappel pour votre réservation qui commence {$timeMessage}.</p>
+            
+            <h3>Détails de la réservation :</h3>
+            <ul>
+                <li><strong>Salle :</strong> {$room->getName()}</li>
+                <li><strong>Date de début :</strong> {$startDate->format('d/m/Y H:i')}</li>
+                <li><strong>Date de fin :</strong> {$endDate->format('d/m/Y H:i')}</li>
+                <li><strong>Capacité :</strong> {$room->getCapacity()} personnes</li>
+            </ul>
+            
+            <p>Merci de votre confiance !</p>
+        </body>
+        </html>
+        ";
+    }
 
     /**
      * Récupère les réservations nécessitant une attention administrateur

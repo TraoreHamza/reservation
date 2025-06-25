@@ -26,6 +26,9 @@ class ReviewController extends AbstractController
     #[Route('/new/{id}', name: 'review_new', methods: ['POST'])]
     public function new(Request $request, int $id): Response
     {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
         $review = new Review();
         $data = $request->request->all();
         $review
