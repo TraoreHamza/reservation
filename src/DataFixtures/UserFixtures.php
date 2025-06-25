@@ -19,6 +19,30 @@ class UserFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
 
+        // Création de l'utilisateur administrateur
+        $adminUser = new User();
+        $adminUser
+            ->setEmail('admin@sallevenue.com')
+            ->setPassword($this->hasher->hashPassword($adminUser, 'admin'))
+            ->setRoles(['ROLE_ADMIN'])
+            ->setWarning(0)
+            ->setIsBanned(false)
+            ->setIsActive(true)
+            ->setIsVerified(true)
+        ;
+        $manager->persist($adminUser);
+        $this->addReference('ADMIN_USER', $adminUser);
+
+        // Création du client admin
+        $adminClient = new Client();
+        $adminClient
+            ->setName('Administrateur')
+            ->setAddress('123 Rue de l\'Administration, 75001 Paris')
+            ->setUser($adminUser)
+        ;
+        $manager->persist($adminClient);
+        $this->addReference('ADMIN_CLIENT', $adminClient);
+
         for ($i = 0; $i < 50; $i++) {
             $user = new User();
             $user
