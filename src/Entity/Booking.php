@@ -28,22 +28,6 @@ class Booking
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
-    /**
-     * @var Collection<int, Equipment>
-     */
-    #[ORM\ManyToMany(targetEntity: Equipment::class, inversedBy: 'bookings')]
-    private Collection $equipments;
-
-    /**
-     * @var Collection<int, Option>
-     */
-    #[ORM\ManyToMany(targetEntity: Option::class, inversedBy: 'bookings')]
-    private Collection $options;
-
-    #[ORM\ManyToOne(inversedBy: 'bookings')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Room $room = null;
-
     #[ORM\ManyToOne(inversedBy: 'bookings')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $client = null;
@@ -72,8 +56,6 @@ class Booking
 
     public function __construct()
     {
-        $this->equipments = new ArrayCollection();
-        $this->options = new ArrayCollection();
         $this->quotations = new ArrayCollection();
         $this->status = "pending";
         $this->options = new ArrayCollection();
@@ -85,7 +67,7 @@ class Booking
      * La mise à jour des dates de création et de modification de l'entité
      */
     #[ORM\PrePersist] // Premier enregistrement d'un objet de l'entité
-    public function setcreated_atValue(): void
+    public function setCreatedAtValue(): void
     {
         $this->created_at = new \DateTimeImmutable();
     }
@@ -131,74 +113,14 @@ class Booking
         return $this;
     }
 
-    public function getcreated_at(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->created_at;
     }
 
-    public function setcreated_at(\DateTimeImmutable $created_at): static
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
         $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Equipment>
-     */
-    public function getEquipments(): Collection
-    {
-        return $this->equipments;
-    }
-
-    public function addEquipment(Equipment $equipment): static
-    {
-        if (!$this->equipments->contains($equipment)) {
-            $this->equipments->add($equipment);
-        }
-
-        return $this;
-    }
-
-    public function removeEquipment(Equipment $equipment): static
-    {
-        $this->equipments->removeElement($equipment);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Option>
-     */
-    public function getOptions(): Collection
-    {
-        return $this->options;
-    }
-
-    public function addOption(Option $option): static
-    {
-        if (!$this->options->contains($option)) {
-            $this->options->add($option);
-        }
-
-        return $this;
-    }
-
-    public function removeOption(Option $option): static
-    {
-        $this->options->removeElement($option);
-
-        return $this;
-    }
-
-    public function getRoom(): ?Room
-    {
-        return $this->room;
-    }
-
-    public function setRoom(?Room $room): static
-    {
-        $this->room = $room;
 
         return $this;
     }
@@ -213,6 +135,11 @@ class Booking
         $this->client = $client;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return 'Réservation ' . $this->startDate->format('d-m-Y') . ' au ' . $this->endDate->format('d-m-Y');
     }
 
     /**
