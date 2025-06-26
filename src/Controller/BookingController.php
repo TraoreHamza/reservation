@@ -47,7 +47,7 @@ class BookingController extends AbstractController
             $room = $this->rr->find($data['room_id']);
             if (!$room) {
                 $this->addFlash('error', 'salle non trouvée');
-                return $this->redirectToRoute('room_view', ['id' => $data['room_id']]);
+                return $this->redirectToRoute('bookings', ['id' => $data['room_id']]);
             }
             $booking->setRoom($room);
         }
@@ -58,11 +58,11 @@ class BookingController extends AbstractController
 
             if ($startDate >= $endDate) {
                 $this->addFlash('error', 'La date de début doit être antérieure à la date de fin');
-                return $this->redirectToRoute('room_view', ['id' => $data['room_id']]);
+                return $this->redirectToRoute('bookings', ['id' => $data['room_id']]);
             }
             if ($startDate < new \DateTimeImmutable()) {
                 $this->addFlash('error', 'La date de début ne peut pas être dans le passé');
-                return $this->redirectToRoute('room_view', ['id' => $data['room_id']]);
+                return $this->redirectToRoute('bookings', ['id' => $data['room_id']]);
             }
 
             $booking->setStartDate($startDate);
@@ -96,7 +96,7 @@ class BookingController extends AbstractController
 
 
         $this->addFlash('success', 'Votre demande de réservation a bien été prise en compte.');
-        return $this->redirectToRoute('room_view', ['id' => $data['room_id']]);
+        return $this->redirectToRoute('bookings', ['id' => $data['room_id']]);
     }
 
 
