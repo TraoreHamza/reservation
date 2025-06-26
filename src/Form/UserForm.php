@@ -26,9 +26,7 @@ class UserForm extends AbstractType
             ->add('clientName', TextType::class, [
                 'mapped' => false,
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer votre nom',
-                    ]),
+                    new NotBlank(message: 'Veuillez entrer votre nom'),
                 ],
                 'label' => 'Nom complet'
             ])
@@ -40,9 +38,7 @@ class UserForm extends AbstractType
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
-                    new IsTrue([
-                        'message' => 'Vous devez accepter les conditions.',
-                    ]),
+                    new IsTrue(message: 'Vous devez accepter les conditions.'),
                 ],
                 'label' => "J'accepte les conditions générales"
             ])
@@ -50,14 +46,12 @@ class UserForm extends AbstractType
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer un mot de passe',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères',
-                        'max' => 4096,
-                    ]),
+                    new NotBlank(message: 'Veuillez entrer un mot de passe'),
+                    new Length(
+                        min: 6,
+                        minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères',
+                        max: 4096,
+                    ),
                 ],
                 'label' => 'Mot de passe'
             ])

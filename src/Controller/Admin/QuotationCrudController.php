@@ -19,6 +19,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use App\Repository\QuotationRepository;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Contrôleur EasyAdmin pour la gestion des devis
@@ -59,17 +63,26 @@ class QuotationCrudController extends AbstractCrudController
         return $actions
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             ->remove(Crud::PAGE_INDEX, Action::NEW)
-            ->add(Crud::PAGE_INDEX, Action::new('send', 'Envoyer')
-                ->linkToCrudAction('sendQuotation')
-                ->displayIf(static function ($entity) {
-                    return $entity->getStatus() === 'draft';
-                }))
-            ->add(Crud::PAGE_INDEX, Action::new('accept', 'Accepter')
+            ->add(
+                Crud::PAGE_INDEX,
+                Action::new('send', 'Envoyer')
+                    ->linkToUrl(function ($entity) {
+                        return $this->container->get(AdminUrlGenerator::class)
+                            ->setController(self::class)
+                            ->setAction('sendQuotation')
+                            ->setEntityId($entity->getId())
+                            ->generateUrl();
+                    })
+                    ->displayIf(static function ($entity) {
+                        return $entity->getStatus() === 'draft';
+                    })
+            )
+            ->add(Crud::PAGE_DETAIL, Action::new('accept', 'Accepter')
                 ->linkToCrudAction('acceptQuotation')
                 ->displayIf(static function ($entity) {
                     return $entity->getStatus() === 'sent';
                 }))
-            ->add(Crud::PAGE_INDEX, Action::new('reject', 'Refuser')
+            ->add(Crud::PAGE_DETAIL, Action::new('reject', 'Refuser')
                 ->linkToCrudAction('rejectQuotation')
                 ->displayIf(static function ($entity) {
                     return $entity->getStatus() === 'sent';
@@ -184,23 +197,28 @@ class QuotationCrudController extends AbstractCrudController
      * 3. Affiche un message de succès ou d'erreur
      * 4. Redirige vers la liste des devis
      */
-    public function sendQuotation(AdminContext $context): RedirectResponse
+    public function sendQuotation(Request $request, QuotationRepository $quotationRepository, EntityManagerInterface $em): RedirectResponse
     {
-        $quotation = $context->getEntity()->getInstance();
+        $id = $request->query->get('entityId');
+        $quotation = $quotationRepository->find($id);
 
-        try {
-            $success = $this->quotationService->sendQuotation($quotation);
-
-            if ($success) {
-                $this->addFlash('success', 'Le devis ' . $quotation->getReference() . ' a été envoyé avec succès.');
-            } else {
-                $this->addFlash('error', 'Erreur lors de l\'envoi du devis ' . $quotation->getReference() . '.');
-            }
-        } catch (\Exception $e) {
-            $this->addFlash('error', 'Erreur lors de l\'envoi du devis : ' . $e->getMessage());
+        if (!$quotation) {
+            $this->addFlash('error', 'Aucun devis sélectionné.');
+            return $this->redirectToRoute('admin', ['crudAction' => 'index']);
         }
 
-        return $this->redirect($context->getReferrer());
+        // Génère une référence unique si besoin
+        if (!$quotation->getReference()) {
+            $quotation->setReference('Q-' . date('Ymd') . '-' . strtoupper(bin2hex(random_bytes(3))));
+        }
+
+        // Change le statut à "sent"
+        $quotation->setStatus('sent');
+        $em->flush();
+
+        $this->addFlash('success', 'Le devis ' . $quotation->getReference() . ' a été marqué comme envoyé.');
+
+        return $this->redirect($request->headers->get('referer') ?? $this->generateUrl('admin'));
     }
 
     /**
@@ -214,15 +232,17 @@ class QuotationCrudController extends AbstractCrudController
      */
     public function acceptQuotation(AdminContext $context): RedirectResponse
     {
+        if (!$context || !$context->getEntity()) {
+            $this->addFlash('error', 'Aucun devis sélectionné.');
+            return $this->redirectToRoute('admin', ['crudAction' => 'index']);
+        }
         $quotation = $context->getEntity()->getInstance();
-
         try {
             $this->quotationService->acceptQuotation($quotation);
             $this->addFlash('success', 'Le devis ' . $quotation->getReference() . ' a été accepté.');
         } catch (\Exception $e) {
             $this->addFlash('error', 'Erreur lors de l\'acceptation du devis : ' . $e->getMessage());
         }
-
         return $this->redirect($context->getReferrer());
     }
 
@@ -237,15 +257,17 @@ class QuotationCrudController extends AbstractCrudController
      */
     public function rejectQuotation(AdminContext $context): RedirectResponse
     {
+        if (!$context || !$context->getEntity()) {
+            $this->addFlash('error', 'Aucun devis sélectionné.');
+            return $this->redirectToRoute('admin', ['crudAction' => 'index']);
+        }
         $quotation = $context->getEntity()->getInstance();
-
         try {
             $this->quotationService->rejectQuotation($quotation);
             $this->addFlash('success', 'Le devis ' . $quotation->getReference() . ' a été refusé.');
         } catch (\Exception $e) {
             $this->addFlash('error', 'Erreur lors du refus du devis : ' . $e->getMessage());
         }
-
         return $this->redirect($context->getReferrer());
     }
 }

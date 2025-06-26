@@ -5,15 +5,15 @@
 - [X] Je peux m'inscrire et me connecter.
 - [X] Je peux voir la liste des salles et leurs disponibilités.
 - [X] Je peux réserver une salle.
-- [ ] Je peux modifier ou annuler ma réservation.
+- [X] Je peux modifier ou annuler ma réservation.
 - [ ] Je peux filtrer les salles par capacité, équipements, ergonomie.
-- [ ] Je peux voir mes réservations et leur statut (en attente, validée).
-- [ ] Je peux poser une pré-réservation (statut "en attente").
+- [X] Je peux voir mes réservations et leur statut (en attente, validée).
+- [X] Je peux poser une pré-réservation (statut "en attente").
 
 ## Administrateur
 
 - [ ] Je peux accéder au dashboard admin.
-- [ ] Je peux valider/annuler les pré-réservations.
+- [X] Je peux valider/annuler les pré-réservations.
 - [ ] Je peux gérer les salles, équipements, utilisateurs (CRUD).
 - [ ] Je reçois une notification pour les pré-réservations non traitées 5 jours avant.
 - [ ] Je vois un code couleur pour différencier les statuts (en attente, validée).
@@ -41,5 +41,5 @@
 - Ajouter des tests automatiques PHPUnit pour les fonctionnalités critiques.
 - Documenter les scénarios de test dans ce fichier à chaque évolution.
 - Améliorer la gestion des notifications si besoin.
-- Vérifier la documentation utilisateur et Git.
+- Vérifiera
 - S'assurer que le diagramme UML est conforme au code.

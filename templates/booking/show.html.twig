@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réservation #{{ booking.id }}{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="max-w-4xl mx-auto py-10 px-4">
+        <h1 class="text-3xl font-bold mb-8">Réservation #{{ booking.id }}</h1>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Détails de la réservation</h2>
+            <p><strong>Salle :</strong> {{ booking.room.name }}</p>
+            <p><strong>Date de début :</strong> {{ booking.startDate|date('d/m/Y H:i') }}</p>
+            <p><strong>Date de fin :</strong> {{ booking.endDate|date('d/m/Y H:i') }}</p>
+            <p><strong>Statut :</strong> {{ booking.status|upper }}</p>
+            
+            <div class="mt-6">
+                <a href="{{ path('bookings') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+                    Retour aux réservations
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

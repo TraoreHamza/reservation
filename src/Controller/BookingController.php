@@ -60,6 +60,11 @@ class BookingController extends AbstractController
 
             // Récupérer le client associé à l'utilisateur connecté
             $user = $this->getUser();
+            
+            if (!$user) {
+                throw $this->createAccessDeniedException('Vous devez être connecté pour créer une réservation.');
+            }
+            
             $client = $user->getClient();
 
             if (!$client) {
@@ -79,8 +84,29 @@ class BookingController extends AbstractController
         ]);
     }
 
+    // Route pour afficher une réservation individuelle
+    #[Route('/{id}', name: 'booking_show', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function show(Booking $booking): Response
+    {
+        $user = $this->getUser();
 
-    #[Route('/{id}/edit', name: 'booking_edit', methods: ['GET', 'POST'])]
+        if (!$user) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour voir cette réservation.');
+        }
+
+        $client = $user->getClient();
+
+        // Vérifier que l'utilisateur peut voir cette réservation
+        if (!$client || $booking->getClient() !== $client) {
+            throw $this->createAccessDeniedException('Vous n\'avez pas accès à cette réservation.');
+        }
+
+        return $this->render('booking/show.html.twig', [
+            'booking' => $booking
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'booking_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function edit(Request $request, Booking $booking): Response
     {
         $form = $this->createForm(BookingForm::class, $booking);
@@ -99,7 +125,7 @@ class BookingController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/cancel', name: 'booking_cancel', methods: ['POST'])]
+    #[Route('/{id}/cancel', name: 'booking_cancel', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function cancel(Booking $booking): Response
     {
         $this->em->remove($booking);

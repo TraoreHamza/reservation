@@ -18,7 +18,7 @@ class Option
     #[ORM\Column(length: 60)]
     private ?string $name = null;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: 'float', nullable: true)]
     private ?float $price = null;
 
     /**

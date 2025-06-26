@@ -6,39 +6,100 @@
 <div class="container mx-auto px-4 py-8">
     <div class="text-center mb-8">
         <h1 class="text-4xl font-bold text-gray-800 mb-4">📚 Documentation Technique - Admin</h1>
-        <p class="text-xl text-gray-600">Diagrammes UML complets et architecture détaillée</p>
+        <p class="text-xl text-gray-600">Architecture et guide d'utilisation du système</p>
     </div>
 
-    <!-- Diagramme de classes -->
+    <!-- Architecture du système -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 class="text-2xl font-semibold mb-4 text-gray-800">🏗️ Diagramme de Classes UML</h2>
+        <h2 class="text-2xl font-semibold mb-4 text-gray-800">🏗️ Architecture du Système</h2>
         <div class="bg-gray-50 rounded-md p-4 mb-4">
-            <p class="text-sm text-gray-600">Architecture complète des entités du système de réservation</p>
+            <p class="text-sm text-gray-600">Entités principales du système de réservation</p>
         </div>
         <div class="overflow-x-auto">
             <pre class="text-xs bg-gray-900 text-green-400 p-4 rounded-md overflow-x-auto">
-{{ include('documentation/uml_class_diagram.txt') }}
+Système de Réservation de Salles - Architecture
+
+ENTITÉS PRINCIPALES:
+├── User (Utilisateur)
+│   ├── email, password, roles
+│   └── relation OneToOne avec Client
+├── Client (Client)
+│   ├── name, address
+│   └── relation OneToOne avec User
+├── Room (Salle)
+│   ├── name, description, capacity, price
+│   └── relations ManyToMany avec Equipment et Option
+├── Booking (Réservation)
+│   ├── startDate, endDate, status
+│   └── relations ManyToOne avec Room et Client
+├── Equipment (Équipement)
+│   ├── name, type
+│   └── relations ManyToMany avec Room et Booking
+└── Option (Option)
+    ├── name, price
+    └── relations ManyToMany avec Room et Booking
+
+RELATIONS:
+- User ↔ Client (OneToOne)
+- Room ↔ Equipment (ManyToMany)
+- Room ↔ Option (ManyToMany)
+- Booking ↔ Room (ManyToOne)
+- Booking ↔ Client (ManyToOne)
+- Booking ↔ Equipment (ManyToMany)
+- Booking ↔ Option (ManyToMany)
             </pre>
         </div>
     </div>
 
-    <!-- Diagrammes de séquences -->
+    <!-- Processus métier -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div class="bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-xl font-semibold mb-4 text-gray-800">📅 Réserver une salle</h3>
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">📅 Processus de Réservation</h3>
             <div class="bg-gray-50 rounded-md p-4">
                 <pre class="text-xs bg-gray-900 text-blue-400 p-4 rounded-md overflow-x-auto">
-{{ include('documentation/sequence_booking.txt') }}
+1. Utilisateur se connecte
+2. Accède au formulaire de réservation
+3. Sélectionne une salle
+4. Choisit dates de début et fin
+5. Sélectionne équipements (optionnel)
+6. Sélectionne options (optionnel)
+7. Soumet le formulaire
+8. Système crée la réservation
+9. Redirection vers la liste des réservations
                 </pre>
             </div>
         </div>
 
         <div class="bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-xl font-semibold mb-4 text-gray-800">❌ Annuler une réservation</h3>
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">❌ Processus d'Annulation</h3>
             <div class="bg-gray-50 rounded-md p-4">
                 <pre class="text-xs bg-gray-900 text-red-400 p-4 rounded-md overflow-x-auto">
-{{ include('documentation/sequence_cancel.txt') }}
+1. Utilisateur accède à ses réservations
+2. Clique sur "Annuler" pour une réservation
+3. Confirmation de suppression
+4. Système supprime la réservation
+5. Redirection vers la liste des réservations
+6. Message de confirmation affiché
                 </pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Guide d'administration -->
+    <div class="bg-white rounded-lg shadow-md p-6 mt-8">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-800">⚙️ Guide d'Administration</h2>
+        <div class="space-y-4">
+            <div class="border-l-4 border-blue-500 pl-4">
+                <h3 class="font-semibold text-gray-800">Gestion des Utilisateurs</h3>
+                <p class="text-gray-600">Accédez au panneau d'administration pour gérer les utilisateurs, leurs rôles et leurs statuts.</p>
+            </div>
+            <div class="border-l-4 border-green-500 pl-4">
+                <h3 class="font-semibold text-gray-800">Gestion des Salles</h3>
+                <p class="text-gray-600">Ajoutez, modifiez ou supprimez des salles, équipements et options disponibles.</p>
+            </div>
+            <div class="border-l-4 border-purple-500 pl-4">
+                <h3 class="font-semibold text-gray-800">Suivi des Réservations</h3>
+                <p class="text-gray-600">Consultez toutes les réservations, leur statut et gérez les conflits.</p>
             </div>
         </div>
     </div>

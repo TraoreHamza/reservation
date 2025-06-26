@@ -1,16 +1,7 @@
-
 Diagramme de classes (UML) — Description textuelle + explications
 Classes principales :
 
-   _____       _       _     
-  / ____|     | |     | |   
- | (___   __ _| |_   _| |_  
-  \___ \ / _` | | | | | __| 
-  ____) | (_| | | |_| | |_  
- |_____/ \__,_|_|\__,_|\__| 
-              
-                                              
-
+---
 
 ```mermaid
 classDiagram
@@ -24,7 +15,7 @@ classDiagram
     - int warning NN
     - bool banned NN
     - bool active NN
-    
+  
     }
 
     class Quotation{
@@ -37,12 +28,12 @@ classDiagram
     - dateTime updated_at NN
     }
 
-    
+  
     class Review{
     - int star
     - string content
     - Room room
-    
+  
     }
 
 
@@ -52,7 +43,7 @@ classDiagram
     - string number
     - string state
     - Room room
-    
+  
     }
 
     class Client{
@@ -126,9 +117,10 @@ classDiagram
 
 
 
-  ```
+```
 
-  ---
+---
+
 ## 📑 Sequence Diagrams
 
 ### Réserver une salle
@@ -188,10 +180,10 @@ sequenceDiagram
  
 ```
 
+## 📑 Sequence Diagrams
 
-  ## 📑 Sequence Diagrams
+### Ajouter une salle aux favoris
 
-###  Ajouter une salle aux favoris
 //verifier si salle est User.Favoris alors retirer sinon ajouter
 
 ```mermaid
@@ -211,10 +203,10 @@ sequenceDiagram
   
 ```
 
+## 📑 Sequence Diagrams
 
-   ## 📑 Sequence Diagrams
+### Gérer les notifications des réservations non traitées (Administrateur)
 
-###  Gérer les notifications des réservations non traitées (Administrateur) 
 // a voir plus tarddeclencheur eventlistener reservation moins de 6 et non traitée il envoi notif
 
 ```mermaid
@@ -235,9 +227,9 @@ sequenceDiagram
 
 ```
 
-  ## 📑 Sequence Diagrams
+## 📑 Sequence Diagrams
 
-###  Gérer les équipements disponibles dans les salles (Administrateur)
+### Gérer les équipements disponibles dans les salles (Administrateur)
 
 ```mermaid
 sequenceDiagram
@@ -256,11 +248,9 @@ Equipment-->>System: Confirmation de mise à jour
 System-->>Admin: Équipements mis à jour avecsuccès
 ```
 
+## 📑 Sequence Diagrams
 
-
-  ## 📑 Sequence Diagrams
-
-###  Consulter les statistiques (Administrateur)
+### Consulter les statistiques (Administrateur)
 
 ```mermaid
 sequenceDiagram
@@ -274,8 +264,3 @@ System->>Salle: Récupérer les données des salles
 Salle-->>System: Données des salles
 System-->>Admin: Afficher les statistiques(nombre de réservations, équipements,disponibilités, etc.)
 ```
-
-
-
-
-

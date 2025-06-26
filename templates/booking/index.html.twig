@@ -38,6 +38,16 @@
                         {% endfor %}
                     </ul>
                 </li>
+                <li>
+                    <span class="font-medium text-gray-600">Équipements :</span>
+                    <ul class="ml-4 list-disc">
+                        {% for equipment in booking.equipments %}
+                            <li>{{ equipment.name }}</li>
+                        {% else %}
+                            <li class="italic text-gray-400">Aucun</li>
+                        {% endfor %}
+                    </ul>
+                </li>
             </ul>
             <div class="mt-6 flex gap-4">
                 <a href="{{ path('booking_edit', {id: booking.id}) }}" class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded">Modifier</a>

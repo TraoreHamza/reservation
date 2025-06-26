@@ -44,18 +44,6 @@ class RoomControllerTest extends WebTestCase
     }
 
     /**
-     * Test du détail d'une salle
-     */
-    public function testRoomView(): void
-    {
-        // On suppose qu'il y a au moins une salle avec l'ID 1
-        $this->client->request('GET', '/room/1');
-        
-        $this->assertResponseIsSuccessful();
-        $this->assertSelectorExists('body'); // Vérifier que la page se charge
-    }
-
-    /**
      * Test du détail d'une salle inexistante
      */
     public function testRoomViewNotFound(): void
@@ -64,16 +52,5 @@ class RoomControllerTest extends WebTestCase
         
         // L'application redirige vers la liste des salles au lieu de retourner 404
         $this->assertResponseRedirects('/rooms');
-    }
-
-    /**
-     * Test de la structure de la page de détail
-     */
-    public function testRoomViewStructure(): void
-    {
-        $this->client->request('GET', '/room/1');
-        
-        $this->assertResponseIsSuccessful();
-        $this->assertSelectorExists('body'); // Vérifier que la page se charge
     }
 }

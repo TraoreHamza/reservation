@@ -54,27 +54,27 @@ class DashboardControllerTest extends WebTestCase
         $this->client->request('GET', '/admin');
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
 
-        $this->client->request('GET', '/admin/statistics');
+        $this->client->request('GET', '/admin/documentation');
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
 
     /**
-     * Test de la page de statistiques admin
+     * Test de la page de documentation admin
      */
-    public function testAdminStatistics(): void
+    public function testAdminDocumentation(): void
     {
-        $this->client->request('GET', '/admin/statistics');
+        $this->client->request('GET', '/admin/documentation');
 
         // Devrait rediriger vers la page de login
         $this->assertResponseRedirects();
     }
 
     /**
-     * Test de la gestion des réservations en attente
+     * Test de la gestion des réservations via EasyAdmin
      */
-    public function testAdminPendingBookings(): void
+    public function testAdminBookings(): void
     {
-        $this->client->request('GET', '/admin/pending-bookings');
+        $this->client->request('GET', '/admin?crudAction=index&crudId=null&entityFqcn=App\Entity\Booking');
 
         // Devrait rediriger vers la page de login
         $this->assertResponseRedirects();

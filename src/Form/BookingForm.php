@@ -20,14 +20,20 @@ class BookingForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-           
+            ->add('room', EntityType::class, [
+                'class' => Room::class,
+                'choice_label' => 'name',
+                'required' => true,
+                'constraints' => [
+                    new NotNull(message: 'Veuillez sélectionner une salle.'),
+                ],
+                'label' => 'Salle'
+            ])
             ->add('startDate', DateType::class, [
                 'widget' => 'single_text',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez sélectionner une date de début.',
-                    ]),
+                    new NotBlank(message: 'Veuillez sélectionner une date de début.'),
                 ],
                 'label' => 'Date de début'
             ])
@@ -35,9 +41,7 @@ class BookingForm extends AbstractType
                 'widget' => 'single_text',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez sélectionner une date de fin.',
-                    ]),
+                    new NotBlank(message: 'Veuillez sélectionner une date de fin.'),
                 ],
                 'label' => 'Date de fin'
             ])

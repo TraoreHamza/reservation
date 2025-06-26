@@ -38,26 +38,8 @@ class Room
      * Prix de la chambre par jour
      * AJOUT : Champ prix pour le système de devis
      */
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: 'float', nullable: true)]
     private ?float $price = null;
-
-    /**
-     * Relation ManyToMany avec Equipment
-     * Une chambre peut avoir plusieurs équipements
-     * 
-     * @var Collection<int, Equipment>
-     */
-    #[ORM\ManyToMany(targetEntity: Equipment::class, inversedBy: 'rooms')]
-    private Collection $equipments;
-
-    /**
-     * Relation ManyToMany avec Option
-     * Une chambre peut avoir plusieurs options
-     * 
-     * @var Collection<int, Option>
-     */
-    #[ORM\ManyToMany(targetEntity: Option::class, inversedBy: 'rooms')]
-    private Collection $options;
 
     /**
      * @var Collection<int, Favorite>
@@ -100,13 +82,28 @@ class Room
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $ergonomics_notes = null;
 
+    #[ORM\Column(type: 'float', nullable: true)]
+    private ?float $dailyRate = null;
+
+    /**
+     * @var Collection<int, Equipment>
+     */
+    #[ORM\ManyToMany(targetEntity: Equipment::class, inversedBy: 'rooms')]
+    private Collection $equipments;
+
+    /**
+     * @var Collection<int, Option>
+     */
+    #[ORM\ManyToMany(targetEntity: Option::class, inversedBy: 'rooms')]
+    private Collection $options;
+
     public function __construct()
     {
         $this->favorites = new ArrayCollection();
         $this->reviews = new ArrayCollection();
-        $this->options = new ArrayCollection();
-        $this->equipments = new ArrayCollection();
         $this->bookings = new ArrayCollection();
+        $this->equipments = new ArrayCollection();
+        $this->options = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -382,6 +379,17 @@ class Room
     {
         $this->ergonomics_notes = $notes;
 
+        return $this;
+    }
+
+    public function getDailyRate(): ?float
+    {
+        return $this->dailyRate;
+    }
+
+    public function setDailyRate(?float $dailyRate): self
+    {
+        $this->dailyRate = $dailyRate;
         return $this;
     }
 }
