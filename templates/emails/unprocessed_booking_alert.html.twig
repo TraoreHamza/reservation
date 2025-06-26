@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Alerte: Réservation non traitée imminente !</title>
+</head>
+<body>
+    <h1>Alerte: Réservation non traitée à valider rapidement !</h1>
+
+    <p>Bonjour administrateur,</p>
+
+    <p>Une réservation n'a pas encore été traitée et approche de sa date de début. Veuillez la valider ou la gérer dès que possible.</p>
+
+    <h2>Détails de la réservation :</h2>
+    <ul>
+        <li><strong>ID Réservation:</strong> {{ booking.id }}</li>
+        <li><strong>Salle:</strong> {{ booking.room.name }}</li>
+        <li><strong>Client:</strong> {{ booking.client.name }}</li>
+        <li><strong>Début:</strong> {{ booking.startDate|date('d/m/Y H:i') }}</li>
+        <li><strong>Fin:</strong> {{ booking.endDate|date('d/m/Y H:i') }}</li>
+        <li><strong>Statut actuel:</strong> {{ booking.status }}</li>
+    </ul>
+
+    <p>Vous pouvez accéder à cette réservation dans votre Back Office EasyAdmin pour la traiter.</p>
+    <p>Cordialement,</p>
+    <p>Votre équipe de réservation</p>
+</body>
+</html>

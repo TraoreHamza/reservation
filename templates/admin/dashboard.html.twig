@@ -1,0 +1,43 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+
+{% block content %}
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 text-center my-4">
+				<h1>Welcome to the Admin Dashboard</h1>
+			
+			</div>
+			<section class="border rounded-3 p-3 mb-4 col-10 mx-auto">
+
+            <twig:BookingAlert />
+
+	
+			</section>
+		</div>
+        <div id="calendar" class="col-10 mx-auto"></div>
+	</div>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+const calendarEl = document.getElementById("calendar");
+if (calendarEl) {
+const calendar = new FullCalendar.Calendar(calendarEl, {
+locale: 'fr',
+headerToolbar: {
+left: "prev,next today",
+center: "title",
+right: "dayGridMonth,listWeek"
+},
+events: {{ bookings|raw }}
+});
+
+
+calendar.render();
+
+} else {
+console.error("Element with ID 'calendar' not found.");
+}
+});
+	</script>
+{% endblock %}

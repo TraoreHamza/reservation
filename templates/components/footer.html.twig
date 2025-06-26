@@ -1,0 +1,25 @@
+<footer class="footer sm:footer-horizontal text-base-content p-10 border-t mt-10">
+    <aside>
+        <twig:ux:icon name="fluent-mdl2:room" class="h-8 w-8 text-slate-500"/>
+        <p>
+            &copy; {{ "now"|date('Y') }} sallevenue. Tous droits réservés.
+        </p>
+    </aside>
+    <nav>
+        <a class="link link-hover" href="{{ path('location', { region: 'grand-est' }) }}">Grand Est</a>
+        <a class="link link-hover" href="{{ path('location', { region: 'nouvelle-aquitaine' }) }}">Nouvelle-Aquitaine</a>
+        <a class="link link-hover" href="{{ path('location', { region: 'auvergne-rhone-alpes' }) }}">Auvergne-Rhône-Alpes</a>
+        <a class="link link-hover" href="{{ path('location', { region: 'occitanie' }) }}">Occitanie</a>
+    </nav>
+    <nav>
+        <a class="link link-hover" href="{{ path('location', { region: 'ile-de-france' }) }}">Île-de-France</a>
+        <a class="link link-hover" href="{{ path('location', { region: 'bretagne' }) }}">Bretagne</a>
+        <a class="link link-hover" href="{{ path('location', { region: 'normandie' }) }}">Normandie</a>
+        <a class="link link-hover" href="{{ path('location', { region: 'pays-de-la-loire' }) }}">Pays de la Loire</a>
+    </nav>
+    <nav>
+        <a class="link link-hover" href="{{ path('location', { region: 'provence-alpes-cote-d-azur' }) }}">Provence-Alpes-Côte d'Azur</a>
+        <a class="link link-hover" href="{{ path('location', { region: 'bourgogne-franche-comte' }) }}">Bourgogne-Franche-Comté</a>
+        <a class="link link-hover" href="{{ path('location', { region: 'centre-val-de-loire' }) }}">Centre-Val de Loire</a>
+    </nav>
+</footer>

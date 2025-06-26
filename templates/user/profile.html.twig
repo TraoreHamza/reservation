@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Mon profil
+{% endblock %}
+
+{% block body %}
+    <main class="py-6">
+
+        <div class="flex justify-between items-center">
+            <h1 class="text-3xl mb-6">Bienvenue {{ app.user.client.name }}</h1>
+            <h2 class="text-2xl font-semibold mb-2">Mes réservations</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            {# Infos utilisateur #}
+            <div class="col-span-1 h-fit rounded-xl">
+                <div class="bg-white shadow rounded-xl p-6 flex flex-col items-center gap-2">
+                    <img src="https://illustrations.popsy.co/sky/app-launch.svg" alt="Profil" class="w-40">
+                    <p class="text-xl font-semibold">{{ app.user.client.name }}</p>
+                    <p class="text-cyan-900">{{ app.user.email }}</p>
+                    <p class="text-sm text-slate-400">Compte créé le {{ app.user.createdAt|date('d/m/Y') }}</p>
+                </div>
+                <div class="mt-4 flex flex-col gap-1">
+                    <a href="#" class="font-normal">&rarr; Voir mes devis</a>
+                    <a href="#" class="font-normal">&rarr; Modifier ma fiche</a>
+                    <a href="#" class="font-normal text-red-500">&rarr; Supprimer mon compte</a>
+                </div>
+            </div>
+
+            {# Réservations #}
+            
+            {% set bookings = app.user.client.bookings|slice(0,3) %}
+            
+            <div class="col-span-1 md:col-span-2 space-y-4">
+                {% if app.user.client.bookings|length > 0 %}
+                    {% for booking in bookings %}
+                        <div class="bg-white p-4 rounded-xl shadow flex justify-between items-center">
+                            <div>
+                                <p class="text-lg font-semibold flex items-center gap-2">
+                                {{ booking.room.name }}
+                                <a href="{{ path('booking_edit', {id: booking.id })}}" class=""><twig:ux:icon name="lucide:pen" class="h-4 w-4" /></a>
+                                </p>
+                                <p class="text-sm text-slate-500">
+                                    Du {{ booking.startDate|date('d/m/Y') }} au {{ booking.endDate|date('d/m/Y') }}
+                                </p>
+                                <p class="text-sm px-2 py-1 rounded-full border-2 w-fit mt-2">
+                                    {% if booking.status == 'pending' %}
+                                        <span class="text-amber-500 mr-3">En attente</span> | 
+                                        <a href="{{ path('booking_cancel', {id: booking.id })}}" class="ml-3 font-normal text-red-400">Annuler la réservation</a>
+                                    {% elseif booking.status == 'cancelled' %}
+                                        <span class="text-slate-500">Annulé</span>
+                                    {% else %}
+                                        <span class="text-emerald-700">Validé</span>
+                                    {% endif %}
+
+                                </p>
+                            </div>
+                            <img src="{{ booking.room.imagePath }}" alt="" class="h-16 w-24 object-cover rounded">
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-slate-500 text-sm">Aucune réservation pour le moment.</p>
+                {% endif %}
+            </div>
+
+            {# Favoris #}
+            <div class="col-span-1 md:col-span-3 mt-10">
+                <h2 class="text-2xl font-semibold mb-4">Mes salles favorites</h2>
+                {% if app.user.favorites|length > 0 %}
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {% for item in app.user.favorites %}
+                            <div class="bg-white shadow rounded-xl overflow-hidden">
+                                <img src="{{ item.room.imagePath }}" alt="{{ item.room.name }}" class="h-32 w-full object-cover">
+                                <div class="p-4">
+                                    <p class="text-lg font-semibold">{{ item.room.name }}</p>
+                                    <p class="text-sm text-slate-500">{{ item.room.location.city }}</p>
+                                    <p class="text-sm">{{ item.room.dailyRate }}€ / jour</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-slate-500 text-sm">Vous n'avez pas encore ajouté aucune salle en favoris.</p>
+                {% endif %}
+            </div>
+
+            {# Infos client supplémentaires si besoin #}
+            
+
+        </div>
+    </main>
+{% endblock %}
