@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 
 class RoomCrudController extends AbstractCrudController
 {
@@ -49,13 +50,26 @@ class RoomCrudController extends AbstractCrudController
                 ->setLabel('Sélectionnez une image')
                 ->setBasePath('medias/images/')
                 ->setUploadDir('public/medias/images')
-                ->setUploadedFileNamePattern('[year]/[month]/[day]/[slug]-[contenthash].[extension]'),
+                ->setUploadedFileNamePattern('[slug]-[contenthash].[extension]'),
             IntegerField::new('capacity')
                 ->setLabel('Capacité')
                 ->setHelp('Capacité maximale de la salle.'),
             BooleanField::new('isAvailable')
                 ->setLabel('Disponibilité')
                 ->setHelp('Indique si la salle est disponible pour réservation.'),
+            AssociationField::new('equipments')
+                ->setLabel('Équipements')
+                ->renderAsNativeWidget()
+                ->setHelp('Nom de l\'équipement associé à la réservation.'),
+            AssociationField::new('options')
+                ->setLabel('Options')
+                ->renderAsNativeWidget()
+                ->setHelp('Nom de l\'option associée à la réservation.'),
+            AssociationField::new('location')
+                ->renderAsNativeWidget()
+                ->setLabel('Emplacement')
+                ->setHelp('Emplacement de la salle'),
+
         ];
     }
 }

@@ -32,7 +32,7 @@
 </div>
 
 <div class="relative">
-    <img src="{{ room.imagePath }}" alt="{{ room.name }}" class="rounded-xl">
+    <img src="{{ asset(room.imagePath)}}" alt="{{ room.name }}" class="rounded-xl">
     <div class="shadow rounded-lg bg-slate-50 bg-opacity-50 py-2 px-4 w-fit absolute bottom-2 left-2">
         Cette salle est actuellement {{ room.isAvailable ? 'disponible' : 'indisponible' }}
     </div>

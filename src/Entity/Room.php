@@ -8,8 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\RoomRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Inflector\Rules\Pattern;
-use Symfony\Component\Validator\Constraints as Assert;
+
+
 
 #[ORM\Entity(repositoryClass: RoomRepository::class)]
 class Room
@@ -26,8 +26,6 @@ class Room
     private ?int $dailyRate = null; // Tarif journalier
 
     #[ORM\Column(length: 255)]
-    #[Assert\Length(max: 255, maxMessage: '{{ max}} caractères maximum.')]
-    #[Assert\Regex(Pattern: '/\.(jpg|jpeg|png|webp)$/')]
     private ?string $image = 'default.png';
 
     #[ORM\Column(type: 'integer')]
@@ -124,7 +122,7 @@ class Room
 
     public function getImagePath(): ?string
     {
-        $path = '/medias/uploads/images/';
+        $path = '/medias/images/';
         if ($this->image !== 'default.png') {
             return $path . $this->image;
         }
