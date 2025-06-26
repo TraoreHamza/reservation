@@ -6,13 +6,8 @@
 <div class="max-w-4xl mx-auto py-10 px-4">
     <div class="flex justify-between items-center mb-8">
     <h1 class="text-3xl font-bold text-gray-800">Mes Réservations</h1>
-    {% if app.user %}
-        <a href="{{ path('booking_new') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow">
-            Nouvelle réservation
-        </a>
-    {% endif %}
 </div>
-    {% for booking in bookings %}
+    {% for booking in app.user.client.bookings %}
         <div class="bg-white shadow-lg rounded-lg mb-8 p-6 border border-gray-100 hover:shadow-2xl transition-shadow">
             <h2 class="text-xl font-semibold text-blue-700 mb-4">
                 Salle : <span class="text-gray-900">{{ booking.room.name }}</span>

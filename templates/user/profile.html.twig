@@ -73,3 +73,9 @@
 
 	</main>
 {% endblock %}
+
+<div class="col-span-1 md:col-span-2 border">
+{% for item in app.user.client.bookings %}
+    {{ dump(item) }}
+{% endfor %}
+</div>
