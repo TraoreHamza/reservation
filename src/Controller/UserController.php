@@ -11,6 +11,7 @@ use App\Form\ClientForm;
 use App\Form\ProfileForm;
 use App\Repository\RoomRepository;
 use App\Repository\FavoriteRepository;
+use App\Repository\QuotationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,16 +24,18 @@ class UserController extends AbstractController
     public function __construct(
         private EntityManagerInterface $em,
         private FavoriteRepository $fr,
-        private RoomRepository $rr
+        private RoomRepository $rr,
+        private QuotationRepository $qr,
     ) {}
 
     #[Route('/profile', name: 'user_profile', methods: ['GET', 'POST'])]
     public function profile(Request $request): Response
     {
+        /** @var User $user */
         $user = $this->getUser();
         $form = $this->createForm(UserForm::class, $user);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
             $this->addFlash('success', 'Profil mis à jour');
@@ -42,7 +45,7 @@ class UserController extends AbstractController
 
         return $this->render('user/profile.html.twig', [
             'profileForm' => $form,
-            'favorites' => $favorites
+            'favorites' => $favorites,
         ]);
     }
 
@@ -63,7 +66,7 @@ class UserController extends AbstractController
         }
 
         return $this->render('user/fiche.html.twig', [
-            'clientForm' => $form
+            'clientForm' => $form,
         ]);
     }
 
@@ -73,26 +76,26 @@ class UserController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        if($this->getUser()) {
-            
+        if ($this->getUser()) {
+
             $favorite = $this->fr->findOneBy(['user' => $user, 'room' => $roomId]);
 
-            if($favorite) {
+            if ($favorite) {
                 $this->em->remove($favorite);
-                $this->addFlash('success', 'Retirée des favoris' );
+                $this->addFlash('success', 'Retirée des favoris');
             } else {
                 $newFav = new Favorite();
                 $newFav->setUser($user);
                 $newFav->setRoom($this->rr->find($roomId));
                 $this->em->persist($newFav);
-                $this->addFlash('success', 'Ajoutée des favoris' );
+                $this->addFlash('success', 'Ajoutée des favoris');
             }
-            
+
             $this->em->flush();
             return $this->redirectToRoute('room_view', ['id' => $roomId]);
         }
 
-        $this->addFlash('error', 'Vous devez être connecté !' );
+        $this->addFlash('error', 'Vous devez être connecté !');
         return $this->redirectToRoute('app_login');
     }
 }

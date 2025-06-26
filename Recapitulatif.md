@@ -1,5 +1,3 @@
-<<<<<<< HEAD:Recap.MD
-=======
 # user stories pour une application de reservation de salle .
 
 En tant qu’utilisateur anonyme , je souhaite pouvoir consulter l’application afin de d'cider de m’inscrire.
@@ -166,4 +164,4 @@ salleservice
 
 
 
->>>>>>> origin/hamza:Recapitulatif.md
+

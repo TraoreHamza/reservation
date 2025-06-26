@@ -120,7 +120,7 @@ class BookingController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/cancel', name: 'booking_cancel', methods: ['POST'])]
+    #[Route('/{id}/cancel', name: 'booking_cancel', methods: ['GET'])]
     public function cancel(Booking $booking): Response
     {
         $this->em->remove($booking);

@@ -61,17 +61,15 @@ class BookingCrudController extends AbstractCrudController
                     'Annulé' => 'cancelled',
                 ])
                 ->setHelp('Statut actuel de la réservation (par exemple, validé, en attente, annulé).'),
-            CollectionField::new('equipments')
-                ->setLabel('Équipement')
-                ->hideOnIndex()
-                ->renderExpanded()
-                ->setHelp('Nom de l\'équipement associé à la réservation.'),
-            CollectionField::new('options')
-                ->setLabel('Option')
-                ->hideOnIndex()
-                ->renderExpanded()
-                ->setHelp('Nom de l\'option associée à la réservation.'),
 
+            AssociationField::new('equipments')
+                ->setLabel('Équipements')
+                ->renderAsNativeWidget()
+                ->setHelp('Nom de l\'équipement associé à la réservation.'),
+            AssociationField::new('options')
+                ->setLabel('Options')
+                ->renderAsNativeWidget()
+                ->setHelp('Nom de l\'option associée à la réservation.'),
             FormField::addFieldset('Informations sur la salle et le client'),
             AssociationField::new('room')
                 ->setLabel('Salle')

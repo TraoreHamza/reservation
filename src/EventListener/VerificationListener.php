@@ -2,11 +2,12 @@
 
 namespace App\EventListener;
 
-use App\Repository\ClientRepository;
 use App\Repository\UserRepository;
+use App\Repository\ClientRepository;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class VerificationListener
 {
@@ -24,12 +25,10 @@ class VerificationListener
             return; // aucun utilisateur connecté
         }
 
-        $client = $user->getClient();
-
-        if (!$client) {
-            /** @var \Symfony\Component\HttpFoundation\Session\Session $session */
+        if (in_array('ROLE_ADMIN', $user->getRoles(), true) && !$user->getClient()) {
             $session = $this->requestStack->getSession();
-            if ($session) {
+
+            if ($session instanceof SessionInterface) {
                 $session->getFlashBag()->add(
                     'warning',
                     'Veuillez compléter votre fiche client avant de continuer.'

@@ -36,7 +36,7 @@ class BookingForm extends AbstractType
                 'required' => false
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Réserver',
+                'label' => 'Enregistrer',
             ])
         ;
     }

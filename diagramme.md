@@ -2,14 +2,7 @@
 Diagramme de classes (UML) — Description textuelle + explications
 Classes principales :
 
-   _____       _       _     
-  / ____|     | |     | |   
- | (___   __ _| |_   _| |_  
-  \___ \ / _` | | | | | __| 
-  ____) | (_| | | |_| | |_  
- |_____/ \__,_|_|\__,_|\__| 
-              
-                                              
+
 
 
 ```mermaid
