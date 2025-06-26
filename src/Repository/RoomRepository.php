@@ -29,22 +29,22 @@ class RoomRepository extends ServiceEntityRepository
             ->leftJoin('r.location', 'l'); // on fait une jointure avec la table des locations
 
         if ($query) {
-            $qb->andWhere('r.name LIKE :val OR r.description LIKE :val') // on cherche le titre ou la description
+            $qb->andWhere('LOWER(r.name) LIKE :val OR LOWER(r.description) LIKE :val') // on cherche le titre ou la description
                 ->setParameter('val', '%' . strtolower($query) . '%'); // on met en minuscule et on ajoute les % pour la recherche
         }
 
         if ($option) {
-            $qb->andWhere('o.name LIKE :option') // on cherche l'option
+            $qb->andWhere('LOWER(o.name) LIKE :option') // on cherche l'option
                 ->setParameter('option', '%' . strtolower($option) . '%'); // on met en minuscule et on ajoute les % pour la recherche 
         }
 
         if ($equipment) {
-            $qb->andWhere('e.name LIKE :equipment') // on cherche l'équipement
+            $qb->andWhere('LOWER(e.name) LIKE :equipment') // on cherche l'équipement
                 ->setParameter('equipment', '%' . strtolower($equipment) . '%'); // on met en minuscule et on ajoute les % pour la recherche
         }
 
         if ($location) {
-            $qb->andWhere('l.department LIKE :location') // on cherche la localisation
+            $qb->andWhere('LOWER(l.department) LIKE :location') // on cherche la localisation
                 ->setParameter('location', '%' . strtolower($location) . '%'); // on met en minuscule et on ajoute les % pour la recherche
         }
 
