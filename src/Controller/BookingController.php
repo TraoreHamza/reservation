@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Booking;
 use App\Form\BookingForm;
+use App\Service\QuotationService;
 use App\Repository\RoomRepository;
 use App\Repository\OptionRepository;
 use App\Repository\BookingRepository;
@@ -24,6 +25,7 @@ class BookingController extends AbstractController
         private RoomRepository $rr,
         private EquipmentRepository $er,
         private OptionRepository $or,
+        private QuotationService $qs
     ) {}
 
     // Route pour touts les booking (réservations)
@@ -93,6 +95,8 @@ class BookingController extends AbstractController
 
         $this->em->persist($booking);
         $this->em->flush();
+        $this->qs->create($booking);
+
 
 
         $this->addFlash('success', 'Votre demande de réservation a bien été prise en compte.');
