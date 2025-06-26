@@ -3,37 +3,39 @@
 {% block title %}Mes Réservations{% endblock %}
 
 {% block body %}
-    <h1>Mes Réservations</h1>
 
-    {% for booking in bookings %}
-        <div class="booking">
-            <h2>Réservation de la salle : {{ booking.room.name }}</h2>
-            <ul>
-                <li>Statut : {{ booking.status }}</li>
-                <li>Date de début : {{ booking.startDate|date('d/m/Y H:i') }}</li>
-                <li>Date de fin : {{ booking.endDate|date('d/m/Y H:i') }}</li>
-                <li>Client : {{ booking.client.nom }}</li>
-                <li>Équipements :
-                    <ul>
-                        {% for equipment in booking.equipment %}
-                            <li>{{ equipment.name }}</li>
-                        {% else %}
-                            <li>Aucun</li>
-                        {% endfor %}
-                    </ul>
-                </li>
-                <li>Options :
-                    <ul>
-                        {% for option in booking.options %}
-                            <li>{{ option.name }}</li>
-                        {% else %}
-                            <li>Aucune</li>
-                        {% endfor %}
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    {% else %}
-        <p>Aucune réservation trouvée.</p>
-    {% endfor %}
+    <div class="mb-10">
+        <h1 class="text-3xl mb-6">Mes réservations</h1>
+    </div>
+
+    <div class="col-span-1 md:col-span-2 space-y-4">
+        {% if app.user.client.bookings|length > 0 %}
+            {% for booking in app.user.client.bookings %}
+                <div class="bg-white p-4 rounded-xl shadow flex justify-between items-center">
+                    <div>
+                        <p class="text-lg font-semibold flex items-center gap-2">
+                        {{ booking.room.name }}
+                        <a href="{{ path('booking_edit', {id: booking.id })}}" class=""><twig:ux:icon name="lucide:pen" class="h-4 w-4" /></a>
+                        </p>
+                        <p class="text-sm text-slate-500">
+                            Du {{ booking.startDate|date('d/m/Y') }} au {{ booking.endDate|date('d/m/Y') }}
+                        </p>
+                        <p class="text-sm px-2 py-1 rounded-full border-2 w-fit mt-2">
+                            {% if booking.status == 'pending' %}
+                                <span class="text-amber-500 mr-3">En attente</span> | 
+                                <a href="{{ path('booking_cancel', {id: booking.id })}}" class="ml-3 font-normal text-red-400">Annuler la réservation</a>
+                            {% elseif booking.status == 'cancelled' %}
+                                <span class="text-slate-500">Annulé</span>
+                            {% else %}
+                                <span class="text-emerald-700">Validé</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <img src="{{ booking.room.imagePath }}" alt="" class="h-16 w-24 object-cover rounded">
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-slate-500 text-sm">Aucune réservation pour le moment.</p>
+        {% endif %}
+    </div>
 {% endblock %}

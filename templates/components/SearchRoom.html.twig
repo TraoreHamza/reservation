@@ -40,7 +40,7 @@
 					<option value="">Toutes les localisations</option>
 					{% set locations = this.locations %}
 					{% for item in locations %}
-						<option value="{{ item.department }}">{{ item.department }}</option>
+						<option value="{{ item.department }}">{{ item.department }} ({{ item.number }})</option>
 					{% endfor %}
 				</select>
 			</div>

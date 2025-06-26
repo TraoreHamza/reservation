@@ -1,28 +1,58 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-Récherche avancée
+	Récherche avancée
 {% endblock %}
 
 {% block body %}
 
-<ul class="flex gap-2 mb-4">
-    <li class="">
-        <a href="{{ path('home') }}">Accueil</a> &rarr;
-    </li>
-    <li class="">
-        <a href="{{ path('rooms') }}">Nos salles</a> &rarr;
-    </li>
-    <li class="text-slate-400">Recherche avancé</li>
-</ul>
+	{# BLOC avec image de fond #}
+	<div class="relative rounded-2xl overflow-hidden mt-8 shadow-lg" style="background-image: url('{{ asset('medias/images/bg-home.jpg') }}'); background-position: center; background-size: cover;">
+		<div class="bg-gradient-to-b from-transparent to-slate-900 w-full h-full px-6 py-10 sm:px-10">
+			<ul class="flex gap-2 mb-4 text-white">
+				<li>
+					<a href="{{ path('home') }}" class="hover:underline">Accueil</a>
+					&rarr;</li>
+				<li>
+					<a href="{{ path('rooms') }}" class="hover:underline">Nos salles</a>
+					&rarr;</li>
+				<li class="text-cyan-200">Recherche avancé</li>
+			</ul>
+			<h1 class="text-4xl sm:text-5xl font-bold text-white">Recherche</h1>
+			<h5 class="text-xl text-cyan-100 mt-2">Trouvez la salle qui vous convient</h5>
+		</div>
+	</div>
 
-<h1 class="text-4xl mt-4">Recherche</h1>
-<div class="flex justify-between align-center">
-    <h5 class="">Trouvez la salle qui vous convient</h5>
-</div>
+	{# FORMULAIRE DE RECHERCHE #}
+	<div class="bg-slate-50 p-4 mt-8 rounded-xl">
+		<twig:SearchRoom/>
+	</div>
 
-<div class="bg-slate-50 p-4 mt-8 rounded-xl">
-    <twig:SearchRoom />
-</div>
+	{# SECTION POURQUOI NOUS CHOISIR #}
+	<div class="mt-16 container mx-auto">
+		<h2 class="text-3xl font-semibold text-center mb-8">Pourquoi nous choisir ?</h2>
+		<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-center">
+			<div class="bg-white rounded-xl shadow p-6 hover:shadow-lg transition flex flex-col items-center gap-2">
+                <twig:ux:icon name="lucide:calendar-plus" class="h-6 w-6"/>
+				<h3 class="text-lg font-semibold text-cyan-900">Réservation rapide</h3>
+				<p class="text-gray-600 mt-2 text-sm">Réservez une salle en quelques clics, sans complications.</p>
+			</div>
+			<div class="bg-white rounded-xl shadow p-6 hover:shadow-lg transition flex flex-col items-center gap-2">
+                <twig:ux:icon name="lucide:shield" class="h-6 w-6"/>
+				<h3 class="text-lg font-semibold text-cyan-900">Fiabilité & sécurité</h3>
+				<p class="text-gray-600 mt-2 text-sm">Des salles vérifiées pour garantir votre tranquillité d'esprit.</p>
+			</div>
+			<div class="bg-white rounded-xl shadow p-6 hover:shadow-lg transition flex flex-col items-center gap-2">
+                <twig:ux:icon name="lucide:boxes" class="h-6 w-6"/>
+				<h3 class="text-lg font-semibold text-cyan-900">Nombreux lieux</h3>
+				<p class="text-gray-600 mt-2 text-sm">Un large choix de salles dans toutes les régions.</p>
+			</div>
+			<div class="bg-white rounded-xl shadow p-6 hover:shadow-lg transition flex flex-col items-center gap-2">
+                <twig:ux:icon name="lucide:phone-call" class="h-6 w-6"/>
+				<h3 class="text-lg font-semibold text-cyan-900">Support dédié</h3>
+				<p class="text-gray-600 mt-2 text-sm">Une équipe disponible pour vous accompagner à chaque étape.</p>
+			</div>
+		</div>
+	</div>
 
 {% endblock %}

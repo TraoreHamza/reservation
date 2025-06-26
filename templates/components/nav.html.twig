@@ -28,7 +28,11 @@
 			</div>
 			<ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 -right-0 p-2 shadow">
 				{% if app.user %}
+					{% if 'ROLE_ADMIN' in app.user.roles %}
+                    	<li><a href="{{ path('admin') }}">Dashboard</a></li>
+					{% endif %}
 					<li><a href="{{ path('user_profile') }}">Mon profil</a></li>
+					<li><a href="{{ path('bookings') }}">Mes reservations</a></li>
 					<li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
 				{% else %}
 					<li><a href="{{ path('app_login') }}">Connexion</a></li>

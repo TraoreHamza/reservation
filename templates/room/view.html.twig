@@ -69,19 +69,29 @@
                 </div>
 
                 <div class="">
-                    <select  name="equipments">
-                        {% for item in room.equipments %}
-                            <option value="{{ item.id }}">{{ item.name }}</option>
-                        {% endfor %}
-                    </select>
+                    {% if room.equipments|length > 0 %}
+                        <select  name="equipments">
+                                <option value="">Sans équipement</option>
+                            {% for item in room.equipments %}
+                                <option value="{{ item.id }}">{{ item.name }}</option>
+                            {% endfor %}
+                        </select>
+                    {% else %}
+                        <p class="text-center py-2 text-sm">Aucun équipement dispo avec cette salle</p>
+                    {% endif %}
                 </div>
 
                 <div class="mb-3">
-                    <select  name="options">
-                        {% for item in room.options %}
-                            <option value="{{ item.id }}">{{ item.name }}</option>
-                        {% endfor %}
-                    </select>
+                    {% if room.options|length > 0 %}
+                        <select  name="options">
+                                <option value="">Aucune option</option>
+                            {% for item in room.options %}
+                                <option value="{{ item.id }}">{{ item.name }}</option>
+                            {% endfor %}
+                        </select>
+                    {% else %}
+                        <p class="text-center py-2 text-sm">Aucune option dispo avec cette salle</p>
+                    {% endif %}
                 </div>
 
                 <button type="submit">Réserver</button>

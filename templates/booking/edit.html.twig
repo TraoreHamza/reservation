@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mettre à jour ma réservation{% endblock %}
+
+{% block body %}
+    <div class="mb-10">
+        <h1 class="text-3xl mb-6">Mettre à jour ma réservation</h1>
+        <p class="">Vous êtes en train de mettre à jour votre réservation pour {{ booking.room.name }}</p>
+    </div>
+
+    <div class="grid place-items-center">
+        <div class="bg-white shadow p-4 rounded-xl">
+            {{ form(form) }}
+        </div>
+    </div>
+
+{% endblock %}
