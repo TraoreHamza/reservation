@@ -15,98 +15,44 @@ class EquipmentFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
-    
 
-        $typeEquipements = [
-            'Mobilier' => [
-                'Chaises',
-                'Tables',
-                'Fauteuils',
-                'Estrades',
-                'Podiums',
-                'Pupitres',
-                'Vestiaires',
-                'Cloisons amovibles',
-                'Tables bistro',
-                'Canapés',
-            ],
-            'Audiovisuel' => [
-                'Vidéoprojecteur',
-                'Écran de projection',
-                'Téléviseur',
-                'Système de sonorisation',
-                'Microphone sans fil',
-                'Haut-parleurs',
-                'Caméra de visioconférence',
-                'Tableau interactif',
-                'Ordinateur de présentation',
-                'Webcam HD',
-            ],
-            'Éclairage' => [
-                'Lumières LED',
-                'Spots directionnels',
-                'Lampes d’ambiance',
-                'Éclairage de scène',
-                'Projecteurs',
-            ],
-            'Connectique & Réseau' => [
-                'Prises électriques',
-                'Prises réseau RJ45',
-                'Routeur Wi-Fi',
-                'Multiprises',
-                'Câbles HDMI/USB',
-                'Adaptateurs divers',
-            ],
-            'Confort & Accessibilité' => [
-                'Climatisation',
-                'Chauffage',
-                'Rideaux occultants',
-                'Accès PMR',
-                'Fontaine à eau',
-                'Distributeur de boissons',
-                'Machine à café',
-                'Réfrigérateur',
-                'Espace détente',
-            ],
-            'Outils de réunion' => [
-                'Tableau blanc',
-                'Paperboard',
-                'Tableau à épingles',
-                'Pointeur laser',
-                'Imprimante',
-                'Scanner',
-                'Photocopieuse',
-            ],
-            'Sécurité' => [
-                'Détecteur de fumée',
-                'Extincteur',
-                'Trousse de premiers secours',
-                'Alarme incendie',
-                'Caméra de surveillance',
-            ],
+        $equipments = [
+            ['type' => 'Audiovisuel', 'name' => 'Vidéoprojecteur'],
+            ['type' => 'Matériel',     'name' => 'Tableau blanc'],
+            ['type' => 'Réseaux',      'name' => 'Wi-Fi'],
+            ['type' => 'Audiovisuel',  'name' => 'Microphone'],
+            ['type' => 'Audiovisuel',  'name' => 'Enceinte audio'],
+            ['type' => 'Audiovisuel',  'name' => 'Caméra de visio'],
+            ['type' => 'Matériel',     'name' => 'Climatisation'],
+            ['type' => 'Matériel',     'name' => 'Ordinateur fourni'],
         ];
 
-
-
-        //  Recuperation des room nouvellement crées
-        $room = [];
-        for ($i = 0; $i < 10; $i++) {
-            $room[] = $this->getReference('ROOM_' . $i, Room::class);
+        // Récupération des rooms créées
+        $rooms = [];
+        for ($i = 0; $i < 50; $i++) {
+            $rooms[] = $this->getReference('ROOM_' . $i, Room::class);
         }
 
-        foreach ($typeEquipements as $type => $equipments) {
-            foreach ($equipments as $equipementName) {
+        foreach ($equipments as $data) {
             $equipment = new Equipment();
             $equipment
-                ->setName($equipementName)
-                ->setType($type)
-                ->addRoom($faker->randomElement($room))
-            ;
-            $manager->persist($equipment);
+                ->setName($data['name'])
+                ->setType($data['type'])
+                ->addRoom($faker->randomElement($rooms))
+                ;
+
+            $random = $faker->randomElements($rooms, $faker->numberBetween(7, 10));
+            foreach ($random as $r) {
+                $equipment->addRoom($r);
             }
+
+            $manager->persist($equipment);
+
         }
+
         $manager->flush();
     }
+
     public function getDependencies(): array
     {
         return [

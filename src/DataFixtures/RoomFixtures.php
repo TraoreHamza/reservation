@@ -20,112 +20,59 @@ class RoomFixtures extends Fixture implements DependentFixtureInterface
         $faker = Factory::create('fr_FR');
 
         $rooms = [
-            'Salle Victor Hugo',
-            'Salle Eiffel',
-            'Salle Pasteur',
-            'Salle Curie',
-            'Salle Molière',
-            'Salle Voltaire',
-            'Salle Zola',
-            'Salle Diderot',
-            'Salle Monet',
-            'Salle Renoir',
-            'Salle Rodin',
-            'Salle Balzac',
-            'Salle Proust',
-            'Salle Camus',
-            'Salle Sartre',
-            'Salle Baudelaire',
-            'Salle Verne',
-            'Salle Colette',
-            'Salle Cézanne',
-            'Salle Gaumont',
-            'Salle Lumière',
-            'Salle Turing',
-            'Salle Descartes',
-            'Salle Rousseau',
-            'Salle De Vinci',
-            'Salle Picasso',
-            'Salle Ravel',
-            'Salle Debussy',
-            'Salle Chopin',
-            'Salle Bizet',
-            'Salle Offenbach',
-            'Salle Gounod',
-            'Salle Berlioz',
-            'Salle Saint-Saëns',
-            'Salle Fauré',
-            'Salle Poulenc',
-            'Salle Satie',
-            'Salle Vivaldi',
-            'Salle Mozart',
-            'Salle Beethoven',
-            'Salle Bach',
-            'Salle Schubert',
-            'Salle Liszt',
-            'Salle Mendelssohn',
-            'Salle Brahms',
-            'Salle Wagner',
-            'Salle Strauss',
-            'Salle Mahler',
-            'Salle Rameau',
-            'Salle Lully',
-            'Salle Couperin',
+            'Salle Victor Hugo' => "Salle Victor Hugo propose une ambiance feutrée offrant calme et concentration. Équipements : un écran tactile interactif, des prises RJ45 et USB à chaque poste, une sonorisation immersive. Mobilier : gradins légers avec fauteuils confortables. Parfait pour événements culturels ou artistiques. Atouts complémentaires : service de pause-café et restauration possible, connexion sécurisée.",
+            'Salle Eiffel' => "Salle Eiffel propose une atmosphère chaleureuse grâce à un mur végétalisé et un éclairage LED réglable. Équipements : un système de visioconférence haute définition, des prises RJ45 et USB à chaque poste, un tableau blanc numérique. Mobilier : gradins légers avec fauteuils confortables. Parfait pour conférences et présentations. Atouts complémentaires : accès PMR, terrasse attenante.",
+            'Salle Pasteur' => "Salle Pasteur propose une ambiance feutrée offrant calme et concentration. Équipements : un tableau blanc numérique, des prises RJ45 et USB à chaque poste, un système de visioconférence haute définition. Mobilier : coin lounge cosy avec fauteuils et tables basses. Parfait pour événements culturels ou artistiques. Atouts complémentaires : terrasse attenante, acoustique optimisée.",
+            'Salle Curie' => "Salle Curie propose une atmosphère chaleureuse grâce à un mur végétalisé et un éclairage LED réglable. Équipements : un écran tactile interactif, un tableau blanc numérique, une sonorisation immersive. Mobilier : tables modulables et chaises ergonomiques. Parfait pour ateliers de formation ou brainstorming. Atouts complémentaires : parking réservé, terrasse attenante.",
+            'Salle Molière' => "Salle Molière propose un design moderne combinant béton ciré et touches métalliques. Équipements : un écran tactile interactif, un tableau blanc numérique, un système de visioconférence haute définition. Mobilier : tables modulables et chaises ergonomiques. Parfait pour conférences et présentations. Atouts complémentaires : lumière naturelle généreuse, coin détente privatif.",
+            'Salle Voltaire' => "Salle Voltaire propose une ambiance feutrée offrant calme et concentration. Équipements : une sonorisation immersive, un tableau blanc numérique, des prises RJ45 et USB à chaque poste. Mobilier : tables en îlots pour ateliers collaboratifs. Parfait pour conférences et présentations. Atouts complémentaires : service de pause-café et restauration possible, lumière naturelle généreuse.",
+            'Salle Zola' => "Salle Zola propose une ambiance feutrée offrant calme et concentration. Équipements : un accès Wi‑Fi haut débit sécurisé, des prises RJ45 et USB à chaque poste, un tableau blanc numérique. Mobilier : tables modulables et chaises ergonomiques. Parfait pour événements culturels ou artistiques. Atouts complémentaires : accès PMR, lumière naturelle généreuse.",
+            'Salle Diderot' => "Salle Diderot propose une ambiance feutrée offrant calme et concentration. Équipements : des prises RJ45 et USB à chaque poste, un système de visioconférence haute définition, un vidéoprojecteur HD. Mobilier : gradins légers avec fauteuils confortables. Parfait pour événements culturels ou artistiques. Atouts complémentaires : parking réservé, coin détente privatif.",
+            'Salle Monet' => "Salle Monet propose un décor artistique mettant en avant des œuvres inspirées du nom de la salle. Équipements : un accès Wi‑Fi haut débit sécurisé, des prises RJ45 et USB à chaque poste, une sonorisation immersive. Mobilier : coin lounge cosy avec fauteuils et tables basses. Parfait pour ateliers de formation ou brainstorming. Atouts complémentaires : acoustique optimisée, parking réservé.",
+            'Salle Renoir' => "Salle Renoir propose une atmosphère chaleureuse grâce à un mur végétalisé et un éclairage LED réglable. Équipements : un accès Wi‑Fi haut débit sécurisé, un vidéoprojecteur HD, un tableau blanc numérique. Mobilier : coin lounge cosy avec fauteuils et tables basses. Parfait pour ateliers de formation ou brainstorming. Atouts complémentaires : service de pause-café et restauration possible, lumière naturelle généreuse.",
+            'Salle Rodin' => "Salle Rodin propose un style épuré et lumineux, avec des matériaux nobles comme le bois clair. Équipements : un système de visioconférence haute définition, un tableau blanc numérique, un accès Wi‑Fi haut débit sécurisé. Mobilier : pupitre amovible et estrade. Parfait pour ateliers de formation ou brainstorming. Atouts complémentaires : coin détente privatif, service de pause-café et restauration possible.",
+            'Salle Balzac' => "Salle Balzac propose un design moderne combinant béton ciré et touches métalliques. Équipements : une sonorisation immersive, un écran tactile interactif, un système de visioconférence haute définition. Mobilier : tables en îlots pour ateliers collaboratifs. Parfait pour ateliers de formation ou brainstorming. Atouts complémentaires : service de pause-café et restauration possible, parking réservé.",
+            'Salle Proust' => "Salle Proust propose un décor artistique mettant en avant des œuvres inspirées du nom de la salle. Équipements : un écran tactile interactif, une sonorisation immersive, un vidéoprojecteur HD. Mobilier : gradins légers avec fauteuils confortables. Parfait pour conférences et présentations. Atouts complémentaires : lumière naturelle généreuse, parking réservé.",
+            'Salle Camus' => "Salle Camus propose une atmosphère chaleureuse grâce à un mur végétalisé et un éclairage LED réglable. Équipements : un vidéoprojecteur HD, des prises RJ45 et USB à chaque poste, un accès Wi‑Fi haut débit sécurisé. Mobilier : pupitre amovible et estrade. Parfait pour ateliers de formation ou brainstorming. Atouts complémentaires : accès PMR, coin détente privatif.",
+            'Salle Sartre' => "Salle Sartre propose un design moderne combinant béton ciré et touches métalliques. Équipements : un système de visioconférence haute définition, des prises RJ45 et USB à chaque poste, un écran tactile interactif. Mobilier : tables en îlots pour ateliers collaboratifs. Parfait pour conférences et présentations. Atouts complémentaires : connexion sécurisée, service de pause-café et restauration possible.",
+            'Salle Baudelaire' => "Salle Baudelaire propose un décor artistique mettant en avant des œuvres inspirées du nom de la salle. Équipements : un écran tactile interactif, un vidéoprojecteur HD, une sonorisation immersive. Mobilier : tables en îlots pour ateliers collaboratifs. Parfait pour événements culturels ou artistiques. Atouts complémentaires : parking réservé, acoustique optimisée.",
+            'Salle Verne' => "Salle Verne propose un décor artistique mettant en avant des œuvres inspirées du nom de la salle. Équipements : un système de visioconférence haute définition, des prises RJ45 et USB à chaque poste, un tableau blanc numérique. Mobilier : tables modulables et chaises ergonomiques. Parfait pour ateliers de formation ou brainstorming. Atouts complémentaires : acoustique optimisée, coin détente privatif.",
+            'Salle Colette' => "Salle Colette propose un style épuré et lumineux, avec des matériaux nobles comme le bois clair. Équipements : un système de visioconférence haute définition, un écran tactile interactif, un accès Wi‑Fi haut débit sécurisé. Mobilier : coin lounge cosy avec fauteuils et tables basses. Parfait pour ateliers de formation ou brainstorming. Atouts complémentaires : parking réservé, acoustique optimisée.",
+            'Salle Cézanne' => "Salle Cézanne propose un design moderne combinant béton ciré et touches métalliques. Équipements : une sonorisation immersive, un tableau blanc numérique, un système de visioconférence haute définition. Mobilier : coin lounge cosy avec fauteuils et tables basses. Parfait pour réunions hybrides ou visioconférences. Atouts complémentaires : accès PMR, lumière naturelle généreuse.",
+            'Salle Gaumont' => "Salle Gaumont propose une atmosphère chaleureuse grâce à un mur végétalisé et un éclairage LED réglable. Équipements : une sonorisation immersive, un accès Wi‑Fi haut débit sécurisé, des prises RJ45 et USB à chaque poste. Mobilier : tables modulables et chaises ergonomiques. Parfait pour réunions hybrides ou visioconférences. Atouts complémentaires : parking réservé, connexion sécurisée.",
+            'Salle Lumière' => "Salle Lumière propose un style épuré et lumineux, avec des matériaux nobles comme le bois clair. Équipements : un système de visioconférence haute définition, un tableau blanc numérique, un écran tactile interactif. Mobilier : tables modulables et chaises ergonomiques. Parfait pour réunions hybrides ou visioconférences. Atouts complémentaires : lumière naturelle généreuse, coin détente privatif.",
+            'Salle Turing' => "Salle Turing propose un style épuré et lumineux, avec des matériaux nobles comme le bois clair. Équipements : un tableau blanc numérique, un vidéoprojecteur HD, un système de visioconférence haute définition. Mobilier : gradins légers avec fauteuils confortables. Parfait pour conférences et présentations. Atouts complémentaires : connexion sécurisée, terrasse attenante.",
+            'Salle Descartes' => "Salle Descartes propose une atmosphère chaleureuse grâce à un mur végétalisé et un éclairage LED réglable. Équipements : un écran tactile interactif, des prises RJ45 et USB à chaque poste, un tableau blanc numérique. Mobilier : tables modulables et chaises ergonomiques. Parfait pour événements culturels ou artistiques. Atouts complémentaires : lumière naturelle généreuse, connexion sécurisée.",
+            'Salle Rousseau' => "Salle Rousseau propose une ambiance feutrée offrant calme et concentration. Équipements : une sonorisation immersive, un écran tactile interactif, un système de visioconférence haute définition. Mobilier : tables modulables et chaises ergonomiques. Parfait pour ateliers de formation ou brainstorming. Atouts complémentaires : accès PMR, coin détente privatif.",
+            'Salle De Vinci' => "Salle De Vinci propose une atmosphère chaleureuse grâce à un mur végétalisé et un éclairage LED réglable. Équipements : un tableau blanc numérique, un système de visioconférence haute définition, un vidéoprojecteur HD. Mobilier : tables modulables et chaises ergonomiques. Parfait pour ateliers de formation ou brainstorming. Atouts complémentaires : coin détente privatif, lumière naturelle généreuse.",
+            'Salle Picasso' => "Salle Picasso propose un style épuré et lumineux, avec des matériaux nobles comme le bois clair. Équipements : une sonorisation immersive, un système de visioconférence haute définition, un écran tactile interactif. Mobilier : coin lounge cosy avec fauteuils et tables basses. Parfait pour réunions hybrides ou visioconférences. Atouts complémentaires : connexion sécurisée, terrasse attenante.",
+            'Salle Ravel' => "Salle Ravel propose une ambiance feutrée offrant calme et concentration. Équipements : un tableau blanc numérique, une sonorisation immersive, des prises RJ45 et USB à chaque poste. Mobilier : gradins légers avec fauteuils confortables. Parfait pour séances de travail collaboratif. Atouts complémentaires : accès PMR, service de pause-café et restauration possible.",
+            'Salle Debussy' => "Salle Debussy propose un design moderne combinant béton ciré et touches métalliques. Équipements : des prises RJ45 et USB à chaque poste, une sonorisation immersive, un tableau blanc numérique. Mobilier : tables en îlots pour ateliers collaboratifs. Parfait pour événements culturels ou artistiques. Atouts complémentaires : connexion sécurisée, accès PMR.",
+            'Salle Chopin' => "Salle Chopin propose une ambiance feutrée offrant calme et concentration. Équipements : un accès Wi‑Fi haut débit sécurisé, un écran tactile interactif, un système de visioconférence haute définition. Mobilier : pupitre amovible et estrade. Parfait pour séances de travail collaboratif. Atouts complémentaires : coin détente privatif, connexion sécurisée.",
+            'Salle Bizet' => "Salle Bizet propose une atmosphère chaleureuse grâce à un mur végétalisé et un éclairage LED réglable. Équipements : un accès Wi‑Fi haut débit sécurisé, des prises RJ45 et USB à chaque poste, un système de visioconférence haute définition. Mobilier : pupitre amovible et estrade. Parfait pour ateliers de formation ou brainstorming. Atouts complémentaires : coin détente privatif, parking réservé.",
+            'Salle Offenbach' => "Salle Offenbach propose une atmosphère chaleureuse grâce à un mur végétalisé et un éclairage LED réglable. Équipements : un vidéoprojecteur HD, un accès Wi‑Fi haut débit sécurisé, une sonorisation immersive. Mobilier : tables modulables et chaises ergonomiques. Parfait pour séances de travail collaboratif. Atouts complémentaires : service de pause-café et restauration possible, acoustique optimisée.",
+            'Salle Gounod' => "Salle Gounod propose un design moderne combinant béton ciré et touches métalliques. Équipements : un accès Wi‑Fi haut débit sécurisé, une sonorisation immersive, un tableau blanc numérique. Mobilier : gradins légers avec fauteuils confortables. Parfait pour séances de travail collaboratif. Atouts complémentaires : connexion sécurisée, parking réservé.",
+            'Salle Berlioz' => "Salle Berlioz propose un design moderne combinant béton ciré et touches métalliques. Équipements : des prises RJ45 et USB à chaque poste, un vidéoprojecteur HD, un accès Wi‑Fi haut débit sécurisé. Mobilier : coin lounge cosy avec fauteuils et tables basses. Parfait pour ateliers de formation ou brainstorming. Atouts complémentaires : lumière naturelle généreuse, connexion sécurisée.",
+            'Salle Saint-Saëns' => "Salle Saint-Saëns propose un style épuré et lumineux, avec des matériaux nobles comme le bois clair. Équipements : un écran tactile interactif, des prises RJ45 et USB à chaque poste, un tableau blanc numérique. Mobilier : tables modulables et chaises ergonomiques. Parfait pour événements culturels ou artistiques. Atouts complémentaires : lumière naturelle généreuse, coin détente privatif.",
+            'Salle Fauré' => "Salle Fauré propose un style épuré et lumineux, avec des matériaux nobles comme le bois clair. Équipements : un écran tactile interactif, un système de visioconférence haute définition, une sonorisation immersive. Mobilier : pupitre amovible et estrade. Parfait pour ateliers de formation ou brainstorming. Atouts complémentaires : terrasse attenante, parking réservé.",
+            'Salle Poulenc' => "Salle Poulenc propose une atmosphère chaleureuse grâce à un mur végétalisé et un éclairage LED réglable. Équipements : une sonorisation immersive, un système de visioconférence haute définition, un tableau blanc numérique. Mobilier : pupitre amovible et estrade. Parfait pour événements culturels ou artistiques. Atouts complémentaires : lumière naturelle généreuse, coin détente privatif.",
+            'Salle Satie' => "Salle Satie propose une atmosphère chaleureuse grâce à un mur végétalisé et un éclairage LED réglable. Équipements : un système de visioconférence haute définition, des prises RJ45 et USB à chaque poste, un vidéoprojecteur HD. Mobilier : tables en îlots pour ateliers collaboratifs. Parfait pour ateliers de formation ou brainstorming. Atouts complémentaires : service de pause-café et restauration possible, acoustique optimisée.",
+            'Salle Vivaldi' => "Salle Vivaldi propose une atmosphère chaleureuse grâce à un mur végétalisé et un éclairage LED réglable. Équipements : un écran tactile interactif, un accès Wi‑Fi haut débit sécurisé, un système de visioconférence haute définition. Mobilier : tables en îlots pour ateliers collaboratifs. Parfait pour ateliers de formation ou brainstorming. Atouts complémentaires : accès PMR, service de pause-café et restauration possible.",
+            'Salle Mozart' => "Salle Mozart propose un décor artistique mettant en avant des œuvres inspirées du nom de la salle. Équipements : une sonorisation immersive, un vidéoprojecteur HD, un écran tactile interactif. Mobilier : coin lounge cosy avec fauteuils et tables basses. Parfait pour conférences et présentations. Atouts complémentaires : terrasse attenante, lumière naturelle généreuse.",
+            'Salle Beethoven' => "Salle Beethoven propose un style épuré et lumineux, avec des matériaux nobles comme le bois clair. Équipements : un système de visioconférence haute définition, un écran tactile interactif, un vidéoprojecteur HD. Mobilier : tables modulables et chaises ergonomiques. Parfait pour ateliers de formation ou brainstorming. Atouts complémentaires : service de pause-café et restauration possible, coin détente privatif.",
+            'Salle Bach' => "Salle Bach propose un décor artistique mettant en avant des œuvres inspirées du nom de la salle. Équipements : un système de visioconférence haute définition, un écran tactile interactif, un tableau blanc numérique. Mobilier : gradins légers avec fauteuils confortables. Parfait pour réunions hybrides ou visioconférences. Atouts complémentaires : terrasse attenante, acoustique optimisée.",
+            'Salle Schubert' => "Salle Schubert propose un décor artistique mettant en avant des œuvres inspirées du nom de la salle. Équipements : un système de visioconférence haute définition, des prises RJ45 et USB à chaque poste, un tableau blanc numérique. Mobilier : coin lounge cosy avec fauteuils et tables basses. Parfait pour réunions hybrides ou visioconférences. Atouts complémentaires : service de pause-café et restauration possible, terrasse attenante.",
+            'Salle Liszt' => "Salle Liszt propose un décor artistique mettant en avant des œuvres inspirées du nom de la salle. Équipements : un système de visioconférence haute définition, un accès Wi‑Fi haut débit sécurisé, un vidéoprojecteur HD. Mobilier : coin lounge cosy avec fauteuils et tables basses. Parfait pour séances de travail collaboratif. Atouts complémentaires : coin détente privatif, parking réservé.",
+            'Salle Mendelssohn' => "Salle Mendelssohn propose un design moderne combinant béton ciré et touches métalliques. Équipements : une sonorisation immersive, un écran tactile interactif, un système de visioconférence haute définition. Mobilier : tables en îlots pour ateliers collaboratifs. Parfait pour séances de travail collaboratif. Atouts complémentaires : parking réservé, acoustique optimisée.",
+            'Salle Brahms' => "Salle Brahms propose un décor artistique mettant en avant des œuvres inspirées du nom de la salle. Équipements : un écran tactile interactif, des prises RJ45 et USB à chaque poste, un système de visioconférence haute définition. Mobilier : gradins légers avec fauteuils confortables. Parfait pour conférences et présentations. Atouts complémentaires : lumière naturelle généreuse, service de pause-café et restauration possible.",
+            'Salle Wagner' => "Salle Wagner propose une atmosphère chaleureuse grâce à un mur végétalisé et un éclairage LED réglable. Équipements : des prises RJ45 et USB à chaque poste, un accès Wi‑Fi haut débit sécurisé, un système de visioconférence haute définition. Mobilier : pupitre amovible et estrade. Parfait pour événements culturels ou artistiques. Atouts complémentaires : terrasse attenante, coin détente privatif.",
+            'Salle Strauss' => "Salle Strauss propose une atmosphère chaleureuse grâce à un mur végétalisé et un éclairage LED réglable. Équipements : des prises RJ45 et USB à chaque poste, un système de visioconférence haute définition, un tableau blanc numérique. Mobilier : coin lounge cosy avec fauteuils et tables basses. Parfait pour événements culturels ou artistiques. Atouts complémentaires : accès PMR, terrasse attenante.",
+            'Salle Mahler' => "Salle Mahler propose un décor artistique mettant en avant des œuvres inspirées du nom de la salle. Équipements : une sonorisation immersive, un tableau blanc numérique, un accès Wi‑Fi haut débit sécurisé. Mobilier : coin lounge cosy avec fauteuils et tables basses. Parfait pour séances de travail collaboratif. Atouts complémentaires : acoustique optimisée, connexion sécurisée.",
+            'Salle Rameau' => "Salle Rameau propose une ambiance feutrée offrant calme et concentration. Équipements : un tableau blanc numérique, un accès Wi‑Fi haut débit sécurisé, un écran tactile interactif. Mobilier : tables modulables et chaises ergonomiques. Parfait pour réunions hybrides ou visioconférences. Atouts complémentaires : accès PMR, coin détente privatif.",
+            'Salle Lully' => "Salle Lully propose une atmosphère chaleureuse grâce à un mur végétalisé et un éclairage LED réglable. Équipements : un système de visioconférence haute définition, un vidéoprojecteur HD, une sonorisation immersive. Mobilier : pupitre amovible et estrade. Parfait pour séances de travail collaboratif. Atouts complémentaires : acoustique optimisée, coin détente privatif.",
+            'Salle Couperin' => "Salle Couperin propose une ambiance feutrée offrant calme et concentration. Équipements : une sonorisation immersive, un vidéoprojecteur HD, un système de visioconférence haute définition. Mobilier : coin lounge cosy avec fauteuils et tables basses. Parfait pour séances de travail collaboratif. Atouts complémentaires : lumière naturelle généreuse, acoustique optimisée.",
         ];
 
-        $descriptions = [
-            "Salle lumineuse idéale pour les réunions d'équipe.",
-            "Espace moderne équipé d'un vidéoprojecteur.",
-            "Salle polyvalente adaptée aux formations et ateliers.",
-            "Salle calme avec vue sur le jardin, parfaite pour la concentration.",
-            "Espace convivial pour les séances de brainstorming.",
-            "Salle de conférence avec système audio intégré.",
-            "Salle équipée pour visioconférences internationales.",
-            "Ambiance chaleureuse, idéale pour des petits groupes.",
-            "Grande salle modulable pour événements et séminaires.",
-            "Espace équipé de tableaux blancs et paperboards.",
-            "Salle insonorisée pour réunions confidentielles.",
-            "Salle de travail avec accès Wi-Fi haut débit.",
-            "Salle spacieuse avec coin détente.",
-            "Salle adaptée aux ateliers créatifs et artistiques.",
-            "Espace de réunion avec lumière naturelle abondante.",
-            "Salle équipée d’un écran interactif tactile.",
-            "Salle de formation avec 20 postes informatiques.",
-            "Espace réservé aux réunions de direction.",
-            "Salle confortable avec fauteuils ergonomiques.",
-            "Salle équipée pour projections vidéo HD.",
-            "Salle accessible aux personnes à mobilité réduite.",
-            "Espace modulable pour réunions et banquets.",
-            "Salle équipée d’un système de climatisation.",
-            "Salle à l’acoustique optimisée pour la musique.",
-            "Salle de réunion avec kitchenette attenante.",
-            "Salle décorée dans un style contemporain.",
-            "Espace chaleureux pour réunions informelles.",
-            "Salle avec accès direct à une terrasse extérieure.",
-            "Salle idéale pour formations en petits groupes.",
-            "Salle équipée de prises électriques individuelles.",
-            "Salle de réunion avec tableau interactif.",
-            "Salle avec vue panoramique sur la ville.",
-            "Espace de travail collaboratif et flexible.",
-            "Salle adaptée aux visioconférences et webinaires.",
-            "Salle dotée d’un système de sonorisation performant.",
-            "Salle de réunion avec mobilier modulable.",
-            "Espace sécurisé pour réunions confidentielles.",
-            "Salle équipée de stores occultants.",
-            "Salle avec accès direct au parking.",
-            "Salle de réunion avec bibliothèque intégrée.",
-            "Salle lumineuse avec grandes baies vitrées.",
-            "Salle de conférence avec scène et pupitre.",
-            "Salle avec espace de rangement pour matériel.",
-            "Salle équipée de prises réseau RJ45.",
-            "Salle de réunion avec espace lounge.",
-            "Salle adaptée aux ateliers de formation pratique.",
-            "Espace convivial pour pauses café et échanges.",
-            "Salle avec accès privatif et sécurisé.",
-            "Salle de réunion avec système de réservation en ligne.",
-            "Salle équipée pour projections 4K.",
-            "Salle avec coin vestiaire pour les participants.",
-        ];
         $imageFilenames = [
             'default.png',
         ];
@@ -134,20 +81,21 @@ class RoomFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < 10; $i++) {
             $locations[] = $this->getReference('LOCATION_' . $i, Location::class);
         }
-    
+
         $i = 0;
-        foreach ($rooms as $index => $roomName) {
+        foreach ($rooms as $roomName => $description) {
             $room = new Room();
-            $imageFilename = $imageFilenames[$index % count($imageFilenames)];
+            $imageFilename = $imageFilenames[$i % count($imageFilenames)];
+
             $room
                 ->setName($roomName)
                 ->setCapacity($faker->numberBetween(1, 100))
-                ->setImage($imageFilename) // On stocke juste le nom du fichier !
-                ->setDescription($descriptions[$index])
+                ->setImage($imageFilename)
+                ->setDescription($description)
                 ->setIsAvailable($faker->boolean(80))
-                ->setDailyRate($faker->numberBetween(100,2500)) // Prix journalier entre 100 et 2500 euros
-                ->setLocation($faker->randomElement($locations)) // Associer une location aléatoire
-            ;
+                ->setDailyRate($faker->numberBetween(100, 2500))
+                ->setLocation($faker->randomElement($locations));
+
             $manager->persist($room);
             $this->addReference('ROOM_' . $i, $room);
 
